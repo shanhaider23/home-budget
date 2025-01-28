@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -16,28 +18,48 @@ import { Budgets } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'sonner';
 
-function CreateBudget() {
+function CreateBudget({ refreshData }) {
 	const [emojiIcon, setEmojiIcon] = useState('Emoji');
 	const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-	const [name, setName] = useState();
-	const [amount, setAmount] = useState();
+	const [name, setName] = useState('');
+	const [amount, setAmount] = useState('');
 
-	const user = useUser();
+	const { user } = useUser();
 	const onCreateBudget = async () => {
-		const result = await db
-			.insert(Budgets)
-			.values({
-				name: name,
-				amount: amount,
-				createdBy: user?.primaryEmailAddress?.emailAddress,
-				icon: emojiIcon,
-			})
-			.returning({ insertedId: Budgets.id });
+		try {
+			// Debugging: Log the nested user object
+			// console.log('User object:', user);
+			// console.log('User email:', user?.primaryEmailAddress?.emailAddress);
 
-		if (result) {
-			toast('New Budget Created');
+			// Extract the email safely
+			const email = user?.primaryEmailAddress?.emailAddress;
+
+			if (!name || !amount || !email) {
+				toast.error('All fields are required, including email.');
+				return;
+			}
+
+			// Insert into the database
+			const result = await db
+				.insert(Budgets)
+				.values({
+					name: name,
+					amount: amount,
+					createdBy: email,
+					icon: emojiIcon,
+				})
+				.returning({ inserted: Budgets.id });
+
+			if (result) {
+				refreshData();
+				toast.success('New Budget Created');
+			}
+		} catch (error) {
+			console.error('Error creating budget:', error);
+			toast.error('Failed to create budget. Please try again.');
 		}
 	};
+
 	return (
 		<div>
 			<Dialog>
@@ -59,7 +81,7 @@ function CreateBudget() {
 								>
 									{emojiIcon}
 								</Button>
-								<div className="absolute">
+								<div className="absolute z-20">
 									<EmojiPicker
 										open={openEmojiPicker}
 										onEmojiClick={(e) => {
@@ -83,15 +105,19 @@ function CreateBudget() {
 										onChange={(e) => setAmount(e.target.value)}
 									/>
 								</div>
+							</div>
+						</DialogDescription>
+						<DialogFooter className="sm:justify-start">
+							<DialogClose asChild>
 								<Button
 									disabled={!(name && amount)}
 									className="mt-5 w-full"
-									onChange={() => onCreateBudget()}
+									onClick={onCreateBudget}
 								>
 									Create Budget
 								</Button>
-							</div>
-						</DialogDescription>
+							</DialogClose>
+						</DialogFooter>
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
