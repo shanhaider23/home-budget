@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/utils/dbConfig';
 import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
@@ -10,14 +10,19 @@ import BarChartDashboard from './_component/BarChart';
 import BudgetItem from './budgets/_components/BudgetItem';
 import ExpenseListTable from './expenses/[id]/_component/ExpenseListTable';
 
-function Dashboard() {
+function Dashboard({ params: paramsPromise }) {
+	const params = use(paramsPromise);
 	const { user } = useUser();
 	const [budgetList, setBudgetList] = useState([]);
 	const [expenseList, setExpenseList] = useState([]);
 
 	useEffect(() => {
-		getBudgetList();
-	}, [user]);
+		getBudgetList(params.id);
+	}, [user, params.id]);
+
+	const refreshData = () => {
+		getBudgetList(params.id);
+	};
 	const getBudgetList = async () => {
 		const results = await db
 			.select({
@@ -58,7 +63,10 @@ function Dashboard() {
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
 				<div className="md:col-span-2 space-y-6 gap-5">
 					<BarChartDashboard budgetList={budgetList} />
-					<ExpenseListTable expensesList={expenseList} />
+					<ExpenseListTable
+						expensesList={expenseList}
+						refreshData={refreshData}
+					/>
 				</div>
 
 				<div className="md:col-span-1">

@@ -9,7 +9,7 @@ import { Budgets } from '@/utils/schema';
 import moment from 'moment';
 import { Loader } from 'lucide-react';
 
-function AddExpense({ budgetId, user }) {
+function AddExpense({ budgetId, refreshData }) {
 	const [name, setName] = useState('');
 	const [amount, setAmount] = useState('');
 	const [loadings, setLoadings] = useState(false);
@@ -34,10 +34,10 @@ function AddExpense({ budgetId, user }) {
 			setAmount('');
 			setName('');
 
-			if (result) {
+			if (result.length > 0) {
 				setLoadings(false);
-				// refreshData();
 				toast.success('New Expense Added');
+				refreshData();
 			}
 			setLoadings(false);
 		} catch (error) {

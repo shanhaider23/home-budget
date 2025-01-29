@@ -7,37 +7,69 @@ import { toast } from 'sonner';
 
 function ExpenseListTable({ expensesList, refreshData }) {
 	const deleteExpense = async (expense) => {
+		const confirmDelete = window.confirm(
+			`Are you sure you want to delete "${expense.name}"?`
+		);
+		if (!confirmDelete) return;
+
 		const results = await db
 			.delete(Expenses)
 			.where(eq(Expenses.id, expense.id))
 			.returning();
 
-		if (results) {
-			toast('Expense Deleted');
+		if (results.length > 0) {
+			toast.success('Expense Deleted');
 			refreshData();
 		}
 	};
+
 	return (
-		<div className="mt-3">
-			<div className="grid grid-cols-4 bg-slate-200 p-2">
-				<h2 className="font-bold">Name</h2>
-				<h2 className="font-bold">Amount</h2>
-				<h2 className="font-bold">Date</h2>
-				<h2 className="font-bold">Action</h2>
+		<div className="bg-white shadow-md rounded-lg overflow-hidden">
+			<div className="overflow-x-auto">
+				<table className="w-full text-left border-collapse">
+					{/* Table Header */}
+					<thead>
+						<tr className="bg-gray-200 text-gray-700">
+							<th className="p-3 font-semibold min-w-[150px]">Name</th>
+							<th className="p-3 font-semibold min-w-[100px]">Amount</th>
+							<th className="p-3 font-semibold min-w-[150px]">Date</th>
+							<th className="p-3 font-semibold min-w-[100px] text-center">
+								Action
+							</th>
+						</tr>
+					</thead>
+
+					{/* Table Body */}
+					<tbody>
+						{expensesList.length > 0 ? (
+							expensesList.map((expense) => (
+								<tr
+									key={expense.id}
+									className="border-b last:border-none hover:bg-gray-100 transition"
+								>
+									<td className="p-3">{expense.name}</td>
+									<td className="p-3">${expense.amount}</td>
+									<td className="p-3">{expense.createdAt}</td>
+									<td className="p-3 text-center">
+										<button
+											className="text-red-500 hover:text-red-700 transition"
+											onClick={() => deleteExpense(expense)}
+										>
+											<Trash size={18} />
+										</button>
+									</td>
+								</tr>
+							))
+						) : (
+							<tr>
+								<td colSpan="4" className="text-center p-5 text-gray-500">
+									No expenses found.
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
 			</div>
-			{expensesList.map((expense, i) => (
-				<div className="grid grid-cols-4 bg-slate-50 p-2" key={expense.id}>
-					<h2>{expense.name}</h2>
-					<h2>{expense.amount}</h2>
-					<h2>{expense.createdAt}</h2>
-					<h2>
-						<Trash
-							className="text-red-600 cursor-pointer"
-							onClick={() => deleteExpense(expense)}
-						/>{' '}
-					</h2>
-				</div>
-			))}
 		</div>
 	);
 }

@@ -33,9 +33,13 @@ function ExpensesScreen({ params: paramsPromise }) {
 	const router = useRouter();
 
 	useEffect(() => {
-		user && getBudgetInfo(params.id);
-	}, [user]);
-
+		if (user) {
+			getBudgetInfo(params.id);
+		}
+	}, [user, params.id]);
+	const refreshData = () => {
+		getBudgetInfo(params.id);
+	};
 	const getBudgetInfo = async (budgetId) => {
 		const results = await db
 			.select({
@@ -58,8 +62,7 @@ function ExpensesScreen({ params: paramsPromise }) {
 			.from(ExpensesSchema)
 			.where(eq(ExpensesSchema.budgetId, budgetId))
 			.orderBy(desc(ExpensesSchema.id));
-		setExpensesList(results);
-		console.log(results, 'expenses');
+		setExpensesList([...results]);
 	};
 
 	const deleteBudget = async () => {
@@ -120,14 +123,14 @@ function ExpensesScreen({ params: paramsPromise }) {
 				<AddExpense
 					budgetId={params.id}
 					user={user}
-					refreshData={() => getBudgetInfo()}
+					refreshData={refreshData}
 				/>
 			</div>
 			<div className="mt-5">
 				<h2 className="text-2xl font-bold"> Latest Expenses </h2>
 				<ExpenseListTable
 					expensesList={expensesList}
-					refreshData={() => getBudgetInfo()}
+					refreshData={refreshData}
 				/>
 			</div>
 		</div>
