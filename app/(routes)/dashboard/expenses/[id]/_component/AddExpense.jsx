@@ -6,10 +6,13 @@ import { Expenses } from '@/utils/schema';
 import { db } from '@/utils/dbConfig';
 import { toast } from 'sonner';
 import { Budgets } from '@/utils/schema';
+import moment from 'moment';
+import { Loader } from 'lucide-react';
 
 function AddExpense({ budgetId, user }) {
 	const [name, setName] = useState('');
 	const [amount, setAmount] = useState('');
+	const [loadings, setLoadings] = useState(false);
 
 	const AddExpense = async () => {
 		try {
@@ -17,21 +20,26 @@ function AddExpense({ budgetId, user }) {
 				toast.error('All fields are required, including email.');
 				return;
 			}
-
+			setLoadings(true);
 			const result = await db
 				.insert(Expenses)
 				.values({
 					name: name,
 					amount: amount,
 					budgetId: budgetId,
-					createdAt: user?.primaryEmailAddress?.emailAddress,
+					createdAt: moment().format('DD/MM/YYYY'),
 				})
 				.returning({ inserted: Budgets.id });
 
+			setAmount('');
+			setName('');
+
 			if (result) {
+				setLoadings(false);
 				// refreshData();
 				toast.success('New Expense Added');
 			}
+			setLoadings(false);
 		} catch (error) {
 			console.error('Error creating budget:', error);
 			toast.error('Failed to create budget. Please try again.');
@@ -46,6 +54,7 @@ function AddExpense({ budgetId, user }) {
 					<Input
 						placeholder="e.g home decor"
 						onChange={(e) => setName(e.target.value)}
+						value={name}
 					/>
 				</div>
 				<div className="mt-2">
@@ -54,6 +63,7 @@ function AddExpense({ budgetId, user }) {
 						placeholder="e.g 5000 Dkk"
 						type="number"
 						onChange={(e) => setAmount(e.target.value)}
+						value={amount}
 					/>
 				</div>
 				<Button
@@ -61,7 +71,7 @@ function AddExpense({ budgetId, user }) {
 					className="mt-5 w-full"
 					onClick={AddExpense}
 				>
-					Add New Expense
+					{loadings ? <Loader className="animate-spin" /> : 'Add New Expense'}
 				</Button>
 			</div>
 		</div>
