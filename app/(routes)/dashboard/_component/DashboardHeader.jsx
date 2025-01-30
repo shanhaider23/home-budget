@@ -22,9 +22,6 @@ function DashboardHeader() {
 				<div className=" flex justify-center items-center">
 					<DarkModeToggle />
 				</div>
-				<div className=" flex justify-center items-center">
-					<UserButton />
-				</div>
 			</div>
 		</div>
 	);

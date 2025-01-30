@@ -60,6 +60,10 @@ function SideNav() {
 					</Link>
 				))}
 			</div>
+			<div className=" flex justify-center items-center gap-5">
+				<UserButton />
+				<h2>My Profile</h2>
+			</div>
 		</div>
 	);
 }

@@ -127,7 +127,7 @@ function ExpensesScreen({ params: paramsPromise }) {
 				/>
 			</div>
 			<div className="mt-5">
-				<h2 className="text-2xl font-bold"> Latest Expenses </h2>
+				<h2 className="text-2xl font-bold mb-4"> Latest Expenses </h2>
 				<ExpenseListTable
 					expensesList={expensesList}
 					refreshData={refreshData}

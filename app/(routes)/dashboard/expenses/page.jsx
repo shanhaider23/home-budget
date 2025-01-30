@@ -6,6 +6,7 @@ import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
 import { Budgets, Expenses } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import ExpenseListTable from './[id]/_component/ExpenseListTable';
+import PiChart from './-component/PiChart';
 
 function ExpenseComponent({ params: paramsPromise }) {
 	const params = use(paramsPromise);
@@ -25,6 +26,7 @@ function ExpenseComponent({ params: paramsPromise }) {
 				id: Expenses.id,
 				name: Expenses.name,
 				amount: Expenses.amount,
+				category: Expenses.category,
 				createdAt: Expenses.createdAt,
 			})
 			.from(Budgets)
@@ -36,6 +38,7 @@ function ExpenseComponent({ params: paramsPromise }) {
 	return (
 		<div className="m-5">
 			<ExpenseListTable expensesList={expenseList} refreshData={refreshData} />
+			<PiChart />
 		</div>
 	);
 }

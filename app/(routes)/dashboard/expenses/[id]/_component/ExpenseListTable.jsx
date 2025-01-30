@@ -1,7 +1,7 @@
 import { db } from '@/utils/dbConfig';
 import { Expenses } from '@/utils/schema';
 import { eq } from 'drizzle-orm';
-import { Trash } from 'lucide-react';
+import { Loader, Trash } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -70,12 +70,12 @@ function ExpenseListTable({ expensesList, refreshData }) {
 								</tr>
 							))
 						) : (
-							<tr>
+							<tr className="flex justify-center items-center ml-[200%]">
 								<td
 									colSpan="4"
-									className="text-center p-5 text-gray-500 dark:text-gray-400"
+									className="text-center p-5 text-gray-500 dark:text-gray-400 flex justify-center items-center "
 								>
-									No expenses found.
+									<Loader className="animate-spin " size={50} />
 								</td>
 							</tr>
 						)}

@@ -51,6 +51,7 @@ function Dashboard({ params: paramsPromise }) {
 				id: Expenses.id,
 				name: Expenses.name,
 				amount: Expenses.amount,
+				category: Expenses.category,
 				createdAt: Expenses.createdAt,
 			})
 			.from(Budgets)

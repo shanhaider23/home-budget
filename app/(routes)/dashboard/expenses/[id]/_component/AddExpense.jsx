@@ -69,7 +69,7 @@ function AddExpense({ budgetId, refreshData }) {
 						Expense Amount
 					</h2>
 					<Input
-						placeholder="e.g 5000 Dkk"
+						placeholder="e.g 5000"
 						type="number"
 						onChange={(e) => setAmount(e.target.value)}
 						value={amount}
