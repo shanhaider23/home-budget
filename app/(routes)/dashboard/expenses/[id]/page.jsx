@@ -116,7 +116,7 @@ function ExpensesScreen({ params: paramsPromise }) {
 			</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 mt-6 gap-5">
 				{budgetInfo ? (
-					<BudgetItem budget={budgetInfo} />
+					<BudgetItem budget={budgetInfo} expensesList={expensesList} />
 				) : (
 					<div className="h-[150px] w-full bg-slate-200 rounded-lg animate-pulse"></div>
 				)}{' '}

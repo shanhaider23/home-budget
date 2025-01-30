@@ -30,8 +30,12 @@ function BudgetList() {
 	};
 	return (
 		<div className="mt-7">
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+			<div className="flex items-center justify-between mb-5">
+				<h2 className="font-bold text-3xl ">Budgets</h2>
 				<CreateBudget refreshData={() => getBudgetList()} />
+			</div>
+
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
 				{budgetList?.length > 0
 					? budgetList.map((budget, i) => (
 							<BudgetItem budget={budget} key={budget.id} />
