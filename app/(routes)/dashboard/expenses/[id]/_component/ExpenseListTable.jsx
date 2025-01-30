@@ -24,12 +24,11 @@ function ExpenseListTable({ expensesList, refreshData }) {
 	};
 
 	return (
-		<div className="bg-white shadow-md rounded-lg overflow-hidden">
+		<div className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border  border-gray-200 dark:border-gray-700">
 			<div className="overflow-x-auto">
 				<table className="w-full text-left border-collapse">
-					{/* Table Header */}
 					<thead>
-						<tr className="bg-gray-200 text-gray-700">
+						<tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
 							<th className="p-3 font-semibold min-w-[150px]">Name</th>
 							<th className="p-3 font-semibold min-w-[100px]">Amount</th>
 							<th className="p-3 font-semibold min-w-[150px]">Date</th>
@@ -45,14 +44,20 @@ function ExpenseListTable({ expensesList, refreshData }) {
 							expensesList.map((expense) => (
 								<tr
 									key={expense.id}
-									className="border-b last:border-none hover:bg-gray-100 transition"
+									className="border-b last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
 								>
-									<td className="p-3">{expense.name}</td>
-									<td className="p-3">${expense.amount}</td>
-									<td className="p-3">{expense.createdAt}</td>
+									<td className="p-3 text-gray-800 dark:text-gray-200">
+										{expense.name}
+									</td>
+									<td className="p-3 text-gray-800 dark:text-gray-200">
+										${expense.amount}
+									</td>
+									<td className="p-3 text-gray-800 dark:text-gray-200">
+										{expense.createdAt}
+									</td>
 									<td className="p-3 text-center">
 										<button
-											className="text-red-500 hover:text-red-700 transition"
+											className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 transition"
 											onClick={() => deleteExpense(expense)}
 										>
 											<Trash size={18} />
@@ -62,7 +67,10 @@ function ExpenseListTable({ expensesList, refreshData }) {
 							))
 						) : (
 							<tr>
-								<td colSpan="4" className="text-center p-5 text-gray-500">
+								<td
+									colSpan="4"
+									className="text-center p-5 text-gray-500 dark:text-gray-400"
+								>
 									No expenses found.
 								</td>
 							</tr>

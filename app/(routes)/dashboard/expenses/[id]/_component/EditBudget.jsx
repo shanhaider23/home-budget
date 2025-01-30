@@ -54,20 +54,22 @@ function EditBudget({ budgetInfo, refreshData }) {
 		<div>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button>
-						{' '}
+					<Button className="bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700">
 						<PenBox /> Edit
 					</Button>
 				</DialogTrigger>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Update Budget</DialogTitle>
+						<DialogTitle className="text-gray-800 dark:text-gray-200">
+							Update Budget
+						</DialogTitle>
 						<DialogDescription>
 							<div className="mt-5">
 								<Button
 									variant="outline"
 									onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
 									size="lg"
+									className="dark:text-gray-200 dark:border-gray-700 dark:bg-gray-700"
 								>
 									{emojiIcon}
 								</Button>
@@ -81,20 +83,26 @@ function EditBudget({ budgetInfo, refreshData }) {
 									/>
 								</div>
 								<div className="mt-2">
-									<h2 className="text-black font-bold my-1">Budget Name</h2>
+									<h2 className="text-black font-bold my-1 dark:text-gray-300">
+										Budget Name
+									</h2>
 									<Input
 										placeholder="e.g home decor"
 										onChange={(e) => setName(e.target.value)}
 										defaultValue={budgetInfo?.name}
+										className="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
 									/>
 								</div>
 								<div className="mt-2">
-									<h2 className="text-black font-bold my-1">Budget Amount</h2>
+									<h2 className="text-black font-bold my-1 dark:text-gray-300">
+										Budget Amount
+									</h2>
 									<Input
 										placeholder="e.g 5000 Dkk"
 										type="number"
 										onChange={(e) => setAmount(e.target.value)}
 										defaultValue={budgetInfo?.amount}
+										className="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
 									/>
 								</div>
 							</div>
@@ -103,7 +111,7 @@ function EditBudget({ budgetInfo, refreshData }) {
 							<DialogClose asChild>
 								<Button
 									disabled={!(name && amount)}
-									className="mt-5 w-full"
+									className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
 									onClick={onEditBudget}
 								>
 									Update Budget

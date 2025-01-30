@@ -27,43 +27,45 @@ function CardInfo({ budgetList }) {
 			{budgetList ? (
 				<>
 					{/* Total Budget Card */}
-					<div className="p-6 bg-blue-100 border-l-4 border-blue-500 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
+					<div className="p-6 bg-blue-100 dark:bg-blue-800 border-l-4 border-blue-500 dark:border-blue-600 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
 						<div className="bg-blue-500 text-white p-4 rounded-full">
 							<PiggyBank size={32} />
 						</div>
 						<div>
-							<h2 className="text-gray-700 font-semibold text-lg">
+							<h2 className="text-gray-700 dark:text-gray-200 font-semibold text-lg">
 								Total Budget
 							</h2>
-							<h2 className="text-xl font-bold text-gray-900">
+							<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
 								${totalBudget}
 							</h2>
 						</div>
 					</div>
 
 					{/* Total Spend Card */}
-					<div className="p-6 bg-red-100 border-l-4 border-red-500 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
+					<div className="p-6 bg-red-100 dark:bg-red-800 border-l-4 border-red-500 dark:border-red-600 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
 						<div className="bg-red-500 text-white p-4 rounded-full">
 							<ReceiptText size={32} />
 						</div>
 						<div>
-							<h2 className="text-gray-700 font-semibold text-lg">
+							<h2 className="text-gray-700 dark:text-gray-200 font-semibold text-lg">
 								Total Spend
 							</h2>
-							<h2 className="text-xl font-bold text-gray-900">${totalSpend}</h2>
+							<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+								${totalSpend}
+							</h2>
 						</div>
 					</div>
 
 					{/* Number of Budgets Card */}
-					<div className="p-6 bg-green-100 border-l-4 border-green-500 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
+					<div className="p-6 bg-green-100 dark:bg-green-800 border-l-4 border-green-500 dark:border-green-600 rounded-lg shadow-md flex items-center gap-4 hover:shadow-lg transition-all">
 						<div className="bg-green-500 text-white p-4 rounded-full">
 							<Wallet size={32} />
 						</div>
 						<div>
-							<h2 className="text-gray-700 font-semibold text-lg">
+							<h2 className="text-gray-700 dark:text-gray-200 font-semibold text-lg">
 								Number of Budgets
 							</h2>
-							<h2 className="text-xl font-bold text-gray-900">
+							<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
 								{budgetList.length}
 							</h2>
 						</div>
@@ -75,7 +77,7 @@ function CardInfo({ budgetList }) {
 					{[1, 2, 3].map((item, i) => (
 						<div
 							key={i}
-							className="h-[120px] w-full bg-slate-200 animate-pulse rounded-lg"
+							className="h-[120px] w-full bg-slate-200 dark:bg-slate-700 animate-pulse rounded-lg"
 						></div>
 					))}
 				</div>

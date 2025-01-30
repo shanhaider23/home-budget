@@ -8,7 +8,7 @@ export default defineConfig({
     dialect: 'postgresql',
     schema: './utils/schema.jsx',
     dbCredentials: {
-        url: 'postgresql://neondb_owner:npg_BnNh9j8qRDYM@ep-rough-scene-a94yjjwk-pooler.gwc.azure.neon.tech/neondb?sslmode=require',
+        url: process.env.NEXT_PUBLIC_DATABASE_URL,
     },
     out: "./drizzle",
 });

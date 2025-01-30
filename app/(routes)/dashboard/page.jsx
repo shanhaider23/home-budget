@@ -62,9 +62,6 @@ function Dashboard({ params: paramsPromise }) {
 
 	return (
 		<div className="p-5">
-			<h2 className="font-bold text-3xl">Hi, {user?.firstName} ✌️</h2>
-			<p className="text-gray-500">What's happening with your money?</p>
-
 			<CardInfo budgetList={budgetList} />
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

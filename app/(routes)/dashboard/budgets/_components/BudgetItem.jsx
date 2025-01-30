@@ -7,19 +7,19 @@ function BudgetItem({ budget, expensesList }) {
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>
-			<div className="p-5 border rounded-lg shadow-lg bg-white hover:shadow-xl hover:scale-105 transition-all cursor-pointer">
+			<div className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl hover:scale-105 transition-all cursor-pointer dark:border-gray-700">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-4">
-						<div className=" bg-slate-200 text-slate-600 p-1 rounded-full">
+						<div className="bg-slate-200 text-slate-600 p-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
 							{budget?.icon}
 						</div>
 
 						<div>
-							<h2 className="text-lg font-semibold text-gray-800">
+							<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
 								{budget.name}
 							</h2>
 
-							<p className="text-sm text-gray-500">
+							<p className="text-sm text-gray-500 dark:text-gray-400">
 								{`${
 									(
 										expensesList?.filter(
@@ -27,32 +27,37 @@ function BudgetItem({ budget, expensesList }) {
 										) || []
 									).length
 								} 
-  ${
-		(expensesList?.filter((expense) => expense.budgetId === budget.id) || [])
-			.length === 1
-			? 'item'
-			: 'items'
-	}`}
+                ${
+									(
+										expensesList?.filter(
+											(expense) => expense.budgetId === budget.id
+										) || []
+									).length === 1
+										? 'item'
+										: 'items'
+								}`}
 							</p>
 						</div>
 					</div>
 					<div>
-						<h2 className="text-lg font-semibold text-gray-800 flex items-center gap-1">
+						<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1">
 							{budget.amount}
-							<p className=" text-sm text-gray-500">{budget.currency}</p>
+							<p className="text-sm text-gray-500 dark:text-gray-400">
+								{budget.currency}
+							</p>
 						</h2>
 					</div>
 				</div>
 
-				<div className="text-gray-800 font-semibold flex items-center justify-between mt-5">
-					<p className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
+				<div className="text-gray-800 font-semibold flex items-center justify-between mt-5 dark:text-gray-200">
+					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
 						Spent:
 						<span>
 							{budget.totalSpend || 0}
 							{budget.currency}
 						</span>
 					</p>
-					<p className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
+					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
 						Remaining:
 						<span>
 							{budget.amount - (budget.totalSpend || 0)}
@@ -62,13 +67,13 @@ function BudgetItem({ budget, expensesList }) {
 				</div>
 
 				<div>
-					<div className="relative h-3 rounded-full bg-gray-200">
+					<div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
 						<div
 							className="absolute top-0 left-0 h-3 rounded-full bg-blue-500 transition-all"
 							style={{ width: `${progress}%` }}
 						></div>
 					</div>
-					<p className="text-sm text-gray-600 mt-1 text-center">
+					<p className="text-sm text-gray-600 mt-1 text-center dark:text-gray-300">
 						{progress.toFixed(0)}% used
 					</p>
 				</div>

@@ -46,29 +46,37 @@ function AddExpense({ budgetId, refreshData }) {
 		}
 	};
 	return (
-		<div className="p-5 border rounded-lg shadow-lg bg-white">
-			<h2 className="font-bold text-lg">Add Expense</h2>
+		<div className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+			<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200">
+				Add Expense
+			</h2>
 			<div>
 				<div className="mt-2">
-					<h2 className="text-black font-bold my-1">Expense Name</h2>
+					<h2 className="text-black font-bold my-1 dark:text-gray-300">
+						Expense Name
+					</h2>
 					<Input
 						placeholder="e.g home decor"
 						onChange={(e) => setName(e.target.value)}
 						value={name}
+						className="dark:bg-gray-700 dark:text-gray-200"
 					/>
 				</div>
 				<div className="mt-2">
-					<h2 className="text-black font-bold my-1">Expense Amount</h2>
+					<h2 className="text-black font-bold my-1 dark:text-gray-300">
+						Expense Amount
+					</h2>
 					<Input
 						placeholder="e.g 5000 Dkk"
 						type="number"
 						onChange={(e) => setAmount(e.target.value)}
 						value={amount}
+						className="dark:bg-gray-700 dark:text-gray-200"
 					/>
 				</div>
 				<Button
 					disabled={!(name && amount)}
-					className="mt-5 w-full"
+					className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
 					onClick={AddExpense}
 				>
 					{loadings ? <Loader className="animate-spin" /> : 'Add New Expense'}
