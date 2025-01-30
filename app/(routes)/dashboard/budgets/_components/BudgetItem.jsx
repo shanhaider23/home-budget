@@ -37,16 +37,27 @@ function BudgetItem({ budget, expensesList }) {
 						</div>
 					</div>
 					<div>
-						<h2 className="text-lg font-semibold text-gray-800">
+						<h2 className="text-lg font-semibold text-gray-800 flex items-center gap-1">
 							{budget.amount}
+							<p className=" text-sm text-gray-500">{budget.currency}</p>
 						</h2>
 					</div>
 				</div>
 
 				<div className="text-gray-800 font-semibold flex items-center justify-between mt-5">
-					<p>Spent: ${budget.totalSpend || 0}</p>
-					<p className="text-sm text-gray-500">
-						Remaining: ${budget.amount - (budget.totalSpend || 0)}
+					<p className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
+						Spent:
+						<span>
+							{budget.totalSpend || 0}
+							{budget.currency}
+						</span>
+					</p>
+					<p className="text-sm text-gray-500 flex items-center gap-1 flex-wrap">
+						Remaining:
+						<span>
+							{budget.amount - (budget.totalSpend || 0)}
+							{budget.currency}
+						</span>
 					</p>
 				</div>
 

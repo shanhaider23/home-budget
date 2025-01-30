@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { db } from '@/utils/dbConfig';
 import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
 import { Budgets, Expenses } from '@/utils/schema';
@@ -12,13 +13,19 @@ import ExpenseListTable from './expenses/[id]/_component/ExpenseListTable';
 
 function Dashboard({ params: paramsPromise }) {
 	const params = use(paramsPromise);
-	const { user } = useUser();
+	const { isSignedIn, user } = useUser();
 	const [budgetList, setBudgetList] = useState([]);
 	const [expenseList, setExpenseList] = useState([]);
+	const router = useRouter();
 
 	useEffect(() => {
-		getBudgetList(params.id);
-	}, [user, params.id]);
+		if (!isSignedIn) {
+			// Redirect to sign-in page if user is not signed in
+			router.push('/sign-in');
+		} else {
+			getBudgetList(params.id);
+		}
+	}, [isSignedIn, user, params.id]);
 
 	const refreshData = () => {
 		getBudgetList(params.id);

@@ -17,21 +17,24 @@ import { db } from '@/utils/dbConfig';
 import { Budgets } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'sonner';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 
 function CreateBudget({ refreshData }) {
 	const [emojiIcon, setEmojiIcon] = useState('Emoji');
 	const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 	const [name, setName] = useState('');
 	const [amount, setAmount] = useState('');
+	const [currency, setCurrency] = useState('');
 
 	const { user } = useUser();
 	const onCreateBudget = async () => {
 		try {
-			// Debugging: Log the nested user object
-			// console.log('User object:', user);
-			// console.log('User email:', user?.primaryEmailAddress?.emailAddress);
-
-			// Extract the email safely
 			const email = user?.primaryEmailAddress?.emailAddress;
 
 			if (!name || !amount || !email) {
@@ -45,6 +48,7 @@ function CreateBudget({ refreshData }) {
 				.values({
 					name: name,
 					amount: amount,
+					currency: currency,
 					createdBy: email,
 					icon: emojiIcon,
 				})
@@ -99,10 +103,24 @@ function CreateBudget({ refreshData }) {
 								<div className="mt-2">
 									<h2 className="text-black font-bold my-1">Budget Amount</h2>
 									<Input
-										placeholder="e.g 5000 Dkk"
+										placeholder="e.g 5000"
 										type="number"
 										onChange={(e) => setAmount(e.target.value)}
 									/>
+								</div>
+								<div className="mt-2">
+									<select
+										value={currency}
+										onChange={(e) => setCurrency(e.target.value)}
+										className="w-full p-2 border rounded-md"
+									>
+										<option value="kr">🇩🇰 Danish Krone (kr)</option>
+										<option value="₨">🇵🇰 Pakistani Rupee (₨)</option>
+										<option value="$">🇺🇸 US Dollar ($)</option>
+										<option value="€">🇪🇺 Euro (€)</option>
+										<option value="£">🇬🇧 British Pound (£)</option>
+										<option value="₹">🇮🇳 Indian Rupee (₹)</option>
+									</select>
 								</div>
 							</div>
 						</DialogDescription>

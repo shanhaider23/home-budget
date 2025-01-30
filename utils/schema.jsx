@@ -11,6 +11,7 @@ export const Budgets = pgTable('budgets', {
 	id: serial('id').notNull().primaryKey(), // Ensure it's treated as primary key
 	name: varchar('name').notNull(),
 	amount: varchar('amount').notNull(),
+	currency: varchar('currency').notNull(),
 	icon: varchar('icon'),
 	createdBy: varchar('createdBy').notNull(),
 });
