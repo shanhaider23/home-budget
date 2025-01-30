@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import {
 	Bar,
 	BarChart,
@@ -10,9 +11,14 @@ import {
 } from 'recharts';
 
 function BarChartDashboard({ budgetList, totalBudget, totalSpend }) {
-	const isDarkMode = document.documentElement.classList.contains('dark');
+	const [isDarkMode, setIsDarkMode] = useState(false);
 
-	console.log(isDarkMode);
+	useEffect(() => {
+		// Check if 'dark' class is present on the <html> element after mount
+		setIsDarkMode(document.documentElement.classList.contains('dark'));
+	}, []);
+
+	// Only execute code that uses `isDarkMode` after the component has mounted
 	const budgetBarColor = isDarkMode
 		? totalBudget > totalSpend
 			? '#82ca9d' // Greenish for light mode

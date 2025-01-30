@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { LayoutGrid, PiggyBank, ReceiptText } from 'lucide-react';
+import { Currency, LayoutGrid, PiggyBank, ReceiptText } from 'lucide-react';
 import { UserButton } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -25,6 +25,12 @@ function SideNav() {
 			name: 'Expenses',
 			icon: ReceiptText,
 			path: '/dashboard/expenses',
+		},
+		{
+			id: 4,
+			name: 'Currency Converter',
+			icon: Currency,
+			path: '/dashboard/currency',
 		},
 	];
 	const path = usePathname();
