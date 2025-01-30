@@ -12,6 +12,7 @@ import { Loader } from 'lucide-react';
 function AddExpense({ budgetId, refreshData }) {
 	const [name, setName] = useState('');
 	const [amount, setAmount] = useState('');
+	const [category, setCategory] = useState('');
 	const [loadings, setLoadings] = useState(false);
 
 	const AddExpense = async () => {
@@ -28,6 +29,7 @@ function AddExpense({ budgetId, refreshData }) {
 					amount: amount,
 					budgetId: budgetId,
 					createdAt: moment().format('DD/MM/YYYY'),
+					category: category,
 				})
 				.returning({ inserted: Budgets.id });
 
@@ -71,6 +73,17 @@ function AddExpense({ budgetId, refreshData }) {
 						type="number"
 						onChange={(e) => setAmount(e.target.value)}
 						value={amount}
+						className="dark:bg-gray-700 dark:text-gray-200"
+					/>
+				</div>
+				<div className="mt-2">
+					<h2 className="text-black font-bold my-1 dark:text-gray-300">
+						Expense Category
+					</h2>
+					<Input
+						placeholder="Food"
+						onChange={(e) => setCategory(e.target.value)}
+						value={category}
 						className="dark:bg-gray-700 dark:text-gray-200"
 					/>
 				</div>

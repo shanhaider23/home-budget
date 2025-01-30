@@ -7,8 +7,8 @@ function BudgetItem({ budget, expensesList }) {
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>
-			<div className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl hover:scale-105 transition-all cursor-pointer dark:border-gray-700">
-				<div className="flex items-center justify-between">
+			<div className="flex flex-col justify-between items-center min-h-52 p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl hover:scale-105 transition-all cursor-pointer dark:border-gray-700">
+				<div className="flex  justify-between w-full items-center">
 					<div className="flex items-center gap-4">
 						<div className="bg-slate-200 text-slate-600 p-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
 							{budget?.icon}
@@ -48,34 +48,33 @@ function BudgetItem({ budget, expensesList }) {
 						</h2>
 					</div>
 				</div>
-
-				<div className="text-gray-800 font-semibold flex items-center justify-between mt-5 dark:text-gray-200">
-					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
-						Spent:
-						<span>
-							{budget.totalSpend || 0}
-							{budget.currency}
-						</span>
-					</p>
-					<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
-						Remaining:
-						<span>
-							{budget.amount - (budget.totalSpend || 0)}
-							{budget.currency}
-						</span>
-					</p>
-				</div>
-
-				<div>
-					<div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
-						<div
-							className="absolute top-0 left-0 h-3 rounded-full bg-blue-500 transition-all"
-							style={{ width: `${progress}%` }}
-						></div>
+				<div className="w-full">
+					<div className="text-gray-800 font-semibold flex items-center justify-between mt-5 dark:text-gray-200">
+						<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
+							Spent:
+							<span>
+								{budget.totalSpend || 0} {budget.currency}
+							</span>
+						</p>
+						<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
+							Remaining:
+							<span>
+								{budget.amount - (budget.totalSpend || 0)} {budget.currency}
+							</span>
+						</p>
 					</div>
-					<p className="text-sm text-gray-600 mt-1 text-center dark:text-gray-300">
-						{progress.toFixed(0)}% used
-					</p>
+
+					<div>
+						<div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
+							<div
+								className="absolute top-0 left-0 h-3 rounded-full bg-blue-500 transition-all"
+								style={{ width: `${progress}%` }}
+							></div>
+						</div>
+						<p className="text-sm text-gray-600 mt-1 text-center dark:text-gray-300">
+							{progress.toFixed(0)}% used
+						</p>
+					</div>
 				</div>
 			</div>
 		</Link>

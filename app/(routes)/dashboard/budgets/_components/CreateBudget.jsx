@@ -1,8 +1,22 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog';
+import EmojiPicker from 'emoji-picker-react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import { db } from '@/utils/dbConfig';
+import { Budgets } from '@/utils/schema';
+import { useUser } from '@clerk/nextjs';
+import { toast } from 'sonner';
 import {
 	Select,
 	SelectContent,
@@ -10,166 +24,132 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { RefreshCcw } from 'lucide-react';
-import axios from 'axios';
 
-const favoriteCurrencies = [
-	{ code: 'DKK', symbol: 'kr', name: 'Danish Krone', flag: '🇩🇰' },
-	{ code: 'PKR', symbol: '₨', name: 'Pakistani Rupee', flag: '🇵🇰' },
-	{ code: 'USD', symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
-	{ code: 'EUR', symbol: '€', name: 'Euro', flag: '🇪🇺' },
-	{ code: 'GBP', symbol: '£', name: 'British Pound', flag: '🇬🇧' },
-	{ code: 'INR', symbol: '₹', name: 'Indian Rupee', flag: '🇮🇳' },
-];
+function CreateBudget({ refreshData }) {
+	const [emojiIcon, setEmojiIcon] = useState('Emoji');
+	const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
+	const [name, setName] = useState('');
+	const [amount, setAmount] = useState('');
+	const [currency, setCurrency] = useState('DKK');
 
-const CurrencyConverter = () => {
-	const [currencies, setCurrencies] = useState([]);
-	const [amount, setAmount] = useState(1);
-	const [fromCurrency, setFromCurrency] = useState('USD');
-	const [toCurrency, setToCurrency] = useState('EUR');
-	const [convertedAmount, setConvertedAmount] = useState(null);
-	const [exchangeRate, setExchangeRate] = useState(null);
+	const { user } = useUser();
+	const onCreateBudget = async () => {
+		try {
+			const email = user?.primaryEmailAddress?.emailAddress;
 
-	useEffect(() => {
-		const fetchCurrencies = async () => {
-			try {
-				const response = await axios.get(
-					`https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_CURRENCY_API}/latest/USD`
-				);
-				setCurrencies(Object.keys(response.data.conversion_rates));
-			} catch (err) {
-				console.error('Failed to fetch currency data.');
+			if (!name || !amount || !currency || !email) {
+				toast.error('All fields are required, including email.');
+				return;
 			}
-		};
-		fetchCurrencies();
-	}, []);
 
-	useEffect(() => {
-		const fetchExchangeRate = async () => {
-			try {
-				const response = await axios.get(
-					`https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_CURRENCY_API}/latest/${fromCurrency}`
-				);
-				const rate = response.data.conversion_rates[toCurrency];
-				setExchangeRate(rate);
-				setConvertedAmount((amount * rate).toFixed(2));
-			} catch (err) {
-				console.error('Failed to fetch exchange rate.');
+			// Insert into the database
+			const result = await db
+				.insert(Budgets)
+				.values({
+					name: name,
+					amount: amount,
+					currency: currency,
+					createdBy: email,
+					icon: emojiIcon,
+				})
+				.returning({ inserted: Budgets.id });
+
+			if (result) {
+				refreshData();
+				toast.success('New Budget Created');
 			}
-		};
-
-		if (fromCurrency && toCurrency) {
-			fetchExchangeRate();
+		} catch (error) {
+			console.error('Error creating budget:', error);
+			toast.error('Failed to create budget. Please try again.');
 		}
-	}, [fromCurrency, toCurrency, amount]);
-
-	const swapCurrencies = () => {
-		setFromCurrency(toCurrency);
-		setToCurrency(fromCurrency);
 	};
 
 	return (
-		<div className="flex justify-center items-center min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white p-5">
-			<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg w-full max-w-md">
-				<h1 className="text-xl font-bold text-center mb-4">
-					Currency Converter
-				</h1>
-
-				<div className="space-y-4">
-					{/* Amount Input */}
-					<div>
-						<Label className="text-sm">Amount</Label>
-						<Input
-							type="number"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
-							placeholder="Enter amount"
-							className="mt-1"
-						/>
-					</div>
-
-					{/* From Currency Selector */}
-					<div>
-						<Label className="text-sm">From</Label>
-						<Select value={fromCurrency} onValueChange={setFromCurrency}>
-							<SelectTrigger className="mt-1">
-								<SelectValue placeholder="Select currency" />
-							</SelectTrigger>
-							<SelectContent>
-								{/* Favorite Currencies */}
-								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
-									<SelectItem key={code} value={code}>
-										{flag} {name} ({symbol})
-									</SelectItem>
-								))}
-								<hr className="my-1 border-gray-500" />
-								{/* All Other Currencies */}
-								{currencies
-									.filter(
-										(currency) =>
-											!favoriteCurrencies.some((fav) => fav.code === currency)
-									)
-									.map((currency) => (
-										<SelectItem key={currency} value={currency}>
-											{currency}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-					</div>
-
-					{/* Swap Button */}
-					<div className="flex justify-center">
-						<Button
-							variant="outline"
-							onClick={swapCurrencies}
-							className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
-						>
-							<RefreshCcw className="w-5 h-5 mr-2" /> Swap
+		<div>
+			<Dialog>
+				<DialogTrigger asChild>
+					<div className=" cursor-pointer ">
+						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800">
+							Create New Budget
 						</Button>
 					</div>
-
-					{/* To Currency Selector */}
-					<div>
-						<Label className="text-sm">To</Label>
-						<Select value={toCurrency} onValueChange={setToCurrency}>
-							<SelectTrigger className="mt-1">
-								<SelectValue placeholder="Select currency" />
-							</SelectTrigger>
-							<SelectContent>
-								{/* Favorite Currencies */}
-								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
-									<SelectItem key={code} value={code}>
-										{flag} {name} ({symbol})
-									</SelectItem>
-								))}
-								<hr className="my-1 border-gray-500" />
-								{/* All Other Currencies */}
-								{currencies
-									.filter(
-										(currency) =>
-											!favoriteCurrencies.some((fav) => fav.code === currency)
-									)
-									.map((currency) => (
-										<SelectItem key={currency} value={currency}>
-											{currency}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-					</div>
-
-					{/* Converted Amount */}
-					{convertedAmount !== null && (
-						<p className="text-lg font-semibold text-center">
-							{amount} {fromCurrency} = {convertedAmount} {toCurrency}
-						</p>
-					)}
-				</div>
-			</Card>
+				</DialogTrigger>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
+							Create New Budget
+						</DialogTitle>
+						<DialogDescription>
+							<div className="mt-5">
+								<Button
+									variant="outline"
+									onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
+									size="lg"
+								>
+									{emojiIcon}
+								</Button>
+								<div className="absolute z-20">
+									<EmojiPicker
+										open={openEmojiPicker}
+										onEmojiClick={(e) => {
+											setEmojiIcon(e.emoji);
+											setOpenEmojiPicker(false);
+										}}
+									/>
+								</div>
+								<div className="mt-2">
+									<h2 className="text-black font-bold my-1 dark:text-gray-300">
+										Budget Name
+									</h2>
+									<Input
+										placeholder="e.g home decor"
+										onChange={(e) => setName(e.target.value)}
+										className="dark:bg-gray-700 dark:text-gray-200"
+									/>
+								</div>
+								<div className="mt-2">
+									<h2 className="text-black font-bold my-1 dark:text-gray-300">
+										Budget Amount
+									</h2>
+									<Input
+										placeholder="e.g 5000 Dkk"
+										type="number"
+										onChange={(e) => setAmount(e.target.value)}
+										className="dark:bg-gray-700 dark:text-gray-200"
+									/>
+								</div>
+								<div className="mt-5">
+									<select
+										value={currency}
+										onChange={(e) => setCurrency(e.target.value)}
+										className="w-full p-2 border rounded-md dark:bg-gray-700 dark:text-gray-200"
+									>
+										<option value="kr">🇩🇰 Danish Krone (kr)</option>
+										<option value="₨">🇵🇰 Pakistani Rupee (₨)</option>
+										<option value="$">🇺🇸 US Dollar ($)</option>
+										<option value="€">🇪🇺 Euro (€)</option>
+										<option value="£">🇬🇧 British Pound (£)</option>
+										<option value="₹">🇮🇳 Indian Rupee (₹)</option>
+									</select>
+								</div>
+							</div>
+						</DialogDescription>
+						<DialogFooter className="sm:justify-start">
+							<DialogClose asChild>
+								<Button
+									disabled={!(name && amount)}
+									className="mt-5 w-full"
+									onClick={onCreateBudget}
+								>
+									Create Budget
+								</Button>
+							</DialogClose>
+						</DialogFooter>
+					</DialogHeader>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
-};
+}
 
-export default CurrencyConverter;
+export default CreateBudget;

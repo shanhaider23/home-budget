@@ -31,6 +31,7 @@ function ExpenseListTable({ expensesList, refreshData }) {
 						<tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
 							<th className="p-3 font-semibold min-w-[150px]">Name</th>
 							<th className="p-3 font-semibold min-w-[100px]">Amount</th>
+							<th className="p-3 font-semibold min-w-[100px]">Category</th>
 							<th className="p-3 font-semibold min-w-[150px]">Date</th>
 							<th className="p-3 font-semibold min-w-[100px] text-center">
 								Action
@@ -50,7 +51,10 @@ function ExpenseListTable({ expensesList, refreshData }) {
 										{expense.name}
 									</td>
 									<td className="p-3 text-gray-800 dark:text-gray-200">
-										${expense.amount}
+										{expense.amount}
+									</td>
+									<td className="p-3 text-gray-800 dark:text-gray-200">
+										{expense.category}
 									</td>
 									<td className="p-3 text-gray-800 dark:text-gray-200">
 										{expense.createdAt}
