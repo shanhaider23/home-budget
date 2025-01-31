@@ -3,7 +3,6 @@ import Link from 'next/link';
 
 function BudgetItem({ budget, expensesList }) {
 	const progress = Math.min((budget.totalSpend / budget.amount) * 100, 100);
-	console.log(budget);
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>

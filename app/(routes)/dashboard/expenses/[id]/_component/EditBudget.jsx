@@ -28,13 +28,6 @@ function EditBudget({ budgetInfo, refreshData }) {
 
 	const { user } = useUser();
 
-	// useEffect(() => {
-	//     if(budgetInfo){
-	//         setEmojiIcon(budgetInfo.icon)
-	//         setAmount(budgetInfo.amount)
-	//         setName(budgetInfo.name)
-	//     }
-	// })
 	const onEditBudget = async () => {
 		const result = await db
 			.update(Budgets)
