@@ -2,6 +2,8 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from "@/components/ui/sonner";
+import Header from "./_component/Header";
+import SideNav from "./(routes)/dashboard/_component/SideNav";
 
 
 const geistSans = Outfit({
@@ -27,7 +29,18 @@ export default function RootLayout({ children }) {
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Toaster />
-          {children}
+          <Header />
+          <div className="flex ">
+            <SideNav />
+            <div className="w-full overflow-x-auto">
+              <div className="sm:h-[calc(98.5vh-60px)] overflow-auto ">
+                <div className="w-full flex justify-center mx-auto   overflow-auto h-[calc(100vh - 120px)] overflow-y-auto relative">
+                  <div className="w-full md:max-w-6xl">{children}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </body>
       </html>
     </ClerkProvider>

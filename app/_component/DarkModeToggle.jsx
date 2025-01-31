@@ -31,10 +31,7 @@ export default function DarkModeToggle() {
 	};
 
 	return (
-		<button
-			onClick={toggleDarkMode}
-			className="p-1 bg-gray-800 text-white rounded-full transition-colors duration-300 hover:bg-gray-600 w-[36px] "
-		>
+		<button onClick={toggleDarkMode}>
 			{darkMode ? (
 				<Sun size={30} absoluteStrokeWidth />
 			) : (
