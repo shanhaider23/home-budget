@@ -25,11 +25,8 @@ function DashboardHeader() {
 				</button>
 
 				{/* Logo */}
-				<div className="hidden sm:flex items-center gap-3  ">
-					<Image src={'/logo.svg'} alt="Logo" width={40} height={40} />
-					<h2 className="text-2xl text-red-800 dark:text-red-500 font-bold">
-						SpendWise
-					</h2>
+				<div className="hidden sm:flex items-center -mb-5 -mt-5  ">
+					<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
 				</div>
 			</div>
 
@@ -50,11 +47,8 @@ function DashboardHeader() {
 			{/* === MOBILE MENU (Dropdown) === */}
 			{isMobileMenuOpen && (
 				<div className="absolute top-full left-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md sm:hidden z-50">
-					<div className="flex justify-start items-center gap-3 p-5  ">
-						<Image src={'/logo.svg'} alt="Logo" width={40} height={40} />
-						<h2 className="text-2xl text-red-800 dark:text-red-500 font-bold">
-							SpendWise
-						</h2>
+					<div className="flex justify-start items-center gap-3 pl-5 pt-5  ">
+						<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
 					</div>
 					<ul className="flex flex-col p-4 space-y-2">
 						{navItems.map((item, idx) => (

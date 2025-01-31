@@ -46,7 +46,7 @@ export default function SideNav() {
 	};
 
 	return (
-		<div>
+		<div className="z-[999]">
 			{isSignedIn && (
 				<div className="pr-4 z-50 h-full">
 					<div
