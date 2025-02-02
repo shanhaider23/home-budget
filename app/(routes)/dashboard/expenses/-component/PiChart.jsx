@@ -85,7 +85,9 @@ function PiChart({ expensesList }) {
 
 	return (
 		<div className="w-full flex justify-center items-center">
-			<Pie data={chartData} />
+			<div>
+				<Pie data={chartData} />
+			</div>
 		</div>
 	);
 }

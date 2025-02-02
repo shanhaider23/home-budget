@@ -20,7 +20,6 @@ function Dashboard({ params: paramsPromise }) {
 
 	useEffect(() => {
 		if (!isSignedIn) {
-			// Redirect to sign-in page if user is not signed in
 			router.push('/sign-in');
 		} else {
 			getBudgetList(params.id);
@@ -44,6 +43,7 @@ function Dashboard({ params: paramsPromise }) {
 			.orderBy(desc(Budgets.id));
 		setBudgetList(results);
 		getAllExpenses();
+		console.log(results);
 	};
 	const getAllExpenses = async () => {
 		const results = await db
@@ -65,7 +65,7 @@ function Dashboard({ params: paramsPromise }) {
 		<div className="p-5">
 			<CardInfo budgetList={budgetList} />
 
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
 				<div className="md:col-span-2 space-y-6 gap-5">
 					<BarChartDashboard budgetList={budgetList} />
 					<ExpenseListTable
@@ -74,7 +74,7 @@ function Dashboard({ params: paramsPromise }) {
 					/>
 				</div>
 
-				<div className="md:col-span-1">
+				<div className="md:col-span-1 h-[600px] overflow-y-auto overflow-x-hidden pl-5 pr-5">
 					<h2 className="font-bold text-2xl mb-4">Latest Budgets</h2>
 					<div className="space-y-4 grid gap-5">
 						{budgetList.map((budget, i) => (

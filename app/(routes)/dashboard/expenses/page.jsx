@@ -7,6 +7,7 @@ import { Budgets, Expenses } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import ExpenseListTable from './[id]/_component/ExpenseListTable';
 import PiChart from './-component/PiChart';
+import TriangleChart from './-component/TriangleChart';
 
 function ExpenseComponent({ params: paramsPromise }) {
 	const params = use(paramsPromise);
@@ -42,10 +43,19 @@ function ExpenseComponent({ params: paramsPromise }) {
 	}
 
 	return (
-		<div className="m-5 flex justify-center items-center flex-col">
-			<div className="grid grid-cols-2 mb-10 w-full ">
-				<PiChart expensesList={expenseList} />
+		<div className="m-5 flex justify-center items-center flex-col gap-5">
+			<div className="flex flex-wrap md:flex-nowrap justify-center items-center w-full gap-5">
+				<div className="w-full md:w-[50%] p-4 shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 rounded-lg">
+					<PiChart expensesList={expenseList} />
+				</div>
+				<div className="w-full md:w-[50%] p-4 shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 rounded-lg">
+					<h2>Bar chart</h2>
+					<div>
+						<TriangleChart />
+					</div>
+				</div>
 			</div>
+
 			<div className="w-full">
 				<ExpenseListTable
 					expensesList={expenseList}

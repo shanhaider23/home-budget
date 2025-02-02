@@ -14,7 +14,6 @@ function BarChartDashboard({ budgetList, totalBudget, totalSpend }) {
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	useEffect(() => {
-		// Check if 'dark' class is present on the <html> element after mount
 		setIsDarkMode(document.documentElement.classList.contains('dark'));
 	}, []);
 
