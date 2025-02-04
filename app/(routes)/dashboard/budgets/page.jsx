@@ -10,4 +10,3 @@ function Budget() {
 }
 
 export default Budget;
-Budget;

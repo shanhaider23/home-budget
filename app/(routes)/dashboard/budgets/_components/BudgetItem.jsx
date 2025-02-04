@@ -2,7 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 
 function BudgetItem({ budget, expensesList }) {
-	const progress = Math.min((budget.totalSpend / budget.amount) * 100, 100);
+	const totalSpend = (expensesList || [])
+		.filter((expense) => expense?.budgetId === budget?.id)
+		.reduce((sum, expense) => sum + Number(expense?.amount || 0), 0);
+
+	const progress = Math.min((totalSpend / budget.amount) * 100, 100);
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>
@@ -52,7 +56,7 @@ function BudgetItem({ budget, expensesList }) {
 						<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
 							Spent:
 							<span>
-								{budget.totalSpend || 0} {budget.currency}
+								{totalSpend} {budget.currency}
 							</span>
 						</p>
 						<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">

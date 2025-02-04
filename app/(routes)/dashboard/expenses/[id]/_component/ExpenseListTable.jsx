@@ -11,7 +11,7 @@ function ExpenseListTable({ budgetId, refreshData }) {
 	const expensesList = useSelector(
 		(state) => state.expenses.list,
 		(prev, next) => {
-			return prev.length === next.length; // Prevents unnecessary re-renders
+			return prev.length === next.length;
 		}
 	);
 
@@ -21,7 +21,7 @@ function ExpenseListTable({ budgetId, refreshData }) {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setLoading(false);
-		}, 4000); // 4 seconds
+		}, 2000);
 
 		return () => clearTimeout(timer); // Cleanup timeout on unmount
 	}, [expensesList]);

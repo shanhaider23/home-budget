@@ -38,10 +38,12 @@ function Dashboard({ params: paramsPromise }) {
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
 				<div className="md:col-span-2 space-y-6 gap-5">
 					<BarChartDashboard budgetList={budgetList} />
-					<ExpenseListTable />
+					<div className="h-[270px] overflow-y-auto overflow-x-hidden">
+						<ExpenseListTable />
+					</div>
 				</div>
 
-				<div className="md:col-span-1 h-[600px] overflow-y-auto overflow-x-hidden pl-5 pr-5">
+				<div className="md:col-span-1 h-[630px] overflow-y-auto overflow-x-hidden pl-5 pr-5">
 					<h2 className="font-bold text-2xl mb-4">Latest Budgets</h2>
 					<div className="space-y-4 grid gap-5">
 						{budgetList.map((budget, i) => (
