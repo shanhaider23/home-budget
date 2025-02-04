@@ -22,22 +22,27 @@ function BudgetList() {
 	}, [user, dispatch]);
 
 	return (
-		<div className="mt-7">
-			{loading ? (
-				<div>Loading...</div>
-			) : (
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-					{budgetList?.length > 0
-						? budgetList.map((budget) => (
-								<BudgetItem
-									key={budget.id}
-									budget={budget}
-									expensesList={expensesList} // Pass expensesList here
-								/>
-						  ))
-						: 'No budgets available'}
-				</div>
-			)}
+		<div className="mt-7 flex flex-col gap-5">
+			<div className="self-end">
+				<CreateBudget />
+			</div>
+			<div>
+				{loading ? (
+					<div>Loading...</div>
+				) : (
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+						{budgetList?.length > 0
+							? budgetList.map((budget) => (
+									<BudgetItem
+										key={budget.id}
+										budget={budget}
+										expensesList={expensesList} // Pass expensesList here
+									/>
+							  ))
+							: 'No budgets available'}
+					</div>
+				)}
+			</div>
 		</div>
 	);
 }
