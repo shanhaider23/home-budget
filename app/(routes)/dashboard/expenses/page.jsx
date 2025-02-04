@@ -5,6 +5,7 @@ import { fetchExpenses } from '@/redux/slices/expenseSlice';
 import { useUser } from '@clerk/nextjs';
 import ExpenseListTable from './[id]/_component/ExpenseListTable';
 import PiChart from './-component/PiChart';
+import ShapeChart from './-component/ShapeChart';
 import { Loader } from 'lucide-react';
 
 function ExpenseComponent({ params }) {
@@ -42,10 +43,14 @@ function ExpenseComponent({ params }) {
 
 	return (
 		<div className="m-5 flex justify-center items-center flex-col gap-5">
-			<div className=" p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
-				<PiChart expensesList={expenseList} />
+			<div className="w-full">
+				<div className=" mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+					<PiChart expensesList={expenseList} />
+				</div>
+				<div className="flex justify-center items-center w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+					<ShapeChart expensesList={expenseList} />
+				</div>
 			</div>
-
 			<div className="w-full">
 				<ExpenseListTable
 					refreshData={() =>
