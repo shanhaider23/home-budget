@@ -1,8 +1,4 @@
-// app/components/DarkModeToggle.js
-
-'use client'; // Make sure this is only used in the client-side code
-
-import { Button } from '@/components/ui/button';
+'use client';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

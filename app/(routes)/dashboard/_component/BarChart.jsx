@@ -20,19 +20,19 @@ function BarChartDashboard({ budgetList, totalBudget, totalSpend }) {
 	// Only execute code that uses `isDarkMode` after the component has mounted
 	const budgetBarColor = isDarkMode
 		? totalBudget > totalSpend
-			? '#82ca9d' // Greenish for light mode
-			: '#4caf50' // Greenish for dark mode
+			? '#82ca9d'
+			: '#4caf50'
 		: totalBudget > totalSpend
-		? '#00bcd4' // Light blue for light mode
-		: '#009688'; // Teal for dark mode
+		? '#00bcd4'
+		: '#009688';
 
 	const spendBarColor = isDarkMode
 		? totalSpend > totalBudget
-			? '#ff6347' // Redish for light mode
-			: '#f44336' // Dark red for dark mode
+			? '#ff6347'
+			: '#f44336'
 		: totalSpend > totalBudget
-		? '#ff5722' // Deep orange for light mode
-		: '#d32f2f'; // Dark red for dark mode
+		? '#ff5722'
+		: '#d32f2f';
 
 	return (
 		<div className="border  border-gray-200 dark:border-gray-700 rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl p-5">

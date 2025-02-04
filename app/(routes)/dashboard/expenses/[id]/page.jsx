@@ -1,14 +1,14 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { db } from '@/utils/dbConfig';
-import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
-import { Budgets, Expenses as ExpensesSchema } from '@/utils/schema';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchExpenses } from '@/redux/slices/expenseSlice';
+import { deleteBudget, fetchBudgets } from '@/redux/slices/budgetSlice';
 import { useUser } from '@clerk/nextjs';
 import BudgetItem from '../../budgets/_components/BudgetItem';
-import { use } from 'react';
 import AddExpense from './_component/AddExpense';
 import ExpenseListTable from './_component/ExpenseListTable';
+import EditBudget from './_component/EditBudget';
 import { Button } from '@/components/ui/button';
 import { Trash } from 'lucide-react';
 import {
@@ -23,72 +23,85 @@ import {
 	AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import EditBudget from './_component/EditBudget';
 
 function ExpensesScreen({ params: paramsPromise }) {
 	const params = use(paramsPromise);
-	const { user } = useUser();
-	const [budgetInfo, setBudgetInfo] = useState('');
-	const [expensesList, setExpensesList] = useState([]);
+	const dispatch = useDispatch();
 	const router = useRouter();
+	const { user } = useUser();
 
+	// Get Redux state
+	const {
+		list: expensesList,
+		loading: expensesLoading,
+		error: expensesError,
+	} = useSelector((state) => state.expenses);
+	const {
+		list: budgetList,
+		loading: budgetLoading,
+		error: budgetError,
+	} = useSelector((state) => state.budgets);
+
+	// Find the specific budget based on params.id
+	const budgetInfo = budgetList.find(
+		(budget) => budget.id === parseInt(params.id, 10)
+	);
+
+	// Fetch budgets & expenses on mount
 	useEffect(() => {
-		if (user) {
-			getBudgetInfo(params.id);
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(fetchBudgets(user.primaryEmailAddress.emailAddress)).then(() => {
+				dispatch(fetchExpenses(user.primaryEmailAddress.emailAddress));
+			});
 		}
-	}, [user, params.id]);
+	}, [dispatch, user, params.id]);
+
+	// Refresh function
 	const refreshData = () => {
-		getBudgetInfo(params.id);
-	};
-	const getBudgetInfo = async (budgetId) => {
-		const results = await db
-			.select({
-				...getTableColumns(Budgets),
-				totalSpend: sql`sum(${ExpensesSchema.amount})`.mapWith(Number),
-				totalItem: sql`sum(${ExpensesSchema.id})`.mapWith(Number),
-			})
-			.from(Budgets)
-			.leftJoin(ExpensesSchema, eq(Budgets.id, ExpensesSchema.budgetId))
-			.where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
-			.where(eq(Budgets.id, budgetId))
-			.groupBy(Budgets.id);
-		setBudgetInfo(results[0]);
-		getExpenseList(budgetId);
-	};
-
-	const getExpenseList = async (budgetId) => {
-		const results = await db
-			.select()
-			.from(ExpensesSchema)
-			.where(eq(ExpensesSchema.budgetId, budgetId))
-			.orderBy(desc(ExpensesSchema.id));
-		setExpensesList([...results]);
-	};
-
-	const deleteBudget = async () => {
-		const deleteExpenseResult = await db
-			.delete(ExpensesSchema)
-			.where(eq(ExpensesSchema.budgetId, params.id))
-			.returning();
-		if (deleteExpenseResult) {
-			const results = await db
-				.delete(Budgets)
-				.where(eq(Budgets.id, params.id))
-				.returning();
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(fetchBudgets(user.primaryEmailAddress.emailAddress));
+			dispatch(fetchExpenses(user.primaryEmailAddress.emailAddress));
 		}
-		toast('Budget Deleted!');
-		router.replace('/dashboard/budgets');
 	};
+
+	// Handle budget deletion
+	const deleteBudgetHandler = () => {
+		dispatch(
+			deleteBudget({
+				pramsId: params.id,
+				email: user.primaryEmailAddress.emailAddress,
+			})
+		).then(() => router.replace('/dashboard/budgets'));
+	};
+
+	// Show loading state
+	if (budgetLoading || expensesLoading) {
+		return (
+			<div className="text-center text-gray-600 dark:text-gray-300">
+				Loading data...
+			</div>
+		);
+	}
+
+	// Show error state
+	if (budgetError || expensesError) {
+		return (
+			<div className="text-center text-red-500">
+				Error: {budgetError || expensesError}
+			</div>
+		);
+	}
+	// Filter expenses based on the selected budget
+	const filteredExpenses = expensesList.filter(
+		(expense) => expense.budgetId === parseInt(params.id, 10)
+	);
 
 	return (
 		<div className="p-10">
 			<div className="flex justify-between items-center">
-				<h2 className="text-2xl font-bold"> My Expenses</h2>
+				<h2 className="text-2xl font-bold">My Expenses</h2>
 				<div className="flex gap-2 items-center">
-					<EditBudget
-						budgetInfo={budgetInfo}
-						refreshData={() => getBudgetInfo()}
-					/>
+					<EditBudget budgetInfo={budgetInfo} refreshData={refreshData} />
 					<AlertDialog>
 						<AlertDialogTrigger asChild>
 							<Button className="flex gap-2" variant="destructive">
@@ -106,7 +119,7 @@ function ExpensesScreen({ params: paramsPromise }) {
 							</AlertDialogHeader>
 							<AlertDialogFooter>
 								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction onClick={() => deleteBudget()}>
+								<AlertDialogAction onClick={deleteBudgetHandler}>
 									Continue
 								</AlertDialogAction>
 							</AlertDialogFooter>
@@ -114,24 +127,22 @@ function ExpensesScreen({ params: paramsPromise }) {
 					</AlertDialog>
 				</div>
 			</div>
+
+			{/* Budget Info Section */}
 			<div className="grid grid-cols-1 md:grid-cols-2 mt-6 gap-5">
 				{budgetInfo ? (
 					<BudgetItem budget={budgetInfo} expensesList={expensesList} />
 				) : (
 					<div className="h-[150px] w-full bg-slate-200 rounded-lg animate-pulse"></div>
-				)}{' '}
-				<AddExpense
-					budgetId={params.id}
-					user={user}
-					refreshData={refreshData}
-				/>
+				)}
+				<AddExpense budgetId={params.id} refreshData={refreshData} />
 			</div>
+
+			{/* Expenses List Section */}
 			<div className="mt-5">
-				<h2 className="text-2xl font-bold mb-4"> Latest Expenses </h2>
-				<ExpenseListTable
-					expensesList={expensesList}
-					refreshData={refreshData}
-				/>
+				<p>{expensesList.budgetId}</p>
+				<h2 className="text-2xl font-bold mb-4">Latest Expenses</h2>
+				<ExpenseListTable budgetId={params.id} />
 			</div>
 		</div>
 	);

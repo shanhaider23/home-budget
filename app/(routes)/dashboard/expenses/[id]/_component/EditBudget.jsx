@@ -17,10 +17,11 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
-import { db } from '@/utils/dbConfig';
-import { Budgets } from '@/utils/schema';
+import { useDispatch } from 'react-redux';
+import { editBudget } from '@/redux/slices/budgetSlice';
 
 function EditBudget({ budgetInfo, refreshData }) {
+	const dispatch = useDispatch();
 	const [emojiIcon, setEmojiIcon] = useState(budgetInfo?.icon);
 	const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 	const [name, setName] = useState(budgetInfo?.name);
@@ -29,20 +30,18 @@ function EditBudget({ budgetInfo, refreshData }) {
 	const { user } = useUser();
 
 	const onEditBudget = async () => {
-		const result = await db
-			.update(Budgets)
-			.set({
-				name: name,
-				amount: amount,
-				icon: emojiIcon,
+		dispatch(
+			editBudget({
+				budgetId: budgetInfo.id,
+				name,
+				amount,
+				emojiIcon,
+				email: user?.emailAddress,
 			})
-			.where(eq(Budgets.id, budgetInfo.id))
-			.returning();
-		if (result) {
-			refreshData();
-			toast.success('Budget Updated');
-		}
+		);
+		refreshData();
 	};
+
 	return (
 		<div>
 			<Dialog>

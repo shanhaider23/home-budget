@@ -17,6 +17,8 @@ import { db } from '@/utils/dbConfig';
 import { Budgets } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { createBudget } from '@/redux/slices/budgetSlice';
 import {
 	Select,
 	SelectContent,
@@ -26,6 +28,7 @@ import {
 } from '@/components/ui/select';
 
 function CreateBudget({ refreshData }) {
+	const dispatch = useDispatch();
 	const [emojiIcon, setEmojiIcon] = useState('Emoji');
 	const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 	const [name, setName] = useState('');
@@ -34,34 +37,17 @@ function CreateBudget({ refreshData }) {
 
 	const { user } = useUser();
 	const onCreateBudget = async () => {
-		try {
-			const email = user?.primaryEmailAddress?.emailAddress;
+		const email = user?.primaryEmailAddress?.emailAddress;
 
-			if (!name || !amount || !currency || !email) {
-				toast.error('All fields are required, including email.');
-				return;
-			}
-
-			// Insert into the database
-			const result = await db
-				.insert(Budgets)
-				.values({
-					name: name,
-					amount: amount,
-					currency: currency,
-					createdBy: email,
-					icon: emojiIcon,
-				})
-				.returning({ inserted: Budgets.id });
-
-			if (result) {
-				refreshData();
-				toast.success('New Budget Created');
-			}
-		} catch (error) {
-			console.error('Error creating budget:', error);
-			toast.error('Failed to create budget. Please try again.');
+		if (!name || !amount || !currency || !email) {
+			toast.error('All fields are required, including email.');
+			return;
 		}
+
+		dispatch(createBudget({ name, amount, currency, email, emojiIcon }));
+		setName('');
+		setAmount('');
+		setCurrency('');
 	};
 
 	return (

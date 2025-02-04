@@ -1,25 +1,36 @@
-import { db } from '@/utils/dbConfig';
-import { Expenses } from '@/utils/schema';
-import { eq } from 'drizzle-orm';
-import { Loader, Trash } from 'lucide-react';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteExpense } from '@/redux/slices/expenseSlice';
+import { Loader, Trash } from 'lucide-react';
 import { toast } from 'sonner';
+import { useUser } from '@clerk/nextjs';
 
-function ExpenseListTable({ expensesList, refreshData }) {
-	const deleteExpense = async (expense) => {
+function ExpenseListTable({ budgetId }) {
+	const dispatch = useDispatch();
+	const { user } = useUser();
+	const expensesList = useSelector((state) => state.expenses.list);
+
+	const filteredExpenses = budgetId
+		? expensesList.filter((expense) => {
+				return expense.budgetId === parseInt(budgetId, 10);
+		  })
+		: expensesList;
+
+	const handleDelete = async (expense) => {
 		const confirmDelete = window.confirm(
 			`Are you sure you want to delete "${expense.name}"?`
 		);
 		if (!confirmDelete) return;
 
-		const results = await db
-			.delete(Expenses)
-			.where(eq(Expenses.id, expense.id))
-			.returning();
-
-		if (results.length > 0) {
-			toast.success('Expense Deleted');
-			refreshData();
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(
+				deleteExpense({
+					expenseId: expense.id,
+					email: user.primaryEmailAddress.emailAddress,
+				})
+			);
+		} else {
+			toast.error('User not authenticated');
 		}
 	};
 
@@ -41,8 +52,8 @@ function ExpenseListTable({ expensesList, refreshData }) {
 
 					{/* Table Body */}
 					<tbody>
-						{expensesList.length > 0 ? (
-							expensesList.map((expense) => (
+						{filteredExpenses.length > 0 ? (
+							filteredExpenses.map((expense) => (
 								<tr
 									key={expense.id}
 									className="border-b last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
@@ -62,7 +73,7 @@ function ExpenseListTable({ expensesList, refreshData }) {
 									<td className="p-3 text-center">
 										<button
 											className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 transition"
-											onClick={() => deleteExpense(expense)}
+											onClick={() => handleDelete(expense)}
 										>
 											<Trash size={18} />
 										</button>

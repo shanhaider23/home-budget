@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
-
 import { db } from '@/utils/dbConfig';
 import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
 import { Budgets, Expenses } from '@/utils/schema';
@@ -10,56 +9,32 @@ import CardInfo from './_component/CardInfo';
 import BarChartDashboard from './_component/BarChart';
 import BudgetItem from './budgets/_components/BudgetItem';
 import ExpenseListTable from './expenses/[id]/_component/ExpenseListTable';
+import { fetchBudgets } from '@/redux/slices/budgetSlice';
+import { fetchExpenses } from '@/redux/slices/expenseSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 function Dashboard({ params: paramsPromise }) {
 	const params = use(paramsPromise);
 	const { isSignedIn, user } = useUser();
-	const [budgetList, setBudgetList] = useState([]);
-	const [expenseList, setExpenseList] = useState([]);
+
 	const router = useRouter();
+
+	const dispatch = useDispatch();
+	const { list: budgetList, loading } = useSelector((state) => state.budgets);
+	const {
+		list: expenseList,
+
+		error,
+	} = useSelector((state) => state.expenses);
 
 	useEffect(() => {
 		if (!isSignedIn) {
 			router.push('/sign-in');
 		} else {
-			getBudgetList(params.id);
+			dispatch(fetchBudgets(user.primaryEmailAddress?.emailAddress));
+			dispatch(fetchExpenses(user.primaryEmailAddress.emailAddress));
 		}
 	}, [isSignedIn, user, params.id]);
-
-	const refreshData = () => {
-		getBudgetList(params.id);
-	};
-	const getBudgetList = async () => {
-		const results = await db
-			.select({
-				...getTableColumns(Budgets),
-				totalSpend: sql`sum(${Expenses.amount})`.mapWith(Number),
-				totalItem: sql`sum(${Expenses.id})`.mapWith(Number),
-			})
-			.from(Budgets)
-			.leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
-			.where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
-			.groupBy(Budgets.id)
-			.orderBy(desc(Budgets.id));
-		setBudgetList(results);
-		getAllExpenses();
-		console.log(results);
-	};
-	const getAllExpenses = async () => {
-		const results = await db
-			.select({
-				id: Expenses.id,
-				name: Expenses.name,
-				amount: Expenses.amount,
-				category: Expenses.category,
-				createdAt: Expenses.createdAt,
-			})
-			.from(Budgets)
-			.rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
-			.where(eq(Budgets.createdBy, user?.primaryEmailAddress.emailAddress))
-			.orderBy(desc(Expenses.id));
-		setExpenseList(results);
-	};
 
 	return (
 		<div className="p-5">
@@ -68,10 +43,7 @@ function Dashboard({ params: paramsPromise }) {
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
 				<div className="md:col-span-2 space-y-6 gap-5">
 					<BarChartDashboard budgetList={budgetList} />
-					<ExpenseListTable
-						expensesList={expenseList}
-						refreshData={refreshData}
-					/>
+					<ExpenseListTable />
 				</div>
 
 				<div className="md:col-span-1 h-[600px] overflow-y-auto overflow-x-hidden pl-5 pr-5">

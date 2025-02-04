@@ -1,45 +1,43 @@
 'use client';
-import React, { useEffect, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
-import { db } from '@/utils/dbConfig';
-import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
-import { Budgets, Expenses } from '@/utils/schema';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchExpenses } from '@/redux/slices/expenseSlice';
 import { useUser } from '@clerk/nextjs';
 import ExpenseListTable from './[id]/_component/ExpenseListTable';
 import PiChart from './-component/PiChart';
 import TriangleChart from './-component/TriangleChart';
 
-function ExpenseComponent({ params: paramsPromise }) {
-	const params = use(paramsPromise);
+function ExpenseComponent({ params }) {
+	const dispatch = useDispatch();
 	const { user } = useUser();
-	const [expenseList, setExpenseList] = useState([]);
+
+	// Get expenses state from Redux
+	const {
+		list: expenseList,
+		loading,
+		error,
+	} = useSelector((state) => state.expenses);
+
+	// Fetch expenses when user or params.id changes
 	useEffect(() => {
-		getAllExpenses();
-	}, [user, params.id]);
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(fetchExpenses(user.primaryEmailAddress.emailAddress));
+		}
+	}, [dispatch, user, params.id]);
 
-	const refreshData = () => {
-		getAllExpenses();
-	};
+	// Show loading state
+	if (loading) {
+		return <div>Loading data...</div>;
+	}
 
-	const getAllExpenses = async () => {
-		const results = await db
-			.select({
-				id: Expenses.id,
-				name: Expenses.name,
-				amount: Expenses.amount,
-				category: Expenses.category,
-				createdAt: Expenses.createdAt,
-			})
-			.from(Budgets)
-			.rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
-			.where(eq(Budgets.createdBy, user?.primaryEmailAddress.emailAddress))
-			.orderBy(desc(Expenses.id));
+	// Show error state
+	if (error) {
+		return <div>Error: {error}</div>;
+	}
 
-		setExpenseList(results);
-		console.log('Expense List Updated:', results); // Debug log
-	};
+	// Show no data message
 	if (!expenseList || expenseList.length === 0) {
-		return <div>Loading data...</div>; // Or a spinner
+		return <div>No expenses found.</div>;
 	}
 
 	return (
@@ -50,16 +48,15 @@ function ExpenseComponent({ params: paramsPromise }) {
 				</div>
 				<div className="w-full md:w-[50%] p-4 shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 rounded-lg">
 					<h2>Bar chart</h2>
-					<div>
-						<TriangleChart />
-					</div>
+					<TriangleChart />
 				</div>
 			</div>
 
 			<div className="w-full">
 				<ExpenseListTable
-					expensesList={expenseList}
-					refreshData={getAllExpenses}
+					refreshData={() =>
+						dispatch(fetchExpenses(user.primaryEmailAddress.emailAddress))
+					}
 				/>
 			</div>
 		</div>
