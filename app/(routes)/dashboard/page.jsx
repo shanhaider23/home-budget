@@ -1,9 +1,6 @@
 'use client';
-import React, { useEffect, useState, use } from 'react';
+import React, { useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { db } from '@/utils/dbConfig';
-import { eq, getTableColumns, sql, desc } from 'drizzle-orm';
-import { Budgets, Expenses } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import CardInfo from './_component/CardInfo';
 import BarChartDashboard from './_component/BarChart';
@@ -16,9 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 function Dashboard({ params: paramsPromise }) {
 	const params = use(paramsPromise);
 	const { isSignedIn, user } = useUser();
-
 	const router = useRouter();
-
 	const dispatch = useDispatch();
 	const { list: budgetList, loading } = useSelector((state) => state.budgets);
 	const {

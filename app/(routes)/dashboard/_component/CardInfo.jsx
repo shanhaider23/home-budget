@@ -36,7 +36,7 @@ function CardInfo({ budgetList }) {
 								Total Budget
 							</h2>
 							<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-								${totalBudget}
+								{totalBudget}
 							</h2>
 						</div>
 					</div>
@@ -51,7 +51,7 @@ function CardInfo({ budgetList }) {
 								Total Spend
 							</h2>
 							<h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-								${totalSpend}
+								{totalSpend}
 							</h2>
 						</div>
 					</div>

@@ -110,7 +110,7 @@ import { Loader } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { addExpense } from '@/redux/slices/expenseSlice';
 
-function AddExpense({ budgetId }) {
+function AddExpense({ budgetId, refreshData }) {
 	const [name, setName] = useState('');
 	const [amount, setAmount] = useState('');
 	const [category, setCategory] = useState('');
@@ -127,7 +127,8 @@ function AddExpense({ budgetId }) {
 		setLoading(true);
 
 		dispatch(addExpense({ name, amount, budgetId, category }));
-
+		console.log('Expense added, calling refreshData...');
+		await refreshData(); // Fetch updated data
 		setName('');
 		setAmount('');
 		setCategory('');

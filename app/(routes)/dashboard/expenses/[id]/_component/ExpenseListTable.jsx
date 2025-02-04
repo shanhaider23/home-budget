@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteExpense } from '@/redux/slices/expenseSlice';
 import { Loader, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import { useUser } from '@clerk/nextjs';
 
-function ExpenseListTable({ budgetId }) {
+function ExpenseListTable({ budgetId, refreshData }) {
 	const dispatch = useDispatch();
 	const { user } = useUser();
-	const expensesList = useSelector((state) => state.expenses.list);
+	const expensesList = useSelector(
+		(state) => state.expenses.list,
+		(prev, next) => {
+			return prev.length === next.length; // Prevents unnecessary re-renders
+		}
+	);
+
+	const [loading, setLoading] = useState(true);
+
+	// Simulate a 4-5 second loader
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setLoading(false);
+		}, 4000); // 4 seconds
+
+		return () => clearTimeout(timer); // Cleanup timeout on unmount
+	}, [expensesList]);
 
 	const filteredExpenses = budgetId
-		? expensesList.filter((expense) => {
-				return expense.budgetId === parseInt(budgetId, 10);
-		  })
+		? expensesList.filter(
+				(expense) => expense.budgetId === parseInt(budgetId, 10)
+		  )
 		: expensesList;
 
 	const handleDelete = async (expense) => {
@@ -28,32 +44,35 @@ function ExpenseListTable({ budgetId }) {
 					expenseId: expense.id,
 					email: user.primaryEmailAddress.emailAddress,
 				})
-			);
+			).unwrap();
+			refreshData();
 		} else {
 			toast.error('User not authenticated');
 		}
 	};
 
 	return (
-		<div className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border  border-gray-200 dark:border-gray-700">
+		<div className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
 			<div className="overflow-x-auto">
-				<table className="w-full text-left border-collapse">
-					<thead>
-						<tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
-							<th className="p-3 font-semibold min-w-[150px]">Name</th>
-							<th className="p-3 font-semibold min-w-[100px]">Amount</th>
-							<th className="p-3 font-semibold min-w-[100px]">Category</th>
-							<th className="p-3 font-semibold min-w-[150px]">Date</th>
-							<th className="p-3 font-semibold min-w-[100px] text-center">
-								Action
-							</th>
-						</tr>
-					</thead>
-
-					{/* Table Body */}
-					<tbody>
-						{filteredExpenses.length > 0 ? (
-							filteredExpenses.map((expense) => (
+				{loading ? (
+					<div className="flex justify-center items-center p-10">
+						<Loader className="animate-spin" size={50} />
+					</div>
+				) : filteredExpenses.length > 0 ? (
+					<table className="w-full text-left border-collapse">
+						<thead>
+							<tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+								<th className="p-3 font-semibold min-w-[150px]">Name</th>
+								<th className="p-3 font-semibold min-w-[100px]">Amount</th>
+								<th className="p-3 font-semibold min-w-[100px]">Category</th>
+								<th className="p-3 font-semibold min-w-[150px]">Date</th>
+								<th className="p-3 font-semibold min-w-[100px] text-center">
+									Action
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{filteredExpenses.map((expense) => (
 								<tr
 									key={expense.id}
 									className="border-b last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
@@ -79,19 +98,14 @@ function ExpenseListTable({ budgetId }) {
 										</button>
 									</td>
 								</tr>
-							))
-						) : (
-							<tr className="flex justify-center items-center ml-[200%]">
-								<td
-									colSpan="4"
-									className="text-center p-5 text-gray-500 dark:text-gray-400 flex justify-center items-center "
-								>
-									<Loader className="animate-spin " size={50} />
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
+							))}
+						</tbody>
+					</table>
+				) : (
+					<div className="text-center p-10 text-gray-500 dark:text-gray-400">
+						No expenses available
+					</div>
+				)}
 			</div>
 		</div>
 	);

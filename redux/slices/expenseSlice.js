@@ -5,31 +5,35 @@ import { eq, desc } from 'drizzle-orm';
 import moment from 'moment';
 import { toast } from 'sonner';
 
-// Fetch expenses from database
-export const fetchExpenses = createAsyncThunk('expenses/fetchExpenses', async (email) => {
-  const results = await db
-    .select({
-      id: Expenses.id,
-      name: Expenses.name,
-      amount: Expenses.amount,
-      category: Expenses.category,
-      createdAt: Expenses.createdAt,
-      budgetId: Expenses.budgetId
-    })
-    .from(Budgets)
-    .rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
-    .where(eq(Budgets.createdBy, email))
-    .orderBy(desc(Expenses.id));
+// **Fetch expenses from database**
+export const fetchExpenses = createAsyncThunk(
+  'expenses/fetchExpenses',
+  async (email) => {
+    const results = await db
+      .select({
+        id: Expenses.id,
+        name: Expenses.name,
+        amount: Expenses.amount,
+        category: Expenses.category,
+        createdAt: Expenses.createdAt,
+        budgetId: Expenses.budgetId,
+      })
+      .from(Budgets)
+      .rightJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
+      .where(eq(Budgets.createdBy, email))
+      .orderBy(desc(Expenses.id));
 
-  return results;
-});
+    return results;
+  }
+);
 
-// Add New Expense
+// **Add New Expense**
 export const addExpense = createAsyncThunk(
   'expenses/addExpense',
-  async ({ name, amount, budgetId, category }, { dispatch }) => {
+  async ({ name, amount, budgetId, category, email }, { dispatch }) => {
     try {
-      const result = await db
+      // Insert into database and return the new expense
+      const [newExpense] = await db
         .insert(Expenses)
         .values({
           name,
@@ -38,32 +42,48 @@ export const addExpense = createAsyncThunk(
           createdAt: moment().format('DD/MM/YYYY'),
           category,
         })
-        .returning({ inserted: Expenses.id });
+        .returning({
+          id: Expenses.id,
+          name: Expenses.name,
+          amount: Expenses.amount,
+          category: Expenses.category,
+          createdAt: Expenses.createdAt,
+          budgetId: Expenses.budgetId,
+        });
 
-      if (result) {
-        dispatch(fetchExpenses(budgetId)); // Refresh expense list
+      if (newExpense) {
         toast.success('New Expense Added');
+
+        // 🔹 Return the new expense so Redux state updates instantly
+        return newExpense;
       }
     } catch (error) {
       console.error('Error adding expense:', error);
       toast.error('Failed to add expense. Please try again.');
+      throw error;
     }
   }
 );
 
-// Delete Expense
-export const deleteExpense = createAsyncThunk('expenses/deleteExpense', async ({ expenseId, email }, { dispatch }) => {
-  try {
-    await db.delete(Expenses).where(eq(Expenses.id, expenseId)).returning();
-    toast.success('Expense Deleted');
+// **Delete Expense**
+export const deleteExpense = createAsyncThunk(
+  'expenses/deleteExpense',
+  async ({ expenseId, email }, { dispatch }) => {
+    try {
+      await db.delete(Expenses).where(eq(Expenses.id, expenseId)).returning();
+      toast.success('Expense Deleted');
 
-    // Refresh expenses after deletion
-    dispatch(fetchExpenses(email));
-  } catch (error) {
-    console.error('Error deleting expense:', error);
-    toast.error('Failed to delete expense. Please try again.');
+      // Refresh expenses after deletion
+      dispatch(fetchExpenses(email));
+
+      return expenseId; // Return deleted expense ID to update state
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      toast.error('Failed to delete expense. Please try again.');
+      throw error;
+    }
   }
-});
+);
 
 const expenseSlice = createSlice({
   name: 'expenses',
@@ -89,8 +109,11 @@ const expenseSlice = createSlice({
       .addCase(addExpense.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addExpense.fulfilled, (state) => {
+      .addCase(addExpense.fulfilled, (state, action) => {
         state.loading = false;
+        if (action.payload) {
+          state.list.unshift(action.payload);
+        }
       })
       .addCase(addExpense.rejected, (state, action) => {
         state.loading = false;
@@ -99,8 +122,9 @@ const expenseSlice = createSlice({
       .addCase(deleteExpense.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteExpense.fulfilled, (state) => {
+      .addCase(deleteExpense.fulfilled, (state, action) => {
         state.loading = false;
+        state.list = state.list.filter((expense) => expense.id !== action.payload);
       })
       .addCase(deleteExpense.rejected, (state, action) => {
         state.loading = false;

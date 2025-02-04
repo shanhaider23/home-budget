@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, use } from 'react';
+import React, { useEffect, use, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchExpenses } from '@/redux/slices/expenseSlice';
@@ -36,18 +36,17 @@ function ExpensesScreen({ params: paramsPromise }) {
 		loading: expensesLoading,
 		error: expensesError,
 	} = useSelector((state) => state.expenses);
+
 	const {
 		list: budgetList,
 		loading: budgetLoading,
 		error: budgetError,
 	} = useSelector((state) => state.budgets);
 
-	// Find the specific budget based on params.id
 	const budgetInfo = budgetList.find(
 		(budget) => budget.id === parseInt(params.id, 10)
 	);
 
-	// Fetch budgets & expenses on mount
 	useEffect(() => {
 		if (user?.primaryEmailAddress?.emailAddress) {
 			dispatch(fetchBudgets(user.primaryEmailAddress.emailAddress)).then(() => {
@@ -55,8 +54,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 			});
 		}
 	}, [dispatch, user, params.id]);
-
-	// Refresh function
 	const refreshData = () => {
 		if (user?.primaryEmailAddress?.emailAddress) {
 			dispatch(fetchBudgets(user.primaryEmailAddress.emailAddress));
@@ -64,7 +61,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 		}
 	};
 
-	// Handle budget deletion
 	const deleteBudgetHandler = () => {
 		dispatch(
 			deleteBudget({
@@ -74,7 +70,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 		).then(() => router.replace('/dashboard/budgets'));
 	};
 
-	// Show loading state
 	if (budgetLoading || expensesLoading) {
 		return (
 			<div className="text-center text-gray-600 dark:text-gray-300">
@@ -83,7 +78,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 		);
 	}
 
-	// Show error state
 	if (budgetError || expensesError) {
 		return (
 			<div className="text-center text-red-500">
@@ -91,10 +85,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 			</div>
 		);
 	}
-	// Filter expenses based on the selected budget
-	const filteredExpenses = expensesList.filter(
-		(expense) => expense.budgetId === parseInt(params.id, 10)
-	);
 
 	return (
 		<div className="p-10">
@@ -128,7 +118,6 @@ function ExpensesScreen({ params: paramsPromise }) {
 				</div>
 			</div>
 
-			{/* Budget Info Section */}
 			<div className="grid grid-cols-1 md:grid-cols-2 mt-6 gap-5">
 				{budgetInfo ? (
 					<BudgetItem budget={budgetInfo} expensesList={expensesList} />
@@ -138,11 +127,9 @@ function ExpensesScreen({ params: paramsPromise }) {
 				<AddExpense budgetId={params.id} refreshData={refreshData} />
 			</div>
 
-			{/* Expenses List Section */}
 			<div className="mt-5">
-				<p>{expensesList.budgetId}</p>
 				<h2 className="text-2xl font-bold mb-4">Latest Expenses</h2>
-				<ExpenseListTable budgetId={params.id} />
+				<ExpenseListTable budgetId={params.id} refreshData={refreshData} />
 			</div>
 		</div>
 	);
