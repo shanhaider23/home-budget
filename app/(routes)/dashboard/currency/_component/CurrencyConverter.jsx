@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { RefreshCcw } from 'lucide-react';
 import axios from 'axios';
+import { LineCharts } from './LineChart';
 
 const favoriteCurrencies = [
 	{ code: 'DKK', symbol: 'kr', name: 'Danish Krone', flag: 'DKK' },
@@ -27,10 +28,12 @@ const favoriteCurrencies = [
 const CurrencyConverter = () => {
 	const [currencies, setCurrencies] = useState([]);
 	const [amount, setAmount] = useState(1);
-	const [fromCurrency, setFromCurrency] = useState('USD');
-	const [toCurrency, setToCurrency] = useState('EUR');
+	const [fromCurrency, setFromCurrency] = useState('');
+	const [toCurrency, setToCurrency] = useState('');
 	const [convertedAmount, setConvertedAmount] = useState(null);
 	const [exchangeRate, setExchangeRate] = useState(null);
+	const [currenciesHistory, setCurrenciesHistory] = useState([]);
+	const [isHistoryLoaded, setIsHistoryLoaded] = useState(false); // Track if history data is fully loaded
 
 	// Load saved currency preferences from localStorage
 	useEffect(() => {
@@ -47,6 +50,7 @@ const CurrencyConverter = () => {
 		localStorage.setItem('toCurrency', toCurrency);
 	}, [fromCurrency, toCurrency]);
 
+	// Fetch available currencies
 	useEffect(() => {
 		const fetchCurrencies = async () => {
 			try {
@@ -60,11 +64,14 @@ const CurrencyConverter = () => {
 		};
 		fetchCurrencies();
 	}, []);
+
+	// Fetch historical currency data for the last 5 years
 	useEffect(() => {
 		const fetchCurrenciesHistory = async () => {
 			const today = new Date();
 			const fiveYearsAgo = new Date();
 			fiveYearsAgo.setFullYear(today.getFullYear() - 5);
+			const currencyHistory = [];
 
 			// Loop through the last 5 years, but only for January
 			for (
@@ -72,33 +79,38 @@ const CurrencyConverter = () => {
 				year <= today.getFullYear();
 				year++
 			) {
-				const startDate = new Date(year, 0, 1); // January 1st of the year
-				const endDate = new Date(year, 0, 31); // January 31st of the year
-
-				// Build the formatted date for January 1st
 				const formattedDate = `${year}/01/01`;
-
-				// Construct the API URL
 				const apiUrl = `https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_CURRENCY_API}/history/${fromCurrency}/${formattedDate}/${amount}`;
 
 				try {
 					const response = await axios.get(apiUrl);
-					console.log(
-						`Data for ${fromCurrency} ${formattedDate}:`,
-						response.data,
-						response.data?.conversion_amounts,
-						response.data?.year
-					);
-					// Optionally, you can process/store this data (e.g., setCurrencies or setData)
+					const conversionRates = response.data?.conversion_amounts;
+					const yearData = {
+						name: year.toString(),
+						[toCurrency]: conversionRates[toCurrency] || 0,
+					};
+					currencyHistory.push(yearData);
+
+					// If all data for the 5 years is fetched, update state
+					if (
+						currencyHistory.length ===
+						today.getFullYear() - fiveYearsAgo.getFullYear() + 1
+					) {
+						setCurrenciesHistory(currencyHistory);
+						setIsHistoryLoaded(true);
+					}
 				} catch (err) {
 					console.error(`Failed to fetch data for ${formattedDate}:`, err);
 				}
 			}
 		};
 
-		fetchCurrenciesHistory();
-	}, []);
+		if (fromCurrency && toCurrency) {
+			fetchCurrenciesHistory();
+		}
+	}, [fromCurrency, toCurrency, amount]); // Re-fetch when the selected currencies or amount change
 
+	// Fetch exchange rate for conversion
 	useEffect(() => {
 		const fetchExchangeRate = async () => {
 			try {
@@ -118,20 +130,22 @@ const CurrencyConverter = () => {
 		}
 	}, [fromCurrency, toCurrency, amount]);
 
+	// Function to get currency flags
 	const getCurrencyFlag = (currencyCode) => {
 		return `https://flagcdn.com/w40/${currencyCode
 			.substring(0, 2)
 			.toLowerCase()}.png`;
 	};
 
+	// Function to swap currencies
 	const swapCurrencies = () => {
 		setFromCurrency(toCurrency);
 		setToCurrency(fromCurrency);
 	};
 
 	return (
-		<div className="flex justify-center items-center min-h-screen p-5">
-			<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
+		<div className="w-full p-5 mt-8">
+			<Card className="m-auto p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
 				<h1 className="text-xl font-bold text-center mb-4">
 					Currency Converter
 				</h1>
@@ -163,7 +177,7 @@ const CurrencyConverter = () => {
 											src={getCurrencyFlag(flag)}
 											alt={flag}
 											className="w-5 h-5 inline-block mr-2"
-										/>{' '}
+										/>
 										{name} ({symbol})
 									</SelectItem>
 								))}
@@ -188,7 +202,7 @@ const CurrencyConverter = () => {
 					</div>
 
 					{/* Swap Button */}
-					<div className="flex justify-end ">
+					<div className="flex justify-end">
 						<Button
 							variant="outline"
 							onClick={swapCurrencies}
@@ -212,7 +226,7 @@ const CurrencyConverter = () => {
 											src={getCurrencyFlag(flag)}
 											alt={flag}
 											className="w-5 h-5 inline-block mr-2"
-										/>{' '}
+										/>
 										{name} ({symbol})
 									</SelectItem>
 								))}
@@ -244,6 +258,8 @@ const CurrencyConverter = () => {
 					)}
 				</div>
 			</Card>
+
+			{isHistoryLoaded && <LineCharts currenciesHistory={currenciesHistory} />}
 		</div>
 	);
 };

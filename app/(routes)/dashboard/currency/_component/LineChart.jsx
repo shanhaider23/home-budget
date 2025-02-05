@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	LineChart,
 	Line,
@@ -11,80 +11,57 @@ import {
 	ResponsiveContainer,
 } from 'recharts';
 
-const data = [
-	{
-		name: '2020',
-		PKR: 4000,
-		USD: 2400,
-		EUR: 2400,
-		GBP: 1500,
-		INR: 1000,
-	},
-	{
-		name: '2021',
-		PKR: 4000,
-		USD: 2400,
-		EUR: 2400,
-		GBP: 1500,
-		INR: 1000,
-	},
-	{
-		name: '2022',
-		PKR: 4000,
-		USD: 2400,
-		EUR: 2400,
-		GBP: 1500,
-		INR: 1000,
-	},
-	{
-		name: '2023',
-		PKR: 4000,
-		USD: 2400,
-		EUR: 2400,
-		GBP: 1500,
-		INR: 1000,
-	},
-	{
-		name: '2025',
-		PKR: 4000,
-		USD: 2400,
-		EUR: 2400,
-		GBP: 1500,
-		INR: 1000,
-	},
-];
+export function LineCharts({ currenciesHistory }) {
+	const [isLoading, setIsLoading] = useState(true);
 
-export function LineCharts() {
+	useEffect(() => {
+		// Check if the currenciesHistory data has finished loading
+		if (currenciesHistory && currenciesHistory.length > 0) {
+			setIsLoading(false); // Data is loaded, stop loading
+		}
+	}, [currenciesHistory]); // Dependency array ensures this runs when currenciesHistory changes
+
 	return (
-		<div>
-			<h2>History</h2>
-			<ResponsiveContainer width="100%" height={400}>
-				<LineChart
-					width={500}
-					height={300}
-					data={data}
-					margin={{
-						top: 5,
-						right: 30,
-						left: 20,
-						bottom: 5,
-					}}
-				>
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="name" />
-					<YAxis />
-					<Tooltip />
-					<Legend />
-					<Line
-						type="monotone"
-						dataKey="PKR"
-						stroke="#8884d8"
-						activeDot={{ r: 8 }}
-					/>
-					<Line type="monotone" dataKey="EUR" stroke="#82ca9d" />
-					<Line type="monotone" dataKey="amt" stroke="#1f5132" />
-				</LineChart>
-			</ResponsiveContainer>
+		<div className=" mt-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+			<h1>History</h1>
+
+			{isLoading ? (
+				<p>Loading chart data...</p>
+			) : (
+				<ResponsiveContainer width="100%" height={400}>
+					<LineChart
+						width={500}
+						height={300}
+						data={currenciesHistory}
+						margin={{
+							top: 5,
+							right: 30,
+							left: 20,
+							bottom: 5,
+						}}
+					>
+						<CartesianGrid strokeDasharray="3 3" />
+						<XAxis dataKey="name" />
+						<YAxis />
+						<Tooltip />
+						<Legend />
+						{/* Lines for different currencies */}
+						<Line
+							type="monotone"
+							dataKey="PKR"
+							stroke="#008000"
+							activeDot={{ r: 8 }}
+						/>
+						<Line type="monotone" dataKey="USD" stroke="#3c3b6e" />
+						<Line type="monotone" dataKey="EUR" stroke="#0033a0" />
+						<Line type="monotone" dataKey="GBP" stroke="#003478" />
+						<Line type="monotone" dataKey="INR" stroke="#ff9933" />
+						<Line type="monotone" dataKey="CAD" stroke="#ff0000" />
+						<Line type="monotone" dataKey="TRY" stroke="#E30A17" />
+						<Line type="monotone" dataKey="SAR" stroke="#006c2b" />
+					</LineChart>
+				</ResponsiveContainer>
+			)}
 		</div>
 	);
 }
