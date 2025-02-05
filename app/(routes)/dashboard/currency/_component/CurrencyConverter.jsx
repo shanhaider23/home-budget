@@ -32,6 +32,21 @@ const CurrencyConverter = () => {
 	const [convertedAmount, setConvertedAmount] = useState(null);
 	const [exchangeRate, setExchangeRate] = useState(null);
 
+	// Load saved currency preferences from localStorage
+	useEffect(() => {
+		const savedFromCurrency = localStorage.getItem('fromCurrency');
+		const savedToCurrency = localStorage.getItem('toCurrency');
+
+		if (savedFromCurrency) setFromCurrency(savedFromCurrency);
+		if (savedToCurrency) setToCurrency(savedToCurrency);
+	}, []);
+
+	// Save selected currencies to localStorage
+	useEffect(() => {
+		localStorage.setItem('fromCurrency', fromCurrency);
+		localStorage.setItem('toCurrency', toCurrency);
+	}, [fromCurrency, toCurrency]);
+
 	useEffect(() => {
 		const fetchCurrencies = async () => {
 			try {
@@ -44,6 +59,44 @@ const CurrencyConverter = () => {
 			}
 		};
 		fetchCurrencies();
+	}, []);
+	useEffect(() => {
+		const fetchCurrenciesHistory = async () => {
+			const today = new Date();
+			const fiveYearsAgo = new Date();
+			fiveYearsAgo.setFullYear(today.getFullYear() - 5);
+
+			// Loop through the last 5 years, but only for January
+			for (
+				let year = fiveYearsAgo.getFullYear();
+				year <= today.getFullYear();
+				year++
+			) {
+				const startDate = new Date(year, 0, 1); // January 1st of the year
+				const endDate = new Date(year, 0, 31); // January 31st of the year
+
+				// Build the formatted date for January 1st
+				const formattedDate = `${year}/01/01`;
+
+				// Construct the API URL
+				const apiUrl = `https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_CURRENCY_API}/history/${fromCurrency}/${formattedDate}/${amount}`;
+
+				try {
+					const response = await axios.get(apiUrl);
+					console.log(
+						`Data for ${fromCurrency} ${formattedDate}:`,
+						response.data,
+						response.data?.conversion_amounts,
+						response.data?.year
+					);
+					// Optionally, you can process/store this data (e.g., setCurrencies or setData)
+				} catch (err) {
+					console.error(`Failed to fetch data for ${formattedDate}:`, err);
+				}
+			}
+		};
+
+		fetchCurrenciesHistory();
 	}, []);
 
 	useEffect(() => {
@@ -64,6 +117,7 @@ const CurrencyConverter = () => {
 			fetchExchangeRate();
 		}
 	}, [fromCurrency, toCurrency, amount]);
+
 	const getCurrencyFlag = (currencyCode) => {
 		return `https://flagcdn.com/w40/${currencyCode
 			.substring(0, 2)
@@ -103,7 +157,6 @@ const CurrencyConverter = () => {
 								<SelectValue placeholder="Select currency" />
 							</SelectTrigger>
 							<SelectContent>
-								{/* Favorite Currencies */}
 								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
 									<SelectItem key={code} value={code}>
 										<img
@@ -115,7 +168,6 @@ const CurrencyConverter = () => {
 									</SelectItem>
 								))}
 								<hr className="my-1 border-gray-500" />
-								{/* All Other Currencies */}
 								{currencies
 									.filter(
 										(currency) =>
@@ -140,7 +192,7 @@ const CurrencyConverter = () => {
 						<Button
 							variant="outline"
 							onClick={swapCurrencies}
-							className="bg-blue-500 hover:bg-blue-600 text-white  rounded-lg flex items-center -mb-7"
+							className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center -mb-7"
 						>
 							<RefreshCcw className="w-5 h-5 mr-2" /> Swap
 						</Button>
@@ -154,7 +206,6 @@ const CurrencyConverter = () => {
 								<SelectValue placeholder="Select currency" />
 							</SelectTrigger>
 							<SelectContent>
-								{/* Favorite Currencies */}
 								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
 									<SelectItem key={code} value={code}>
 										<img
@@ -166,7 +217,6 @@ const CurrencyConverter = () => {
 									</SelectItem>
 								))}
 								<hr className="my-1 border-gray-500" />
-								{/* All Other Currencies */}
 								{currencies
 									.filter(
 										(currency) =>
