@@ -6,6 +6,8 @@ import {
 	LayoutGrid,
 	PiggyBank,
 	ReceiptText,
+	Calendar,
+	ListTodo,
 } from 'lucide-react';
 
 export const NavItems = () => {
@@ -46,6 +48,22 @@ export const NavItems = () => {
 			href: '/dashboard/currency',
 			icon: <Currency size={20} />,
 			active: isNavItemActive(pathname, '/dashboard/currency'),
+			position: 'top',
+		},
+		{
+			id: 5,
+			name: 'Monthly Budget',
+			href: '/dashboard/monthly',
+			icon: <Calendar size={20} />,
+			active: isNavItemActive(pathname, '/dashboard/monthly'),
+			position: 'top',
+		},
+		{
+			id: 6,
+			name: 'Todo List',
+			href: '/dashboard/todo',
+			icon: <ListTodo size={20} />,
+			active: isNavItemActive(pathname, '/dashboard/todo'),
 			position: 'top',
 		},
 		{
