@@ -76,7 +76,7 @@ function PiChart({ expensesList }) {
 	}
 
 	return (
-		<ResponsiveContainer width={'100%'} height={400}>
+		<ResponsiveContainer width="100%" height={400}>
 			<BarChart
 				data={data}
 				margin={{

@@ -43,11 +43,11 @@ function ExpenseComponent({ params }) {
 
 	return (
 		<div className="m-5 flex justify-center items-center flex-col gap-5">
-			<div className="w-full">
-				<div className=" mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+			<div className="w-full grid grid-cols-1 grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-5 ">
+				<div className=" flex justify-center items-center shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
 					<PiChart expensesList={expenseList} />
 				</div>
-				<div className="flex justify-center items-center w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+				<div className="flex justify-center items-center shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
 					<ShapeChart expensesList={expenseList} />
 				</div>
 			</div>

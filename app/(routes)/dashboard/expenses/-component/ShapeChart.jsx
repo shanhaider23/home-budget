@@ -6,18 +6,7 @@ import { Loader } from 'lucide-react';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function PiChart({ expensesList }) {
-	const [chartData, setChartData] = useState({
-		labels: [],
-		datasets: [
-			{
-				label: 'Amount by Category',
-				data: [],
-				backgroundColor: [],
-				borderColor: [],
-				borderWidth: 1,
-			},
-		],
-	});
+	const [chartData, setChartData] = useState(null);
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	// Detect dark or light mode
@@ -25,72 +14,71 @@ function PiChart({ expensesList }) {
 		const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
 		setIsDarkMode(darkModeQuery.matches);
 
-		darkModeQuery.addEventListener('change', (e) => {
-			setIsDarkMode(e.matches);
-		});
+		const updateMode = (e) => setIsDarkMode(e.matches);
+		darkModeQuery.addEventListener('change', updateMode);
+
+		return () => darkModeQuery.removeEventListener('change', updateMode);
 	}, []);
 
 	// Define light and dark color schemes
 	const lightColors = [
-		'rgba(255, 99, 132, 0.2)',
-		'rgba(54, 162, 235, 0.2)',
-		'rgba(255, 206, 86, 0.2)',
-		'rgba(75, 192, 192, 0.2)',
-		'rgba(153, 102, 255, 0.2)',
-		'rgba(255, 159, 64, 0.2)',
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56',
+		'#4BC0C0',
+		'#9966FF',
+		'#FF9F40',
 	];
 	const darkColors = [
-		'rgba(255, 99, 132, 0.8)',
-		'rgba(54, 162, 235, 0.8)',
-		'rgba(255, 206, 86, 0.8)',
-		'rgba(75, 192, 192, 0.8)',
-		'rgba(153, 102, 255, 0.8)',
-		'rgba(255, 159, 64, 0.8)',
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56',
+		'#4BC0C0',
+		'#9966FF',
+		'#FF9F40',
 	];
 
 	// Update the chart data when expensesList changes
 	useEffect(() => {
-		if (expensesList.length > 0) {
+		if (expensesList && expensesList.length > 0) {
 			const aggregatedData = expensesList.reduce((acc, transaction) => {
-				if (acc[transaction.category]) {
-					acc[transaction.category] += transaction.amount;
-				} else {
-					acc[transaction.category] = transaction.amount;
-				}
+				acc[transaction.category] =
+					(acc[transaction.category] || 0) + transaction.amount;
 				return acc;
 			}, {});
 
-			const newData = {
-				labels: Object.keys(aggregatedData), // Categories as labels
+			const categories = Object.keys(aggregatedData);
+			const amounts = Object.values(aggregatedData);
+			const colors = isDarkMode ? darkColors : lightColors;
+
+			setChartData({
+				labels: categories,
 				datasets: [
 					{
 						label: 'Amount by Category',
-						data: Object.values(aggregatedData), // Sum of amounts for each category
-						backgroundColor: isDarkMode ? darkColors : lightColors, // Choose colors based on the theme
-						borderColor: isDarkMode
-							? darkColors.map((color) => color.replace('0.8', '1'))
-							: lightColors.map((color) => color.replace('0.2', '1')), // Make border more visible in dark mode
+						data: amounts,
+						backgroundColor: colors.slice(0, categories.length),
+						borderColor: colors.map((color) => color.replace('0.8', '1')),
 						borderWidth: 1,
 					},
 				],
-			};
-			setChartData(newData); // Update the chart data
+			});
+		} else {
+			setChartData(null);
 		}
-	}, [expensesList, isDarkMode]); // Re-run when expensesList or theme changes
+	}, [expensesList, isDarkMode]);
 
-	if (expensesList.length === 0) {
+	if (!chartData) {
 		return (
-			<div>
-				<Loader />
+			<div className="flex justify-center items-center h-40">
+				<Loader className="animate-spin" size={40} />
 			</div>
 		);
 	}
 
 	return (
-		<div className="w-full ">
-			<div>
-				<Pie data={chartData} />
-			</div>
+		<div className="w-full max-w-md mx-auto">
+			<Pie data={chartData} />
 		</div>
 	);
 }
