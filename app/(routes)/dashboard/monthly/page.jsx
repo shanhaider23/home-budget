@@ -9,7 +9,7 @@ function Monthly() {
 	const [month, setMonth] = useState('');
 
 	return (
-		<div className="grid grid-cols-3 grid-rows-1 gap-5 mt-5">
+		<div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
 			<div>
 				<CashFlow month={month} setMonth={setMonth} />
 				<InputDetail />
@@ -18,7 +18,7 @@ function Monthly() {
 				<MonthlyIncome month={month} />
 			</div>
 			<div>
-				<MonthlyExpense />
+				<MonthlyExpense month={month} />
 			</div>
 		</div>
 	);

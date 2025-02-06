@@ -160,7 +160,7 @@ function CashFlow({ month, setMonth }) {
 									<Loader className="animate-spin" size={50} />
 								</div>
 							) : filteredList.length > 0 ? (
-								<table className="w-full text-left border-collapse">
+								<table className="w-full text-center border-collapse">
 									<tbody>
 										{Object.entries(totals).map(([type, amount]) => (
 											<tr
