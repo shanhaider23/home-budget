@@ -144,7 +144,7 @@ const CurrencyConverter = () => {
 	};
 
 	return (
-		<div className="w-full p-5 mt-8">
+		<div className="w-full mt-5">
 			<Card className="m-auto p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
 				<h1 className="text-xl font-bold text-center mb-4">
 					Currency Converter

@@ -15,15 +15,14 @@ export function LineCharts({ currenciesHistory }) {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		// Check if the currenciesHistory data has finished loading
 		if (currenciesHistory && currenciesHistory.length > 0) {
-			setIsLoading(false); // Data is loaded, stop loading
+			setIsLoading(false);
 		}
-	}, [currenciesHistory]); // Dependency array ensures this runs when currenciesHistory changes
+	}, [currenciesHistory]);
 
 	return (
 		<div className=" mt-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
-			<h1>History</h1>
+			<h1 className="mb-5 text-2xl">Last five years history</h1>
 
 			{isLoading ? (
 				<p>Loading chart data...</p>
