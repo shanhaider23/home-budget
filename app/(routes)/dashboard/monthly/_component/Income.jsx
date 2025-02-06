@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { Loader } from 'lucide-react';
 
-function MonthlyIncome({ month }) {
+function MonthlyIncome({ month, year }) {
 	const dispatch = useDispatch();
 	const { user } = useUser();
 
@@ -33,7 +33,12 @@ function MonthlyIncome({ month }) {
 		const itemMonth = new Date(item.date)
 			.toLocaleString('default', { month: 'long' })
 			.toLowerCase();
-		return item.type === 'income' && (!month || itemMonth === month);
+		const itemYear = new Date(item.date).getFullYear().toString();
+		return (
+			item.type === 'income' &&
+			(!month || itemMonth === month) &&
+			(!year || itemYear === year)
+		);
 	});
 
 	const incomeData = filteredList.map((item) => ({

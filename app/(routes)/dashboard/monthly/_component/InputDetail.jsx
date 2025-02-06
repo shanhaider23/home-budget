@@ -67,8 +67,8 @@ function InputDetail() {
 		<div>
 			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
 				<DialogTrigger asChild>
-					<div className=" cursor-pointer ">
-						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800">
+					<div className=" cursor-pointer w-full ">
+						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800 w-full">
 							Add Income or Expense
 						</Button>
 					</div>
@@ -159,7 +159,7 @@ function InputDetail() {
 									{loading ? (
 										<Loader className="animate-spin" />
 									) : (
-										'Add New Expense'
+										'Add New Income or Expense'
 									)}
 								</Button>
 							</DialogClose>

@@ -25,8 +25,7 @@ import {
 	YAxis,
 } from 'recharts';
 
-function CashFlow({ month, setMonth }) {
-	const [year, setYear] = useState('');
+function CashFlow({ month, setMonth, year, setYear }) {
 	const dispatch = useDispatch();
 	const { user } = useUser();
 	const [isDarkMode, setIsDarkMode] = useState(false);
@@ -92,7 +91,7 @@ function CashFlow({ month, setMonth }) {
 	const spendBarColor = isDarkMode ? '#ff6347' : '#d32f2f';
 
 	return (
-		<div className="mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+		<div className="mb-7 w-full h-[80vh] p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
 			<div className="grid grid-cols-1 grid-rows-[10%,40%, 50% ]  gap-5">
 				<div className="bg-slate-500">
 					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
