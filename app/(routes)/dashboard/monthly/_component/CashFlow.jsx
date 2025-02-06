@@ -1,0 +1,157 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMonthly } from '@/redux/slices/monthlySlice';
+import { useUser } from '@clerk/nextjs';
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
+
+import { Loader } from 'lucide-react';
+
+function CashFlow() {
+	const [month, setMonth] = useState('');
+	const [year, setYear] = useState('');
+	const dispatch = useDispatch();
+	const { user } = useUser();
+
+	const {
+		list: monthlyList,
+		loading,
+		error,
+	} = useSelector((state) => state.monthly);
+
+	useEffect(() => {
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(fetchMonthly(user.primaryEmailAddress.emailAddress));
+		}
+	}, [dispatch, user]);
+
+	if (loading) {
+		return (
+			<div>
+				<Loader />
+			</div>
+		);
+	}
+
+	if (error) {
+		return <div>Error: {error}</div>;
+	}
+
+	const totals = monthlyList.reduce((acc, item) => {
+		acc[item.type] = (acc[item.type] || 0) + parseFloat(item.amount);
+		return acc;
+	}, {});
+
+	return (
+		<div className="mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+			<div className="flex flex-col justify-center items-stretch gap-5">
+				<div className="bg-slate-500">
+					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+						<h1 className="">Month </h1>
+					</div>
+				</div>
+				<div className="flex flex-col justify-center items-stretch gap-5">
+					<div>
+						<div className="w-full text-left border-collapse">
+							<div className="border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+								<h1>Select The Month & Year </h1>
+							</div>
+							<div>
+								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+									<h2 className="justify-self-center self-center">Month</h2>
+									<Select value={month} onValueChange={setMonth}>
+										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200  rounded-none">
+											<SelectValue placeholder="Select a Month" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectItem value="january">January</SelectItem>
+												<SelectItem value="february">February</SelectItem>
+												<SelectItem value="march">March</SelectItem>
+												<SelectItem value="april">April</SelectItem>
+												<SelectItem value="may">May</SelectItem>
+												<SelectItem value="june">June</SelectItem>
+												<SelectItem value="july">July</SelectItem>
+												<SelectItem value="august">August</SelectItem>
+												<SelectItem value="september">September</SelectItem>
+												<SelectItem value="october">October</SelectItem>
+												<SelectItem value="november">November</SelectItem>
+												<SelectItem value="december">December</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</div>
+								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+									<h2 className="justify-self-center self-center">Year</h2>
+									<Select value={year} onValueChange={setYear}>
+										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200 rounded-none">
+											<SelectValue placeholder="Select a Year" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectGroup>
+												<SelectItem value="2022">2022</SelectItem>
+												<SelectItem value="2023">2023</SelectItem>
+												<SelectItem value="2024">2024</SelectItem>
+												<SelectItem value="2025">2025</SelectItem>
+												<SelectItem value="2026">2026</SelectItem>
+												<SelectItem value="2027">2027</SelectItem>
+												<SelectItem value="2028">2028</SelectItem>
+												<SelectItem value="2029">2029</SelectItem>
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="bg-white dark:bg-gray-800 shadow-md  overflow-hidden border border-gray-200 dark:border-gray-700">
+						<div className="overflow-x-auto">
+							{loading ? (
+								<div className="flex justify-center items-center p-10">
+									<Loader className="animate-spin" size={50} />
+								</div>
+							) : monthlyList.length > 0 ? (
+								<table className="w-full text-left border-collapse">
+									<thead></thead>
+									<tbody>
+										{Object.entries(totals).map(([type, amount]) => (
+											<tr
+												key={type}
+												className="border-b last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
+											>
+												<td
+													className={`p-3 text-gray-800 dark:text-gray-200 ${
+														type === 'income' ? 'bg-green-500' : 'bg-red-500'
+													}`}
+												>
+													{type === 'income' ? 'Income' : 'Expense'}
+												</td>
+												<td className="p-3 text-gray-800 dark:text-gray-200">
+													{amount.toFixed(2)}
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							) : (
+								<div className="text-center p-10 text-gray-500 dark:text-gray-400">
+									No records available
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default CashFlow;
