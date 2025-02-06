@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMonthly } from '@/redux/slices/monthlySlice';
+
 import { useUser } from '@clerk/nextjs';
 import {
 	Select,
@@ -14,12 +15,25 @@ import {
 } from '@/components/ui/select';
 
 import { Loader } from 'lucide-react';
+import {
+	Bar,
+	BarChart,
+	Legend,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from 'recharts';
 
-function CashFlow() {
-	const [month, setMonth] = useState('');
+function CashFlow({ month, setMonth }) {
 	const [year, setYear] = useState('');
 	const dispatch = useDispatch();
 	const { user } = useUser();
+	const [isDarkMode, setIsDarkMode] = useState(false);
+
+	useEffect(() => {
+		setIsDarkMode(document.documentElement.classList.contains('dark'));
+	}, []);
 
 	const {
 		list: monthlyList,
@@ -28,6 +42,7 @@ function CashFlow() {
 	} = useSelector((state) => state.monthly);
 
 	useEffect(() => {
+		console.log(monthlyList, 'monthly');
 		if (user?.primaryEmailAddress?.emailAddress) {
 			dispatch(fetchMonthly(user.primaryEmailAddress.emailAddress));
 		}
@@ -45,17 +60,43 @@ function CashFlow() {
 		return <div>Error: {error}</div>;
 	}
 
-	const totals = monthlyList.reduce((acc, item) => {
+	const filteredList = monthlyList.filter((item) => {
+		const itemMonth = new Date(item.date)
+			.toLocaleString('default', { month: 'long' })
+			.toLowerCase();
+		const itemYear = new Date(item.date).getFullYear().toString();
+
+		return (!month || itemMonth === month) && (!year || itemYear === year);
+	});
+
+	const totals = filteredList.reduce((acc, item) => {
+		console.log(monthlyList, 'monthly');
 		acc[item.type] = (acc[item.type] || 0) + parseFloat(item.amount);
 		return acc;
 	}, {});
+	const balance = (totals.income || 0) - (totals.expense || 0);
+
+	const data = [
+		{
+			name: 'Income',
+			income: totals.income,
+		},
+		{
+			name: 'Expenses',
+			expense: totals.expense,
+		},
+	];
+
+	const budgetBarColor = isDarkMode ? '#4caf50' : '#009688';
+
+	const spendBarColor = isDarkMode ? '#ff6347' : '#d32f2f';
 
 	return (
 		<div className="mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
-			<div className="flex flex-col justify-center items-stretch gap-5">
+			<div className="grid grid-cols-1 grid-rows-[10%,40%, 50% ]  gap-5">
 				<div className="bg-slate-500">
 					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
-						<h1 className="">Month </h1>
+						<h1 className="capitalize">{month ? month : 'Select Month'}</h1>
 					</div>
 				</div>
 				<div className="flex flex-col justify-center items-stretch gap-5">
@@ -92,7 +133,7 @@ function CashFlow() {
 								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
 									<h2 className="justify-self-center self-center">Year</h2>
 									<Select value={year} onValueChange={setYear}>
-										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200 rounded-none">
+										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200 rounded-none ">
 											<SelectValue placeholder="Select a Year" />
 										</SelectTrigger>
 										<SelectContent>
@@ -118,9 +159,8 @@ function CashFlow() {
 								<div className="flex justify-center items-center p-10">
 									<Loader className="animate-spin" size={50} />
 								</div>
-							) : monthlyList.length > 0 ? (
+							) : filteredList.length > 0 ? (
 								<table className="w-full text-left border-collapse">
-									<thead></thead>
 									<tbody>
 										{Object.entries(totals).map(([type, amount]) => (
 											<tr
@@ -139,6 +179,10 @@ function CashFlow() {
 												</td>
 											</tr>
 										))}
+										<tr className="border-t font-bold">
+											<td className="p-3 bg-blue-500 text-white">Balance</td>
+											<td className="p-3">{balance.toFixed(2)}</td>
+										</tr>
 									</tbody>
 								</table>
 							) : (
@@ -147,6 +191,38 @@ function CashFlow() {
 								</div>
 							)}
 						</div>
+					</div>
+				</div>
+				<div className="border border-gray-200 dark:border-gray-700">
+					<div className="border bg-slate-500 shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+						<h1 className="">Cash Flow </h1>
+					</div>
+					<div className="mt-4">
+						<ResponsiveContainer width={'80%'} height={250}>
+							<BarChart
+								data={data}
+								margin={{
+									top: 5,
+									right: 5,
+									left: 5,
+									bottom: 5,
+								}}
+							>
+								<XAxis
+									dataKey="name"
+									stroke={isDarkMode ? '#ddd' : '#8884d8'}
+								/>
+								<YAxis stroke={isDarkMode ? '#ddd' : '#8884d8'} />
+								<Tooltip />
+								<Legend
+									wrapperStyle={{ color: isDarkMode ? '#ddd' : '#8884d8' }}
+								/>
+
+								{/* Bars with dynamic color based on totalBudget and totalSpend */}
+								<Bar dataKey="income" stackId="a" fill={budgetBarColor} />
+								<Bar dataKey="expense" stackId="a" fill={spendBarColor} />
+							</BarChart>
+						</ResponsiveContainer>
 					</div>
 				</div>
 			</div>

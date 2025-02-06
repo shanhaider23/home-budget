@@ -1,18 +1,21 @@
-import React from 'react';
-import InputDetail from './_component/InputDetail';
+'use client';
+import React, { useState } from 'react';
 import CashFlow from './_component/CashFlow';
 import MonthlyIncome from './_component/Income';
 import MonthlyExpense from './_component/Expense';
+import InputDetail from './_component/InputDetail';
 
 function Monthly() {
+	const [month, setMonth] = useState('');
+
 	return (
-		<div className="flex justify-center gap-10 items-center mt-5">
+		<div className="grid grid-cols-3 grid-rows-1 gap-5 mt-5">
 			<div>
-				<CashFlow />
+				<CashFlow month={month} setMonth={setMonth} />
 				<InputDetail />
 			</div>
 			<div>
-				<MonthlyIncome />
+				<MonthlyIncome month={month} />
 			</div>
 			<div>
 				<MonthlyExpense />

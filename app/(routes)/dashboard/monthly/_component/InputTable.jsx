@@ -1,7 +1,7 @@
 import React from 'react';
 
-function InpuTable() {
+function InputTable() {
 	return <div>input table</div>;
 }
 
-export default InpuTable;
+export default InputTable;
