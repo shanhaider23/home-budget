@@ -22,7 +22,7 @@ function BudgetList() {
 	}, [user, dispatch]);
 
 	return (
-		<div className="mt-7 flex flex-col gap-5">
+		<div className="mt-5 flex flex-col gap-5">
 			<div className="self-end">
 				<CreateBudget />
 			</div>
