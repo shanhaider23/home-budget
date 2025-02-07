@@ -24,9 +24,10 @@ function DashboardHeader() {
 					{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 
-				{/* Logo */}
 				<div className="hidden sm:flex items-center -mb-5 -mt-5  ">
-					<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
+					<Link href={'/dashboard'}>
+						<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
+					</Link>
 				</div>
 			</div>
 
@@ -41,6 +42,7 @@ function DashboardHeader() {
 			{/* === RIGHT SIDE: User & Dark Mode Toggle === */}
 			<div className="flex items-center gap-4">
 				<UserButton />
+				<p> {user?.fullName}</p>
 				<DarkModeToggle />
 			</div>
 
