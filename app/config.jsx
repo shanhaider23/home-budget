@@ -8,6 +8,8 @@ import {
 	ReceiptText,
 	Calendar,
 	ListTodo,
+	Brain,
+	BotMessageSquare,
 } from 'lucide-react';
 
 export const NavItems = () => {
@@ -60,10 +62,26 @@ export const NavItems = () => {
 		},
 		{
 			id: 6,
-			name: 'Todo List',
+			name: 'Reminder',
 			href: '/dashboard/todo',
 			icon: <ListTodo size={20} />,
 			active: isNavItemActive(pathname, '/dashboard/todo'),
+			position: 'top',
+		},
+		{
+			id: 7,
+			name: 'Financial Forecasting',
+			href: '/dashboard/forecasting',
+			icon: <Brain size={20} />,
+			active: isNavItemActive(pathname, '/dashboard/forecasting'),
+			position: 'top',
+		},
+		{
+			id: 8,
+			name: 'AI Advice',
+			href: '/dashboard/advice',
+			icon: <BotMessageSquare size={20} />,
+			active: isNavItemActive(pathname, '/dashboard/advice'),
 			position: 'top',
 		},
 		{

@@ -24,8 +24,8 @@ function AddExpense({ budgetId, refreshData }) {
 		setLoading(true);
 
 		dispatch(addExpense({ name, amount, budgetId, category }));
-		console.log('Expense added, calling refreshData...');
-		await refreshData(); // Fetch updated data
+
+		await refreshData();
 		setName('');
 		setAmount('');
 		setCategory('');

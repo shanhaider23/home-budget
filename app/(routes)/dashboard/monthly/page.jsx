@@ -23,7 +23,7 @@ function Monthly() {
 				</div>
 
 				{/* Right Panel */}
-				<div className="flex-grow w-full sm:w-auto mb-5">
+				<div className="flex-grow w-full sm:w-auto">
 					<div className="flex flex-col gap-3">
 						<div className="w-full">
 							<InputDetail />

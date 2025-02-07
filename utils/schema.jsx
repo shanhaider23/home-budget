@@ -30,3 +30,11 @@ export const Monthly = pgTable('monthly', {
 	category: varchar('category').notNull(),
 	amount: numeric('amount').notNull().default(0),
 });
+export const Tasks = pgTable('tasks', {
+	id: serial('id').primaryKey(),
+	title: varchar('title').notNull(),
+	description: varchar('description').notNull(),
+	status: varchar('status').notNull(),
+	date: varchar('date').notNull(),
+	createdAt: varchar('createdAt').notNull(),
+});

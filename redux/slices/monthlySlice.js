@@ -19,7 +19,6 @@ export const fetchMonthly = createAsyncThunk(
             })
             .from(Monthly)
             .orderBy(desc(Monthly.id));
-        console.log(results);
         return results;
     }
 );
