@@ -44,7 +44,7 @@ function ExpenseComponent({ params }) {
 	return (
 		<div className="mt-5">
 			<div>
-				<h1 className="text-3xl mb-5  ">All Expenses</h1>
+				<h1 className="text-3xl mb-5 font-bold ">All Expenses</h1>
 			</div>
 			<div className="flex justify-center items-center flex-col gap-5">
 				<div className="w-full grid grid-cols-1 grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 gap-5 ">

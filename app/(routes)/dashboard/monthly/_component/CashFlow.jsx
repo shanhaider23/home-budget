@@ -94,15 +94,17 @@ function CashFlow({ month, setMonth, year, setYear }) {
 		<div className="mb-7 w-full h-[80vh] p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
 			<div className="grid grid-cols-1 grid-rows-[10%,40%, 50% ]  gap-5">
 				<div className="bg-slate-500">
-					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
-						<h1 className="capitalize">{month ? month : 'Select Month'}</h1>
+					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-2xl font-bold p-2 ">
+						<h1>Monthly Budget </h1>
 					</div>
 				</div>
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>
 						<div className="w-full text-left border-collapse">
 							<div className="border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
-								<h1>Select The Month & Year </h1>
+								<h1 className="capitalize">
+									{month || year || 'Select Month or Year'}
+								</h1>
 							</div>
 							<div>
 								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">

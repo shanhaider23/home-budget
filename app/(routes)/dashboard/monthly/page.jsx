@@ -28,7 +28,7 @@ function Monthly() {
 						<div className="w-full">
 							<InputDetail />
 						</div>
-						<div className="flex gap-5 items-center justify-center  flex-wrap sm:flex-nowrap">
+						<div className="flex gap-5 items-start justify-center  flex-wrap sm:flex-nowrap">
 							<MonthlyIncome month={month} year={year} />
 							<MonthlyExpense month={month} year={year} />
 						</div>

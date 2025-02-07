@@ -25,7 +25,7 @@ function BudgetList() {
 		<div className="mt-5 flex flex-col gap-5">
 			<div className="flex justify-between items-center">
 				<div>
-					<h1 className="text-3xl  ">All Budgets</h1>
+					<h1 className="text-3xl font-bold ">All Budgets</h1>
 				</div>
 				<div>
 					<CreateBudget />
