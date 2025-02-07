@@ -42,7 +42,7 @@ function ExpenseComponent({ params }) {
 	}
 
 	return (
-		<div className="mt-5">
+		<div className="mt-5 pr-5">
 			<div>
 				<h1 className="text-3xl mb-5 font-bold ">All Expenses</h1>
 			</div>

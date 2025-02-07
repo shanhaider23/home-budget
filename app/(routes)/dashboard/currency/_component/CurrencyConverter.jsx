@@ -33,7 +33,9 @@ const CurrencyConverter = () => {
 	const [convertedAmount, setConvertedAmount] = useState(null);
 	const [exchangeRate, setExchangeRate] = useState(null);
 	const [currenciesHistory, setCurrenciesHistory] = useState([]);
-	const [isHistoryLoaded, setIsHistoryLoaded] = useState(false); // Track if history data is fully loaded
+	const [isHistoryLoaded, setIsHistoryLoaded] = useState(false);
+	const [rates, setRates] = useState({});
+	const [lastUpdated, setLastUpdated] = useState('');
 
 	// Load saved currency preferences from localStorage
 	useEffect(() => {
@@ -120,6 +122,8 @@ const CurrencyConverter = () => {
 				const rate = response.data.conversion_rates[toCurrency];
 				setExchangeRate(rate);
 				setConvertedAmount((amount * rate).toFixed(2));
+				setRates(response.data.conversion_rates);
+				setLastUpdated(response.data.time_last_update_utc);
 			} catch (err) {
 				console.error('Failed to fetch exchange rate.');
 			}
@@ -144,120 +148,155 @@ const CurrencyConverter = () => {
 	};
 
 	return (
-		<div className="w-full mt-5">
-			<Card className="m-auto p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg w-full max-w-md border border-gray-200 dark:border-gray-700">
-				<h1 className="text-xl font-bold text-center mb-4">
-					Currency Converter
-				</h1>
+		<div className="w-full mt-5 pr-5">
+			<div className="flex flex-col md:flex-row gap-6 w-full">
+				{/* Currency Converter Card */}
+				<div className="flex-1">
+					<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700 h-full">
+						<h1 className="text-xl font-bold text-center mb-4">
+							Currency Converter
+						</h1>
 
-				<div className="space-y-4">
-					{/* Amount Input */}
-					<div>
-						<Label className="text-sm">Amount</Label>
-						<Input
-							type="number"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
-							placeholder="Enter amount"
-							className="mt-1"
-						/>
-					</div>
+						<div className="space-y-4">
+							{/* Amount Input */}
+							<div>
+								<Label className="text-sm">Amount</Label>
+								<Input
+									type="number"
+									value={amount}
+									onChange={(e) => setAmount(e.target.value)}
+									placeholder="Enter amount"
+									className="mt-1"
+								/>
+							</div>
 
-					{/* From Currency Selector */}
-					<div>
-						<Label className="text-sm">From</Label>
-						<Select value={fromCurrency} onValueChange={setFromCurrency}>
-							<SelectTrigger className="mt-1">
-								<SelectValue placeholder="Select currency" />
-							</SelectTrigger>
-							<SelectContent>
-								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
-									<SelectItem key={code} value={code}>
-										<img
-											src={getCurrencyFlag(flag)}
-											alt={flag}
-											className="w-5 h-5 inline-block mr-2"
-										/>
-										{name} ({symbol})
-									</SelectItem>
-								))}
-								<hr className="my-1 border-gray-500" />
-								{currencies
-									.filter(
-										(currency) =>
-											!favoriteCurrencies.some((fav) => fav.code === currency)
-									)
-									.map((currency) => (
-										<SelectItem key={currency} value={currency}>
-											<img
-												src={getCurrencyFlag(currency)}
-												alt={currency}
-												className="w-5 h-5 inline-block mr-2"
-											/>
-											{currency}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-					</div>
+							{/* From Currency Selector */}
+							<div>
+								<Label className="text-sm">From</Label>
+								<Select value={fromCurrency} onValueChange={setFromCurrency}>
+									<SelectTrigger className="mt-1">
+										<SelectValue placeholder="Select currency" />
+									</SelectTrigger>
+									<SelectContent>
+										{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
+											<SelectItem key={code} value={code}>
+												<img
+													src={getCurrencyFlag(flag)}
+													alt={flag}
+													className="w-5 h-5 inline-block mr-2"
+												/>
+												{name} ({symbol})
+											</SelectItem>
+										))}
+										<hr className="my-1 border-gray-500" />
+										{currencies
+											.filter(
+												(currency) =>
+													!favoriteCurrencies.some(
+														(fav) => fav.code === currency
+													)
+											)
+											.map((currency) => (
+												<SelectItem key={currency} value={currency}>
+													<img
+														src={getCurrencyFlag(currency)}
+														alt={currency}
+														className="w-5 h-5 inline-block mr-2"
+													/>
+													{currency}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
 
-					{/* Swap Button */}
-					<div className="flex justify-end">
-						<Button
-							variant="outline"
-							onClick={swapCurrencies}
-							className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center -mb-7"
-						>
-							<RefreshCcw className="w-5 h-5 mr-2" /> Swap
-						</Button>
-					</div>
+							{/* Swap Button */}
+							<div className="flex justify-end">
+								<Button
+									variant="outline"
+									onClick={swapCurrencies}
+									className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center"
+								>
+									<RefreshCcw className="w-5 h-5 mr-2" /> Swap
+								</Button>
+							</div>
 
-					{/* To Currency Selector */}
-					<div>
-						<Label className="text-sm">To</Label>
-						<Select value={toCurrency} onValueChange={setToCurrency}>
-							<SelectTrigger className="mt-1">
-								<SelectValue placeholder="Select currency" />
-							</SelectTrigger>
-							<SelectContent>
-								{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
-									<SelectItem key={code} value={code}>
-										<img
-											src={getCurrencyFlag(flag)}
-											alt={flag}
-											className="w-5 h-5 inline-block mr-2"
-										/>
-										{name} ({symbol})
-									</SelectItem>
-								))}
-								<hr className="my-1 border-gray-500" />
-								{currencies
-									.filter(
-										(currency) =>
-											!favoriteCurrencies.some((fav) => fav.code === currency)
-									)
-									.map((currency) => (
-										<SelectItem key={currency} value={currency}>
-											<img
-												src={getCurrencyFlag(currency)}
-												alt={currency}
-												className="w-5 h-5 inline-block mr-2"
-											/>
-											{currency}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-					</div>
+							{/* To Currency Selector */}
+							<div>
+								<Label className="text-sm">To</Label>
+								<Select value={toCurrency} onValueChange={setToCurrency}>
+									<SelectTrigger className="mt-1">
+										<SelectValue placeholder="Select currency" />
+									</SelectTrigger>
+									<SelectContent>
+										{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
+											<SelectItem key={code} value={code}>
+												<img
+													src={getCurrencyFlag(flag)}
+													alt={flag}
+													className="w-5 h-5 inline-block mr-2"
+												/>
+												{name} ({symbol})
+											</SelectItem>
+										))}
+										<hr className="my-1 border-gray-500" />
+										{currencies
+											.filter(
+												(currency) =>
+													!favoriteCurrencies.some(
+														(fav) => fav.code === currency
+													)
+											)
+											.map((currency) => (
+												<SelectItem key={currency} value={currency}>
+													<img
+														src={getCurrencyFlag(currency)}
+														alt={currency}
+														className="w-5 h-5 inline-block mr-2"
+													/>
+													{currency}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
 
-					{/* Converted Amount */}
-					{convertedAmount !== null && (
-						<p className="text-3xl font-bold text-center">
-							{amount} {fromCurrency} = {convertedAmount} {toCurrency}
-						</p>
-					)}
+							{/* Converted Amount */}
+							{convertedAmount !== null && (
+								<p className="text-3xl font-bold text-center">
+									{amount} {fromCurrency} = {convertedAmount} {toCurrency}
+								</p>
+							)}
+						</div>
+					</Card>
 				</div>
-			</Card>
+
+				{/* Exchange Rate Card */}
+				<div className="flex-1">
+					<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700 h-full">
+						<h2 className="text-xl font-bold text-center mb-4">
+							{fromCurrency} Exchange Rates
+						</h2>
+						<p className="text-center text-sm text-gray-500 mb-12">
+							Last updated: {new Date(lastUpdated).toLocaleString()}
+						</p>
+						<div className="space-y-2">
+							{favoriteCurrencies
+								.filter(({ code }) => code !== fromCurrency) // Exclude fromCurrency
+								.map(({ code, symbol, name }) => (
+									<div key={code} className="flex justify-between p-2 border-b">
+										<span>
+											{name} ({symbol})
+										</span>
+										<span className="font-bold">
+											{rates[code]?.toFixed(4) || 'N/A'}
+										</span>
+									</div>
+								))}
+						</div>
+					</Card>
+				</div>
+			</div>
 
 			{isHistoryLoaded && <LineCharts currenciesHistory={currenciesHistory} />}
 		</div>

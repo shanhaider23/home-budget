@@ -21,7 +21,7 @@ export function LineCharts({ currenciesHistory }) {
 	}, [currenciesHistory]);
 
 	return (
-		<div className=" mt-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+		<div className=" mt-7 mb-5 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
 			<h1 className="mb-5 text-2xl">Last five years history</h1>
 
 			{isLoading ? (

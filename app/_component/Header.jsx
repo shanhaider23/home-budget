@@ -5,7 +5,7 @@ import DashboardHeader from '../(routes)/dashboard/_component/DashboardHeader';
 
 function Header() {
 	return (
-		<div>
+		<div className="sticky top-0 z-50">
 			<DashboardHeader />
 		</div>
 	);

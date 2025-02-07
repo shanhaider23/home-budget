@@ -10,8 +10,8 @@ function Monthly() {
 	const [year, setYear] = useState('');
 
 	return (
-		<div className="mt-5">
-			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap">
+		<div className="mt-5 ">
+			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap mr-5">
 				{/* Left Panel */}
 				<div className="w-full sm:w-[300px] self-start">
 					<CashFlow
@@ -23,7 +23,7 @@ function Monthly() {
 				</div>
 
 				{/* Right Panel */}
-				<div className="flex-grow w-full sm:w-auto pr-5">
+				<div className="flex-grow w-full sm:w-auto mb-5">
 					<div className="flex flex-col gap-3">
 						<div className="w-full">
 							<InputDetail />
