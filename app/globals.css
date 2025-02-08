@@ -3,8 +3,16 @@
 @tailwind utilities;
 
 body {
-	font-family: Arial, Helvetica, sans-serif;
 	@apply bg-white text-black;
+}
+
+.page-transition-container {
+	opacity: 1;
+	transition: opacity 0.5s ease-in-out;
+}
+
+body.page-transition .page-transition-container {
+	opacity: 0;
 }
 .dark body {
 	@apply bg-gray-800 text-white;
@@ -69,12 +77,3 @@ html {
 		--chart-5: 340 75% 55%;
 	}
 }
-
-/* @layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
-} */

@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import TransitionLink from '@/app/_component/TransitionLink';
 
 export default function SideNav() {
 	const { isSignedIn } = useUser();
@@ -129,7 +130,7 @@ export const SideNavItem = ({
 	return (
 		<>
 			{isSidebarExpanded ? (
-				<Link href={path}>
+				<TransitionLink href={path}>
 					<h2
 						className={`flex gap-2 items-center text-gray-500 font-medium p-5 cursor-pointer rounded-md hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
 							path === active &&
@@ -139,7 +140,7 @@ export const SideNavItem = ({
 						{icon}
 						{label}
 					</h2>
-				</Link>
+				</TransitionLink>
 			) : (
 				<TooltipProvider delayDuration={70}>
 					<Tooltip>
