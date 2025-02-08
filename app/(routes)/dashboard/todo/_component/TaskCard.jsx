@@ -11,13 +11,7 @@ export default function TaskCard({ task }) {
 		: undefined;
 
 	return (
-		<div
-			ref={setNodeRef}
-			{...listeners}
-			{...attributes}
-			className="cursor-grab rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md hover:shadow-lg p-4 transition-all"
-			style={style}
-		>
+		<div ref={setNodeRef} {...listeners} {...attributes} style={style}>
 			{/* Title Section */}
 			<h1 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
 				{task.title}

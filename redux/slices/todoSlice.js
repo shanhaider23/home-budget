@@ -73,9 +73,10 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async ({ id, stat
 // **Delete Task**
 export const deleteTasks = createAsyncThunk('tasks/deleteTasks', async ({ taskId }, { dispatch }) => {
     try {
-        await db.delete(Tasks).where(eq(Tasks.id, taskId)).returning();
+        const deletedTask = await db.delete(Tasks).where(eq(Tasks.id, taskId)).returning();
+        if (!deletedTask) throw new Error("Task not found");
         toast.success('Task Deleted');
-        dispatch(fetchTasks()); // Refresh after delete
+        dispatch(fetchTasks()); // Refresh task list
         return taskId;
     } catch (error) {
         console.error('Error deleting task:', error);
@@ -83,6 +84,7 @@ export const deleteTasks = createAsyncThunk('tasks/deleteTasks', async ({ taskId
         throw error;
     }
 });
+
 
 const todoSlice = createSlice({
     name: 'tasks',

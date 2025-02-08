@@ -23,7 +23,7 @@ export default function TodoBoard() {
 	}, [dispatch]);
 	const refreshData = () => {
 		dispatch(fetchTasks());
-		setRefreshKey((prevKey) => prevKey + 1); // Change state to trigger re-render
+		setRefreshKey((prevKey) => prevKey + 1);
 	};
 	function handleDragEnd(event) {
 		const { active, over } = event;
@@ -58,6 +58,7 @@ export default function TodoBoard() {
 							<Column
 								key={column.id}
 								column={column}
+								refreshData={refreshData}
 								tasks={tasks.filter((task) => task.status === column.id)}
 							/>
 						))}
