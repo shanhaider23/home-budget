@@ -75,10 +75,14 @@ export const deleteMonthly = createAsyncThunk(
 export const updateMonthly = createAsyncThunk(
     "monthly/updateMonthly",
     async ({ id, amount, category }) => {
-        await db.update(Monthly).set({ amount, category }).where(eq(Monthly.id, id));
-        return { id, amount, category };
+        const updatedRecord = await db.update(Monthly)
+            .set({ amount, category })
+            .where(eq(Monthly.id, id))
+            .returning(); // Ensure it returns the updated row
+        return updatedRecord[0]; // Return the updated record
     }
 );
+
 
 const monthlySlice = createSlice({
     name: 'monthly',

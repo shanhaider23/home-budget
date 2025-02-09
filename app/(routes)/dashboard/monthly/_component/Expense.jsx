@@ -53,14 +53,20 @@ function MonthlyExpense({ month, year }) {
 		name: item.category,
 		value: parseFloat(item.amount),
 	}));
+
 	const handleEdit = (item) => {
-		console.log(item.id);
 		setEditId(item.id);
 		setEditValues({ category: item.category, amount: item.amount });
 	};
 
-	const handleUpdate = (id) => {
-		dispatch(updateMonthly({ id, ...editValues }));
+	const handleUpdate = async (id) => {
+		await dispatch(
+			updateMonthly({
+				id,
+				category: editValues.category,
+				amount: editValues.amount,
+			})
+		);
 		setEditId(null);
 	};
 

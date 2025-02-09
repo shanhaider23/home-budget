@@ -1,7 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMonthly } from '@/redux/slices/monthlySlice';
+import {
+	fetchMonthly,
+	deleteMonthly,
+	updateMonthly,
+} from '@/redux/slices/monthlySlice';
 import { useUser } from '@clerk/nextjs';
 import {
 	PieChart,
@@ -11,10 +15,13 @@ import {
 	Tooltip,
 	Legend,
 } from 'recharts';
-import { Loader } from 'lucide-react';
+import { Loader, Trash2, PenBox, Check, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 function MonthlyIncome({ month, year }) {
 	const dispatch = useDispatch();
+	const [editId, setEditId] = useState(null);
+	const [editValues, setEditValues] = useState({ category: '', amount: '' });
 	const { user } = useUser();
 
 	const {
@@ -45,6 +52,31 @@ function MonthlyIncome({ month, year }) {
 		name: item.category,
 		value: parseFloat(item.amount),
 	}));
+	const handleEdit = (item) => {
+		setEditId(item.id);
+		setEditValues({ category: item.category, amount: item.amount });
+	};
+
+	const handleUpdate = async (id) => {
+		await dispatch(
+			updateMonthly({
+				id,
+				category: editValues.category,
+				amount: editValues.amount,
+			})
+		);
+		setEditId(null);
+	};
+
+	const handleCancel = () => {
+		setEditId(null);
+	};
+
+	const handleDelete = (id) => {
+		if (window.confirm('Are you sure you want to delete this record?')) {
+			dispatch(deleteMonthly({ monthlyId: id }));
+		}
+	};
 	const COLORS = [
 		'#0088FE',
 		'#00C49F',
@@ -103,15 +135,95 @@ function MonthlyIncome({ month, year }) {
 											<tr
 												key={item.id}
 												className="border border-gray-200 dark:border-gray-700 last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
-												style={{
-													backgroundColor: COLORS[index % COLORS.length],
-												}}
 											>
 												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
-													{item.category}
+													<button
+														onClick={() => handleEdit(item)}
+														className="bg-transparent"
+													>
+														<PenBox
+															size={15}
+															strokeWidth={2.75}
+															className="text-blue-500"
+														/>
+													</button>
 												</td>
+												{editId === item.id ? (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<div className="flex justify-center items-center">
+															<Input
+																type="text"
+																value={editValues.category}
+																onChange={(e) =>
+																	setEditValues({
+																		...editValues,
+																		category: e.target.value,
+																	})
+																}
+															/>
+															<div>
+																<button onClick={() => handleUpdate(item.id)}>
+																	<Check size={15} />
+																</button>
+																<button onClick={handleCancel}>
+																	<X size={15} />
+																</button>
+															</div>
+														</div>
+													</td>
+												) : (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														{item.category}
+													</td>
+												)}
+												{editId === item.id ? (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<div className="flex justify-center items-center">
+															<Input
+																type="number"
+																value={editValues.amount}
+																onChange={(e) =>
+																	setEditValues({
+																		...editValues,
+																		amount: e.target.value,
+																	})
+																}
+															/>
+															<div>
+																<div>
+																	<button onClick={() => handleUpdate(item.id)}>
+																		<Check size={15} />
+																	</button>
+																	<button onClick={handleCancel}>
+																		<X size={15} />
+																	</button>
+																</div>
+															</div>
+														</div>
+													</td>
+												) : (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<p
+															style={{
+																color: COLORS[index % COLORS.length],
+															}}
+														>
+															{item.amount}
+														</p>
+													</td>
+												)}
+
 												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
-													{item.amount}
+													<button
+														onClick={() => handleDelete(item.id)}
+														className="bg-transparent "
+													>
+														<Trash2
+															size={15}
+															strokeWidth={2.75}
+															className="text-red-500"
+														/>
+													</button>
 												</td>
 											</tr>
 										))}
