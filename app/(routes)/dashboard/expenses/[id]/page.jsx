@@ -64,7 +64,7 @@ function ExpensesScreen({ params: paramsPromise }) {
 	const deleteBudgetHandler = () => {
 		dispatch(
 			deleteBudget({
-				pramsId: params.id,
+				paramsId: params.id,
 				email: user.primaryEmailAddress.emailAddress,
 			})
 		).then(() => router.replace('/dashboard/budgets'));
