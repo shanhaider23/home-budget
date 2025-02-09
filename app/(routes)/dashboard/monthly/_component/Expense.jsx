@@ -1,7 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMonthly } from '@/redux/slices/monthlySlice';
+import { fetchMonthly, deleteMonthly } from '@/redux/slices/monthlySlice';
+import { Input } from '@/components/ui/input';
+
 import { useUser } from '@clerk/nextjs';
 import {
 	PieChart,
@@ -11,9 +13,10 @@ import {
 	Tooltip,
 	Legend,
 } from 'recharts';
-import { Loader } from 'lucide-react';
+import { Loader, Trash2, PenBox, Check, X } from 'lucide-react';
 
 function MonthlyExpense({ month, year }) {
+	const [editData, setEditData] = useState(false);
 	const dispatch = useDispatch();
 	const { user } = useUser();
 
@@ -45,6 +48,14 @@ function MonthlyExpense({ month, year }) {
 		name: item.category,
 		value: parseFloat(item.amount),
 	}));
+	const handleDelete = (id) => {
+		if (window.confirm('Are you sure you want to delete this record?')) {
+			dispatch(deleteMonthly({ monthlyId: id }));
+		}
+	};
+	const handleEdit = () => {
+		setEditData(true);
+	};
 	const COLORS = [
 		'#FF0000', // Red
 		'#D32F2F', // Dark Red
@@ -52,6 +63,10 @@ function MonthlyExpense({ month, year }) {
 		'#E64A19', // Deep Orange
 		'#FF5722', // Orange-Red
 		'#795548', // Brown
+
+		'#F28C8C', // Soft Coral
+
+		'#FF8E72', // Vibrant Coral
 	];
 
 	return (
@@ -103,15 +118,85 @@ function MonthlyExpense({ month, year }) {
 											<tr
 												key={item.id}
 												className="border border-gray-200 dark:border-gray-700 last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
-												style={{
-													backgroundColor: COLORS[index % COLORS.length],
-												}}
 											>
 												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
-													{item.category}
+													<button
+														onClick={handleEdit}
+														className="bg-transparent"
+													>
+														<PenBox
+															size={15}
+															strokeWidth={2.75}
+															className="text-blue-500"
+														/>
+													</button>
 												</td>
+												{editData ? (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<div className="flex justify-center items-center">
+															<Input
+																placeholder="Pay Electricity Bill"
+																onChange={() => setEditData(true)}
+																value={item.category}
+																className="dark:bg-gray-700 dark:text-gray-200"
+															/>
+															<div>
+																<button>
+																	<Check size={10} />
+																</button>
+																<button>
+																	<X size={10} />
+																</button>
+															</div>
+														</div>
+													</td>
+												) : (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														{item.category}
+													</td>
+												)}
+												{editData ? (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<div className="flex justify-center items-center">
+															<Input
+																placeholder="Pay Electricity Bill"
+																onChange={() => setEditData(true)}
+																value={item.category}
+																className="dark:bg-gray-700 dark:text-gray-200"
+															/>
+															<div>
+																<button>
+																	<Check size={10} />
+																</button>
+																<button>
+																	<X size={10} />
+																</button>
+															</div>
+														</div>
+													</td>
+												) : (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<p
+															style={{
+																color: COLORS[index % COLORS.length],
+															}}
+														>
+															{item.amount}
+														</p>
+													</td>
+												)}
+
 												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
-													{item.amount}
+													<button
+														onClick={() => handleDelete(item.id)}
+														className="bg-transparent "
+													>
+														<Trash2
+															size={15}
+															strokeWidth={2.75}
+															className="text-red-500"
+														/>
+													</button>
 												</td>
 											</tr>
 										))}

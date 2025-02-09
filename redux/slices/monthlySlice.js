@@ -72,6 +72,13 @@ export const deleteMonthly = createAsyncThunk(
         }
     }
 );
+export const updateMonthly = createAsyncThunk(
+    "monthly/updateMonthly",
+    async ({ id, amount, email }) => {
+        await db.update(Monthly).set({ amount }).where(eq(Monthly.id, id));
+        return { id, amount };
+    }
+);
 
 const monthlySlice = createSlice({
     name: 'monthly',
@@ -117,6 +124,11 @@ const monthlySlice = createSlice({
             .addCase(deleteMonthly.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
+            })
+            .addCase(updateMonthly.fulfilled, (state, action) => {
+                state.list = state.list.map((monthly) =>
+                    monthly.id === action.payload.id ? { ...monthly, amount: action.payload.amount } : monthly
+                );
             });
     },
 });

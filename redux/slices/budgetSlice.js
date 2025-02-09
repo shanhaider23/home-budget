@@ -102,9 +102,9 @@ export const deleteBudget = createAsyncThunk(
                 .where(eq(Budgets.id, paramsId))
                 .returning();
 
-            if (deletedBudget.length > 0) {
+            if (deletedBudget) {
                 toast.success('Budget Deleted');
-                return paramsId; // 🔹 Return deleted budget ID to remove from Redux state
+                return paramsId;
             } else {
                 throw new Error('Failed to delete budget');
             }
