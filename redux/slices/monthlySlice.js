@@ -74,9 +74,9 @@ export const deleteMonthly = createAsyncThunk(
 );
 export const updateMonthly = createAsyncThunk(
     "monthly/updateMonthly",
-    async ({ id, amount, email }) => {
-        await db.update(Monthly).set({ amount }).where(eq(Monthly.id, id));
-        return { id, amount };
+    async ({ id, amount, category }) => {
+        await db.update(Monthly).set({ amount, category }).where(eq(Monthly.id, id));
+        return { id, amount, category };
     }
 );
 

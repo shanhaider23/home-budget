@@ -1,7 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMonthly, deleteMonthly } from '@/redux/slices/monthlySlice';
+import {
+	fetchMonthly,
+	deleteMonthly,
+	updateMonthly,
+} from '@/redux/slices/monthlySlice';
 import { Input } from '@/components/ui/input';
 
 import { useUser } from '@clerk/nextjs';
@@ -16,7 +20,8 @@ import {
 import { Loader, Trash2, PenBox, Check, X } from 'lucide-react';
 
 function MonthlyExpense({ month, year }) {
-	const [editData, setEditData] = useState(false);
+	const [editId, setEditId] = useState(null);
+	const [editValues, setEditValues] = useState({ category: '', amount: '' });
 	const dispatch = useDispatch();
 	const { user } = useUser();
 
@@ -48,14 +53,27 @@ function MonthlyExpense({ month, year }) {
 		name: item.category,
 		value: parseFloat(item.amount),
 	}));
+	const handleEdit = (item) => {
+		console.log(item.id);
+		setEditId(item.id);
+		setEditValues({ category: item.category, amount: item.amount });
+	};
+
+	const handleUpdate = (id) => {
+		dispatch(updateMonthly({ id, ...editValues }));
+		setEditId(null);
+	};
+
+	const handleCancel = () => {
+		setEditId(null);
+	};
+
 	const handleDelete = (id) => {
 		if (window.confirm('Are you sure you want to delete this record?')) {
 			dispatch(deleteMonthly({ monthlyId: id }));
 		}
 	};
-	const handleEdit = () => {
-		setEditData(true);
-	};
+
 	const COLORS = [
 		'#FF0000', // Red
 		'#D32F2F', // Dark Red
@@ -121,7 +139,7 @@ function MonthlyExpense({ month, year }) {
 											>
 												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
 													<button
-														onClick={handleEdit}
+														onClick={() => handleEdit(item)}
 														className="bg-transparent"
 													>
 														<PenBox
@@ -131,21 +149,25 @@ function MonthlyExpense({ month, year }) {
 														/>
 													</button>
 												</td>
-												{editData ? (
+												{editId === item.id ? (
 													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
 														<div className="flex justify-center items-center">
 															<Input
-																placeholder="Pay Electricity Bill"
-																onChange={() => setEditData(true)}
-																value={item.category}
-																className="dark:bg-gray-700 dark:text-gray-200"
+																type="text"
+																value={editValues.category}
+																onChange={(e) =>
+																	setEditValues({
+																		...editValues,
+																		category: e.target.value,
+																	})
+																}
 															/>
 															<div>
-																<button>
-																	<Check size={10} />
+																<button onClick={() => handleUpdate(item.id)}>
+																	<Check size={15} />
 																</button>
-																<button>
-																	<X size={10} />
+																<button onClick={handleCancel}>
+																	<X size={15} />
 																</button>
 															</div>
 														</div>
@@ -155,22 +177,28 @@ function MonthlyExpense({ month, year }) {
 														{item.category}
 													</td>
 												)}
-												{editData ? (
+												{editId === item.id ? (
 													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
 														<div className="flex justify-center items-center">
 															<Input
-																placeholder="Pay Electricity Bill"
-																onChange={() => setEditData(true)}
-																value={item.category}
-																className="dark:bg-gray-700 dark:text-gray-200"
+																type="number"
+																value={editValues.amount}
+																onChange={(e) =>
+																	setEditValues({
+																		...editValues,
+																		amount: e.target.value,
+																	})
+																}
 															/>
 															<div>
-																<button>
-																	<Check size={10} />
-																</button>
-																<button>
-																	<X size={10} />
-																</button>
+																<div>
+																	<button onClick={() => handleUpdate(item.id)}>
+																		<Check size={15} />
+																	</button>
+																	<button onClick={handleCancel}>
+																		<X size={15} />
+																	</button>
+																</div>
 															</div>
 														</div>
 													</td>
