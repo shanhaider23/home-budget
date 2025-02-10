@@ -10,8 +10,8 @@ function Monthly() {
 	const [year, setYear] = useState('');
 
 	return (
-		<div className="mt-5 ">
-			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap mr-5">
+		<div className="mt-5 overflow-hidden">
+			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap mr-5 h-full">
 				{/* Left Panel */}
 				<div className="w-full sm:w-[300px] self-start">
 					<CashFlow
@@ -23,13 +23,18 @@ function Monthly() {
 				</div>
 
 				{/* Right Panel */}
-				<div className="flex-grow w-full sm:w-auto">
-					<div className="flex flex-col gap-3">
-						<div className="w-full">
-							<InputDetail />
-						</div>
-						<div className="flex gap-5 items-start justify-center  flex-wrap sm:flex-nowrap">
+				<div className="flex-grow w-full sm:w-auto flex flex-col gap-3">
+					<div className="w-full">
+						<InputDetail />
+					</div>
+
+					{/* Scrollable Section */}
+					<div className="flex gap-5 items-start justify-center flex-wrap sm:flex-nowrap overflow-y-auto max-h-[700px] ">
+						{/* These components will be scrollable */}
+						<div className="flex-1 min-w-[250px]">
 							<MonthlyIncome month={month} year={year} />
+						</div>
+						<div className="flex-1 min-w-[250px]">
 							<MonthlyExpense month={month} year={year} />
 						</div>
 					</div>

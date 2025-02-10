@@ -10,13 +10,23 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-
+import { predefinedCategories } from '@/lib/categories';
 import { Calendar } from '@/components/ui/calendar';
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+	CommandSeparator,
+	CommandShortcut,
+} from '@/components/ui/command';
 import {
 	Select,
 	SelectContent,
@@ -45,6 +55,32 @@ function InputDetail() {
 	const [type, setType] = useState('');
 
 	const dispatch = useDispatch();
+	// const predefinedCategories = [
+	// 	'Food',
+	// 	'Transport',
+	// 	'Entertainment',
+	// 	'Bills',
+	// 	'Shopping',
+	// 	'Car Insurance',
+	// 	'Mobile Phone Bill',
+	// 	'Bank Fees',
+	// 	'Electricity',
+	// 	'House Rent',
+	// 	'Petrol',
+	// 	'Grocery',
+	// 	'Netflix',
+	// 	'Karate Classes',
+	// 	'Internet Bill',
+	// 	'Parking',
+	// 	'Healthcare',
+	// 	'Education',
+	// 	'Subscriptions',
+	// 	'Savings & Investments',
+	// 	'Loan Payments',
+	// 	'Gym Membership',
+	// 	'Charity & Donations',
+	// 	'Miscellaneous',
+	// ];
 
 	const handleInputDetail = async () => {
 		if (!amount || !category) {
@@ -127,11 +163,30 @@ function InputDetail() {
 									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
 										Category
 									</Label>
+									<Command className="rounded-lg border shadow-md md:min-w-[450px] h-[150px] overflow-y-hidden mt-1">
+										<CommandInput placeholder="Type a command or search..." />
+										<CommandList>
+											<CommandEmpty>No results found.</CommandEmpty>
+											<CommandGroup
+												heading="Suggestions"
+												className=" overflow-y-auto"
+											>
+												{predefinedCategories.map((item) => (
+													<CommandItem
+														key={item}
+														onSelect={() => setCategory(item)}
+													>
+														{item}
+													</CommandItem>
+												))}
+											</CommandGroup>
+										</CommandList>
+									</Command>
 									<Input
-										placeholder="Grocery"
+										placeholder="Type Category"
 										onChange={(e) => setCategory(e.target.value)}
 										value={category}
-										className="dark:bg-gray-700 dark:text-gray-200"
+										className="dark:bg-gray-700 dark:text-gray-200 mt-4"
 									/>
 								</div>
 
