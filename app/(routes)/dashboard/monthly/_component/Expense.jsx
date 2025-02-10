@@ -123,7 +123,6 @@ function MonthlyExpense({ month, year }) {
 											))}
 										</Pie>
 										<Tooltip />
-										<Legend />
 									</PieChart>
 								</ResponsiveContainer>
 							</div>

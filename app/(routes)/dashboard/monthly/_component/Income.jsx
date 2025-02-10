@@ -116,7 +116,6 @@ function MonthlyIncome({ month, year }) {
 											))}
 										</Pie>
 										<Tooltip />
-										<Legend />
 									</PieChart>
 								</ResponsiveContainer>
 							</div>
