@@ -81,31 +81,21 @@ function AddTodo({ refreshData }) {
 						<DialogDescription>
 							<div>
 								<div className="mt-2">
-									<h2 className="text-black font-bold my-1 dark:text-gray-300">
-										Due Date
-									</h2>
-									<Popover>
-										<PopoverTrigger asChild>
-											<Button
-												variant={'outline'}
-												className={cn(
-													'w-[240px] justify-start text-left font-normal dark:bg-gray-700 dark:text-gray-200',
-													!date && 'text-muted-foreground'
-												)}
-											>
-												<CalendarIcon />
-												{date ? format(date, 'PPP') : <span>Pick a date</span>}
-											</Button>
-										</PopoverTrigger>
-										<PopoverContent className="w-auto p-0" align="start">
-											<Calendar
-												mode="single"
-												selected={date}
-												onSelect={setDate}
-												initialFocus
-											/>
-										</PopoverContent>
-									</Popover>
+									<div className="flex flex-col gap-2 items-start justify-start">
+										<h2 className="text-black font-bold my-1 dark:text-gray-300">
+											Due Date
+										</h2>
+										<p className="flex justify-start gap-2 items-center">
+											<CalendarIcon />
+											{date ? format(date, 'PPP') : <span>Pick a date</span>}
+										</p>
+									</div>
+									<Calendar
+										mode="single"
+										selected={date}
+										onSelect={setDate}
+										initialFocus
+									/>
 								</div>
 								<div className="mt-2">
 									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
