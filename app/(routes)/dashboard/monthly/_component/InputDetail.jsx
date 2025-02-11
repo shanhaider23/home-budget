@@ -57,7 +57,7 @@ function InputDetail() {
 	const [loading, setLoading] = useState(false);
 	const [date, setDate] = useState('');
 	const [type, setType] = useState('');
-
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { user } = useUser();
 
@@ -84,7 +84,7 @@ function InputDetail() {
 	const handleFileUpload = (event) => {
 		const file = event.target.files[0];
 		if (!file) return;
-
+		setLoading(true);
 		const reader = new FileReader();
 
 		reader.onload = (e) => {
@@ -102,6 +102,7 @@ function InputDetail() {
 					processFileData(jsonData);
 				} catch (error) {
 					toast.error('Invalid JSON file.');
+					setLoading(false);
 				}
 			}
 		};
@@ -111,6 +112,7 @@ function InputDetail() {
 	const processFileData = (data) => {
 		if (!Array.isArray(data) || data.length === 0) {
 			toast.error('Invalid data format.');
+			setLoading(false);
 			return;
 		}
 
@@ -127,6 +129,8 @@ function InputDetail() {
 		});
 
 		toast.success('Data successfully added!');
+		setLoading(false);
+		setIsDialogOpen(false);
 	};
 
 	return (
@@ -247,36 +251,46 @@ function InputDetail() {
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
-			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 z-auto ">
+			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 				<DialogTrigger asChild>
-					<div className=" cursor-pointer w-full ">
-						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800 w-full">
-							Upload CSV or JSON file
-						</Button>
-					</div>
+					<Button
+						className="bg-blue-800 text-gray-100 dark:text-gray-200 dark:hover:text-gray-800 w-full"
+						onClick={() => setIsDialogOpen(true)}
+					>
+						Upload CSV or JSON file
+					</Button>
 				</DialogTrigger>
 				<DialogContent className="sm:max-w-sm">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
-							Add Income or Expense
+							Upload Data
 						</DialogTitle>
 						<DialogDescription>
-							<div>
-								<div className="mt-4">
-									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
-										Upload CSV or JSON
-									</Label>
-									<Input
-										type="file"
-										accept=".csv, .json"
-										ref={fileInputRef}
-										onChange={handleFileUpload}
-										className="dark:bg-gray-700 dark:text-gray-200 mt-2"
-									/>
-								</div>
+							<div className="mt-4">
+								<label className="text-md text-black font-bold my-1 dark:text-gray-300">
+									Select CSV or JSON File
+								</label>
+								<Input
+									type="file"
+									accept=".csv, .json"
+									ref={fileInputRef}
+									onChange={handleFileUpload}
+									className="dark:bg-gray-700 dark:text-gray-200 mt-2"
+									disabled={loading}
+								/>
 							</div>
 						</DialogDescription>
 					</DialogHeader>
+					<DialogFooter>
+						<DialogClose asChild>
+							<Button
+								className="mt-4 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
+								disabled={loading}
+							>
+								{loading ? <Loader className="animate-spin" /> : 'Close'}
+							</Button>
+						</DialogClose>
+					</DialogFooter>
 				</DialogContent>
 			</Dialog>
 		</div>
