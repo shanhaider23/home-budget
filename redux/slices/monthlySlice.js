@@ -8,7 +8,9 @@ import { toast } from 'sonner';
 // **Fetch Monthly Data from Database**
 export const fetchMonthly = createAsyncThunk(
     'monthly/fetchMonthly',
-    async () => {
+    async (email) => {
+        if (!email) throw new Error('User email is required');
+        console.log(email);
         const results = await db
             .select({
                 id: Monthly.id,
@@ -18,15 +20,20 @@ export const fetchMonthly = createAsyncThunk(
                 amount: Monthly.amount,
             })
             .from(Monthly)
+            .where(eq(Monthly.createdBy, email)) // 🔹 Filter by user
             .orderBy(desc(Monthly.id));
+
         return results;
     }
 );
 
+
 // **Add New Monthly Record**
 export const addMonthly = createAsyncThunk(
     'monthly/addMonthly',
-    async ({ date, type, category, amount }, { dispatch }) => {
+    async ({ date, type, category, amount, email }, { dispatch }) => {
+        if (!email) throw new Error('User email is required');
+
         try {
             const [newMonthly] = await db
                 .insert(Monthly)
@@ -35,6 +42,7 @@ export const addMonthly = createAsyncThunk(
                     type,
                     category,
                     amount,
+                    createdBy: email, // 🔹 Store user who created it
                 })
                 .returning({
                     id: Monthly.id,
@@ -42,6 +50,7 @@ export const addMonthly = createAsyncThunk(
                     type: Monthly.type,
                     category: Monthly.category,
                     amount: Monthly.amount,
+                    email: Monthly.createdBy
                 });
 
             if (newMonthly) {
@@ -55,6 +64,7 @@ export const addMonthly = createAsyncThunk(
         }
     }
 );
+
 
 // **Delete Monthly Record**
 export const deleteMonthly = createAsyncThunk(

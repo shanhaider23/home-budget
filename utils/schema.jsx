@@ -29,6 +29,7 @@ export const Monthly = pgTable('monthly', {
 	type: varchar('type').notNull(),
 	category: varchar('category').notNull(),
 	amount: numeric('amount').notNull().default(0),
+	createdBy: varchar('createdBy').notNull(),
 });
 export const Tasks = pgTable('tasks', {
 	id: serial('id').primaryKey(),
@@ -37,4 +38,5 @@ export const Tasks = pgTable('tasks', {
 	status: varchar('status').notNull(),
 	date: varchar('date').notNull(),
 	createdAt: varchar('createdAt').notNull(),
+	createdBy: varchar('createdBy').notNull(),
 });

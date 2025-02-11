@@ -48,6 +48,7 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useUser } from '@clerk/nextjs';
 
 function InputDetail() {
 	const [amount, setAmount] = useState('');
@@ -57,8 +58,9 @@ function InputDetail() {
 	const [type, setType] = useState('');
 
 	const dispatch = useDispatch();
-
+	const { user } = useUser();
 	const handleInputDetail = async () => {
+		const email = user?.primaryEmailAddress?.emailAddress;
 		if (!amount || !category) {
 			toast.error('All fields are required.');
 			return;
@@ -66,7 +68,7 @@ function InputDetail() {
 
 		setLoading(true);
 
-		dispatch(addMonthly({ date, type, category, amount }));
+		dispatch(addMonthly({ date, type, category, amount, email }));
 		// await refreshData(); // Fetch updated data
 		setType('');
 		setCategory('');

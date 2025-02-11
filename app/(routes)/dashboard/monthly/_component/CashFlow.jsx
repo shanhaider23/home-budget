@@ -41,7 +41,6 @@ function CashFlow({ month, setMonth, year, setYear }) {
 	} = useSelector((state) => state.monthly);
 
 	useEffect(() => {
-		console.log(monthlyList, 'monthly');
 		if (user?.primaryEmailAddress?.emailAddress) {
 			dispatch(fetchMonthly(user.primaryEmailAddress.emailAddress));
 		}
