@@ -24,20 +24,14 @@ function DashboardHeader() {
 					{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 
-				<div className="hidden sm:flex items-center -mb-5 -mt-5  ">
+				<div className="hidden sm:flex items-center mb-2 mt-2  ">
 					<Link href={'/dashboard'}>
-						<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
+						<Image src={'/logo.png'} alt="Logo" width={150} height={80} />
 					</Link>
 				</div>
 			</div>
 
 			{/* === CENTER: Search Bar (Hidden on Mobile) === */}
-			<div className="hidden sm:block">
-				<Input
-					placeholder="Search budget"
-					className="w-[250px] p-3 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-				/>
-			</div>
 
 			{/* === RIGHT SIDE: User & Dark Mode Toggle === */}
 			<div className="flex items-center gap-4">
