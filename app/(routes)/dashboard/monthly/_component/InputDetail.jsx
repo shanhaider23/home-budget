@@ -12,7 +12,8 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { predefinedCategories } from '@/lib/categories';
 import { Calendar } from '@/components/ui/calendar';
-import DatePicker from 'react-datepicker';
+import { useRef } from 'react';
+import Papa from 'papaparse';
 import {
 	Popover,
 	PopoverContent,
@@ -59,6 +60,7 @@ function InputDetail() {
 
 	const dispatch = useDispatch();
 	const { user } = useUser();
+
 	const handleInputDetail = async () => {
 		const email = user?.primaryEmailAddress?.emailAddress;
 		if (!amount || !category) {
@@ -69,7 +71,7 @@ function InputDetail() {
 		setLoading(true);
 
 		dispatch(addMonthly({ date, type, category, amount, email }));
-		// await refreshData(); // Fetch updated data
+
 		setType('');
 		setCategory('');
 		setAmount('');
@@ -77,8 +79,58 @@ function InputDetail() {
 		setLoading(false);
 	};
 
+	const fileInputRef = useRef(null);
+
+	const handleFileUpload = (event) => {
+		const file = event.target.files[0];
+		if (!file) return;
+
+		const reader = new FileReader();
+
+		reader.onload = (e) => {
+			const content = e.target.result;
+
+			if (file.name.endsWith('.csv')) {
+				Papa.parse(content, {
+					header: true,
+					skipEmptyLines: true,
+					complete: (result) => processFileData(result.data),
+				});
+			} else if (file.name.endsWith('.json')) {
+				try {
+					const jsonData = JSON.parse(content);
+					processFileData(jsonData);
+				} catch (error) {
+					toast.error('Invalid JSON file.');
+				}
+			}
+		};
+
+		reader.readAsText(file);
+	};
+	const processFileData = (data) => {
+		if (!Array.isArray(data) || data.length === 0) {
+			toast.error('Invalid data format.');
+			return;
+		}
+
+		const email = user?.primaryEmailAddress?.emailAddress;
+
+		data.forEach((item) => {
+			const { date, type, category, amount } = item;
+			if (!date || !type || !category || !amount) {
+				toast.error('Missing required fields in file.');
+				return;
+			}
+
+			dispatch(addMonthly({ date, type, category, amount, email }));
+		});
+
+		toast.success('Data successfully added!');
+	};
+
 	return (
-		<div>
+		<div className="flex gap-5">
 			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 z-auto ">
 				<DialogTrigger asChild>
 					<div className=" cursor-pointer w-full ">
@@ -87,7 +139,7 @@ function InputDetail() {
 						</Button>
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-md">
+				<DialogContent className="sm:max-w-sm">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Add Income or Expense
@@ -136,7 +188,7 @@ function InputDetail() {
 									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
 										Category
 									</Label>
-									<Command className="rounded-lg border shadow-md md:min-w-[400px] h-[150px] overflow-y-hidden mt-1">
+									<Command className="rounded-lg border shadow-md md:min-w-[300px] h-[150px] overflow-y-hidden mt-1">
 										<CommandInput placeholder="Type a command or search..." />
 										<CommandList>
 											<CommandEmpty>No results found.</CommandEmpty>
@@ -181,17 +233,49 @@ function InputDetail() {
 							<DialogClose asChild>
 								<Button
 									disabled={!(amount && category)}
-									className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
+									className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 capitalize"
 									onClick={handleInputDetail}
 								>
 									{loading ? (
 										<Loader className="animate-spin" />
 									) : (
-										'Add New Income or Expense'
+										`Add New ${type}`
 									)}
 								</Button>
 							</DialogClose>
 						</DialogFooter>
+					</DialogHeader>
+				</DialogContent>
+			</Dialog>
+			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 z-auto ">
+				<DialogTrigger asChild>
+					<div className=" cursor-pointer w-full ">
+						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800 w-full">
+							Upload CSV or JSON file
+						</Button>
+					</div>
+				</DialogTrigger>
+				<DialogContent className="sm:max-w-sm">
+					<DialogHeader>
+						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
+							Add Income or Expense
+						</DialogTitle>
+						<DialogDescription>
+							<div>
+								<div className="mt-4">
+									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
+										Upload CSV or JSON
+									</Label>
+									<Input
+										type="file"
+										accept=".csv, .json"
+										ref={fileInputRef}
+										onChange={handleFileUpload}
+										className="dark:bg-gray-700 dark:text-gray-200 mt-2"
+									/>
+								</div>
+							</div>
+						</DialogDescription>
 					</DialogHeader>
 				</DialogContent>
 			</Dialog>
