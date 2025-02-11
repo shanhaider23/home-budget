@@ -24,7 +24,7 @@ function DashboardHeader() {
 					{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 
-				<div className="hidden sm:flex items-center mb-2 mt-2  ">
+				<div className="hidden sm:flex items-center   ">
 					<Link href={'/dashboard'}>
 						<Image src={'/logo.png'} alt="Logo" width={150} height={80} />
 					</Link>
