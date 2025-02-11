@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchTasks, updateTask } from '@/redux/slices/todoSlice';
 import Column from './Column';
 import AddTodo from './AddTodo';
+import { useUser } from '@clerk/nextjs';
 
 const COLUMNS = [
 	{ id: 'todo', title: 'To Do' },
@@ -15,12 +16,15 @@ const COLUMNS = [
 
 export default function TodoBoard() {
 	const dispatch = useDispatch();
+	const { user } = useUser();
 	const [refreshKey, setRefreshKey] = useState(0);
 	const { list: tasks, loading, error } = useSelector((state) => state.tasks);
 
 	useEffect(() => {
-		dispatch(fetchTasks());
-	}, [dispatch]);
+		if (user?.primaryEmailAddress?.emailAddress) {
+			dispatch(fetchTasks(user.primaryEmailAddress.emailAddress));
+		}
+	}, [dispatch, user]);
 	const refreshData = () => {
 		dispatch(fetchTasks());
 		setRefreshKey((prevKey) => prevKey + 1);

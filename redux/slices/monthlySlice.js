@@ -10,7 +10,7 @@ export const fetchMonthly = createAsyncThunk(
     'monthly/fetchMonthly',
     async (email) => {
         if (!email) throw new Error('User email is required');
-        console.log(email);
+
         const results = await db
             .select({
                 id: Monthly.id,

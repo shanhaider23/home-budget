@@ -36,6 +36,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@/components/ui/dialog';
+import { useUser } from '@clerk/nextjs';
 
 function AddTodo({ refreshData }) {
 	const [date, setDate] = useState('');
@@ -43,10 +44,11 @@ function AddTodo({ refreshData }) {
 	const [description, setDescription] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [status, setStatus] = useState('');
-
+	const { user } = useUser();
 	const dispatch = useDispatch();
 
 	const handleAddTodo = async () => {
+		const email = user?.primaryEmailAddress?.emailAddress;
 		if (!date || !title) {
 			toast.error('All fields are required.');
 			return;
@@ -54,7 +56,7 @@ function AddTodo({ refreshData }) {
 
 		setLoading(true);
 
-		dispatch(addTasks({ date, title, status, description }));
+		dispatch(addTasks({ date, title, status, description, email }));
 		await refreshData();
 		setDate('');
 		setTitle('');

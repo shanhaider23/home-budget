@@ -6,7 +6,9 @@ import moment from 'moment';
 import { toast } from 'sonner';
 
 // **Fetch All Tasks**
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (email) => {
+    if (!email) throw new Error('User email is required');
+
     const results = await db
         .select({
             id: Tasks.id,
@@ -17,14 +19,15 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
             createdAt: Tasks.createdAt,
         })
         .from(Tasks)
+        .where(eq(Tasks.createdBy, email))
         .orderBy(desc(Tasks.id));
 
     console.log('Fetched tasks:', results);
-    return [...results]; // Return a new array to trigger re-render
+    return [...results];
 });
 
 // **Add Task**
-export const addTasks = createAsyncThunk('tasks/addTasks', async ({ date, title, status, description }, { dispatch }) => {
+export const addTasks = createAsyncThunk('tasks/addTasks', async ({ date, title, status, description, email }, { dispatch }) => {
     try {
         const [newTask] = await db
             .insert(Tasks)
@@ -34,6 +37,7 @@ export const addTasks = createAsyncThunk('tasks/addTasks', async ({ date, title,
                 createdAt: moment().format('DD/MM/YYYY'),
                 status,
                 description,
+                createdBy: email,
             })
             .returning({
                 id: Tasks.id,
@@ -42,6 +46,7 @@ export const addTasks = createAsyncThunk('tasks/addTasks', async ({ date, title,
                 createdAt: Tasks.createdAt,
                 status: Tasks.status,
                 description: Tasks.description,
+                email: Tasks.createdBy,
             });
 
         if (newTask) {
