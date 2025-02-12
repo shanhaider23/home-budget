@@ -35,7 +35,7 @@ function BarChartDashboard({ budgetList, totalBudget, totalSpend }) {
 		: '#d32f2f';
 
 	return (
-		<div className="border  border-gray-200 dark:border-gray-700 rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl p-5">
+		<div className="shadow-lg bg-card  hover:shadow-xl p-5">
 			<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5">
 				Activity
 			</h2>

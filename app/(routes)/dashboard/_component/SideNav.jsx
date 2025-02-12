@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useState } from 'react';
 
 import Link from 'next/link';
-
+import Image from 'next/image';
 import {
 	Tooltip,
 	TooltipContent,
@@ -17,48 +17,75 @@ import { usePathname } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import TransitionLink from '@/app/_component/TransitionLink';
 
-export default function SideNav() {
+export default function SideNav({ isSidebarExpanded, setIsSidebarExpanded }) {
 	const { isSignedIn } = useUser();
 	const navItems = NavItems();
 	const path = usePathname();
 
-	const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
-		if (typeof window !== 'undefined') {
-			const saved = window.localStorage.getItem('sidebarExpanded');
-			if (saved === null) {
-				return true;
-			}
-			return JSON.parse(saved);
-		}
-		return true;
-	});
+	// const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
+	// 	if (typeof window !== 'undefined') {
+	// 		const saved = window.localStorage.getItem('sidebarExpanded');
+	// 		if (saved === null) {
+	// 			return true;
+	// 		}
+	// 		return JSON.parse(saved);
+	// 	}
+	// 	return true;
+	// });
 
-	useEffect(() => {
-		if (typeof window !== 'undefined') {
-			window.localStorage.setItem(
-				'sidebarExpanded',
-				JSON.stringify(isSidebarExpanded)
-			);
-		}
-	}, [isSidebarExpanded, path, isSignedIn]);
+	// useEffect(() => {
+	// 	if (typeof window !== 'undefined') {
+	// 		window.localStorage.setItem(
+	// 			'sidebarExpanded',
+	// 			JSON.stringify(isSidebarExpanded)
+	// 		);
+	// 	}
+	// }, [isSidebarExpanded, path, isSignedIn]);
 
 	const toggleSidebar = () => {
 		setIsSidebarExpanded(!isSidebarExpanded);
+		if (typeof window !== 'undefined') {
+			window.localStorage.setItem(
+				'sidebarExpanded',
+				JSON.stringify(!isSidebarExpanded)
+			);
+		}
 	};
 
 	return (
-		<div className="z-[999]">
+		<div className="z-[999] h-full">
 			{isSignedIn && (
 				<div className="pr-4 z-50 h-full">
 					<div
 						className={cn(
 							isSidebarExpanded ? 'w-[255px]' : 'w-[68px]',
-							'border-r transition-all duration-300 ease-in-out transform hidden sm:flex h-full border-gray-200 dark:border-gray-700 shadow-lg  bg-white dark:bg-gray-800 dark:text-white '
+							'border-r bg-sidebar transition-all duration-300 ease-in-out transform hidden sm:flex h-full  border-gray-200 dark:border-gray-700 shadow-lg '
 						)}
 					>
 						<aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
 							{/* Top */}
 							<div className="mt-4 relative pb-4">
+								<div className="hidden sm:flex items-center   ">
+									<Link href={'/dashboard'}>
+										{isSidebarExpanded ? (
+											<Image
+												src={'/logo.png'}
+												alt="Logo"
+												width={150}
+												height={80}
+												className="mb-4"
+											/>
+										) : (
+											<Image
+												src={'/logo-sm.png'}
+												alt="Logo"
+												width={150}
+												height={80}
+												className="mb-4"
+											/>
+										)}
+									</Link>
+								</div>
 								<div className="flex flex-col space-y-1">
 									{navItems.map((item, idx) => {
 										if (item.position === 'top') {

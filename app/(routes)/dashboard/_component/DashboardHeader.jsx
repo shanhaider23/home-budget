@@ -15,20 +15,11 @@ function DashboardHeader() {
 	const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
 	return (
-		<div className="p-4 shadow-lg flex justify-between items-center gap-5 border border-gray-200 dark:border-gray-700 transition-all duration-300 relative">
+		<div className="p-4 flex justify-between items-center gap-5  transition-all duration-300 relative">
 			<div className="flex items-center gap-3">
-				<button
-					className="sm:hidden bg-gray-800 text-white p-2 rounded-md"
-					onClick={toggleMobileMenu}
-				>
+				<button className="sm:hidden" onClick={toggleMobileMenu}>
 					{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
-
-				<div className="hidden sm:flex items-center   ">
-					<Link href={'/dashboard'}>
-						<Image src={'/logo.png'} alt="Logo" width={150} height={80} />
-					</Link>
-				</div>
 			</div>
 
 			{/* === CENTER: Search Bar (Hidden on Mobile) === */}

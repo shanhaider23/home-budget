@@ -10,9 +10,9 @@ function BudgetItem({ budget, expensesList }) {
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>
-			<div className="flex flex-col justify-between items-center min-h-52 p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl hover:scale-105 transition-all cursor-pointer dark:border-gray-700">
+			<div className="flex flex-col justify-between items-center min-h-52 p-5 bg-card  hover:shadow-xl hover:scale-105 transition-all cursor-pointer">
 				<div className="flex  justify-between w-full items-center">
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-2">
 						<div className="bg-slate-200 text-slate-600 p-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
 							{budget?.icon}
 						</div>
