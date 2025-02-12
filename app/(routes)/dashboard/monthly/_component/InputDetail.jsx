@@ -134,16 +134,16 @@ function InputDetail() {
 	};
 
 	return (
-		<div className="flex gap-5">
-			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 z-auto ">
+		<div className="flex ">
+			<Dialog>
 				<DialogTrigger asChild>
-					<div className=" cursor-pointer w-full ">
-						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800 w-full">
+					<div className=" cursor-pointer w-full pr-5 ">
+						<button className="btn-grad w-full shadow-lg">
 							Add Income or Expense
-						</Button>
+						</button>
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-sm">
+				<DialogContent className="sm:max-w-sm bg-card">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Add Income or Expense
@@ -253,14 +253,16 @@ function InputDetail() {
 			</Dialog>
 			<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 				<DialogTrigger asChild>
-					<Button
-						className="bg-blue-800 text-gray-100 dark:text-gray-200 dark:hover:text-gray-800 w-full"
-						onClick={() => setIsDialogOpen(true)}
-					>
-						Upload CSV or JSON file
-					</Button>
+					<div className=" cursor-pointer w-full pr-5 ">
+						<button
+							className="btn-grad w-full shadow-lg"
+							onClick={() => setIsDialogOpen(true)}
+						>
+							Upload CSV or JSON file
+						</button>
+					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-sm">
+				<DialogContent className="sm:max-w-sm bg-card">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Upload Data

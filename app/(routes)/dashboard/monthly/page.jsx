@@ -10,9 +10,8 @@ function Monthly() {
 	const [year, setYear] = useState('');
 
 	return (
-		<div className="mt-5 overflow-hidden">
-			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap mr-5 h-full">
-				{/* Left Panel */}
+		<div className="m-5 overflow-hidden">
+			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap  h-full">
 				<div className="w-full sm:w-[300px] self-start">
 					<CashFlow
 						month={month}
@@ -22,7 +21,6 @@ function Monthly() {
 					/>
 				</div>
 
-				{/* Right Panel */}
 				<div className="flex-grow w-full sm:w-auto flex flex-col gap-3">
 					<div className="w-full">
 						<InputDetail />

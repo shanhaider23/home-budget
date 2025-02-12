@@ -52,7 +52,7 @@ function ExpenseListTable({ budgetId, refreshData }) {
 	};
 
 	return (
-		<div className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+		<div className=" shadow-lg overflow-hidden bg-card">
 			<div className="overflow-x-auto">
 				{loading ? (
 					<div className="flex justify-center items-center p-10">

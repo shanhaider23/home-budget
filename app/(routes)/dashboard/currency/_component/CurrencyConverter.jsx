@@ -148,11 +148,10 @@ const CurrencyConverter = () => {
 	};
 
 	return (
-		<div className="w-full mt-5 pr-5">
-			<div className="flex flex-col md:flex-row gap-6 w-full">
-				{/* Currency Converter Card */}
+		<div className="w-full p-5">
+			<div className="flex flex-col md:flex-row gap-5 w-full">
 				<div className="flex-1">
-					<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700 h-full">
+					<Card className="p-6 shadow-lg bg-card h-full">
 						<h1 className="text-xl font-bold text-center mb-4">
 							Currency Converter
 						</h1>
@@ -271,9 +270,8 @@ const CurrencyConverter = () => {
 					</Card>
 				</div>
 
-				{/* Exchange Rate Card */}
 				<div className="flex-1">
-					<Card className="p-6 shadow-lg bg-white dark:bg-gray-800 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700 h-full">
+					<Card className="p-6 shadow-lg bg-card h-full">
 						<h2 className="text-xl font-bold text-center mb-4">
 							{fromCurrency} Exchange Rates
 						</h2>

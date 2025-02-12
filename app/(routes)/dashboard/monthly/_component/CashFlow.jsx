@@ -68,7 +68,6 @@ function CashFlow({ month, setMonth, year, setYear }) {
 	});
 
 	const totals = filteredList.reduce((acc, item) => {
-		console.log(monthlyList, 'monthly');
 		acc[item.type] = (acc[item.type] || 0) + parseFloat(item.amount);
 		return acc;
 	}, {});
@@ -90,13 +89,8 @@ function CashFlow({ month, setMonth, year, setYear }) {
 	const spendBarColor = isDarkMode ? '#ff6347' : '#d32f2f';
 
 	return (
-		<div className="mb-7 w-full  p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
-			<div className="grid grid-cols-1 grid-rows-[10%,40%, 50% ]  gap-5">
-				<div className="bg-slate-500">
-					<div className="border  shadow-lg  dark:border-gray-700 flex justify-center items-center text-2xl font-bold p-2 ">
-						<h1>Monthly Budget </h1>
-					</div>
-				</div>
+		<div className=" w-full p-5 shadow-lg bg-card">
+			<div className="grid grid-cols-1 grid-rows-[40%, 60% ]  gap-5">
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>
 						<div className="w-full text-left border-collapse">

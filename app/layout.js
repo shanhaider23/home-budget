@@ -9,6 +9,7 @@ import { store } from '../redux/store';
 import { Provider } from 'react-redux';
 import Footer from "./_component/Footer";
 import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const geistSans = Outfit({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Outfit({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -33,20 +34,21 @@ export default function RootLayout({ children }) {
             <Toaster />
             <div className="flex h-screen">
               {/* Sidebar: Fixed on the left */}
-              <aside className="w-64 h-full text-white fixed left-0 top-0 bottom-0">
+              <aside className="w-64 h-full text-white fixed left-0 top-0 bottom-0 hidden sm:block">
                 <SideNav isSidebarExpanded={isSidebarExpanded} setIsSidebarExpanded={setIsSidebarExpanded} />
               </aside>
 
               {/* Main Content: Includes Header, Footer & Page Content */}
-              <main className={`transition-all duration-300 flex flex-col w-full h-screen overflow-hidden`}
-                style={{
-                  marginLeft: isSidebarExpanded ? '255px' : '68px',
-                }}>
+              <main className={cn(
+                "transition-all duration-300 flex flex-col w-full h-screen overflow-hidden",
+                isSidebarExpanded ? "sm:ml-[255px]" : "sm:ml-[68px]",
+                "ml-0" // Ensures no margin on mobile
+              )}>
                 {/* Header */}
                 <Header />
 
                 {/* Content Section with Page Transitions */}
-                <div className=" overflow-auto">
+                <div className="flex-grow overflow-auto">
                   <div className="w-full flex justify-center mx-auto h-full relative">
                     <div className="w-full  page-transition-container">
                       {children}

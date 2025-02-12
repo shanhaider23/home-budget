@@ -4,7 +4,7 @@ import { Linkedin, Github, BriefcaseBusiness } from 'lucide-react';
 
 function Footer() {
 	return (
-		<div className="pl-4 pr-4 pt-2 pb-2 shadow-lg flex justify-between items-center gap-5 border-t border-gray-200 dark:border-gray-700 transition-all duration-300 ">
+		<div className="pl-4 pr-4 pt-2 pb-2 sticky bottom-0 flex justify-between items-center gap-5  transition-all duration-300 ">
 			<div className="flex gap-4 text-gray-800 dark:text-white text-sm">
 				<Link
 					href="https://www.linkedin.com/in/shan-e-haider-bukhari/"

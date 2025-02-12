@@ -33,7 +33,7 @@ function DashboardHeader() {
 
 			{/* === MOBILE MENU (Dropdown) === */}
 			{isMobileMenuOpen && (
-				<div className="absolute top-full left-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md sm:hidden z-50">
+				<div className="absolute top-full left-0 w-[350px] bg-menu bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md sm:hidden z-50">
 					<div className="flex justify-start items-center gap-3 pl-5 pt-5  ">
 						<Image src={'/logo.png'} alt="Logo" width={120} height={100} />
 					</div>

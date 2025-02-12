@@ -87,7 +87,7 @@ function MonthlyIncome({ month, year }) {
 	];
 
 	return (
-		<div className="mb-7 w-full p-4 shadow-lg border border-gray-200 dark:border-gray-700 rounded-lg">
+		<div className=" w-full p-5 shadow-lg bg-card">
 			<div className="grid grid-cols-1 gap-5">
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>

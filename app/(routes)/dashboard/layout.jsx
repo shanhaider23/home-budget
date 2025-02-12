@@ -19,11 +19,7 @@ function DashboardLayout({ children }) {
 			.from(Budgets)
 			.where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress));
 	};
-	return (
-		<div>
-			<div> {children}</div>{' '}
-		</div>
-	);
+	return <> {children}</>;
 }
 
 export default DashboardLayout;

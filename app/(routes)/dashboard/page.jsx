@@ -32,7 +32,7 @@ function Dashboard({ params: paramsPromise }) {
 	}, [isSignedIn, user, params.id]);
 
 	return (
-		<div className="p-5">
+		<div className="pl-5 pr-5 pt-5">
 			<CardInfo budgetList={budgetList} />
 
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">

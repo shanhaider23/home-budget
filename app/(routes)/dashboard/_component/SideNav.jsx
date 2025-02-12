@@ -22,26 +22,6 @@ export default function SideNav({ isSidebarExpanded, setIsSidebarExpanded }) {
 	const navItems = NavItems();
 	const path = usePathname();
 
-	// const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
-	// 	if (typeof window !== 'undefined') {
-	// 		const saved = window.localStorage.getItem('sidebarExpanded');
-	// 		if (saved === null) {
-	// 			return true;
-	// 		}
-	// 		return JSON.parse(saved);
-	// 	}
-	// 	return true;
-	// });
-
-	// useEffect(() => {
-	// 	if (typeof window !== 'undefined') {
-	// 		window.localStorage.setItem(
-	// 			'sidebarExpanded',
-	// 			JSON.stringify(isSidebarExpanded)
-	// 		);
-	// 	}
-	// }, [isSidebarExpanded, path, isSignedIn]);
-
 	const toggleSidebar = () => {
 		setIsSidebarExpanded(!isSidebarExpanded);
 		if (typeof window !== 'undefined') {
@@ -59,7 +39,10 @@ export default function SideNav({ isSidebarExpanded, setIsSidebarExpanded }) {
 					<div
 						className={cn(
 							isSidebarExpanded ? 'w-[255px]' : 'w-[68px]',
-							'border-r bg-sidebar transition-all duration-300 ease-in-out transform hidden sm:flex h-full  border-gray-200 dark:border-gray-700 shadow-lg '
+							'border-r bg-sidebar transition-all duration-300 ease-in-out transform',
+							'hidden sm:flex h-full border-gray-200 dark:border-gray-700 shadow-lg',
+							'sm:translate-x-0', // Always visible on `sm` and above
+							isSidebarExpanded ? 'translate-x-0' : '-translate-x-full' // Slide in/out on mobile
 						)}
 					>
 						<aside className="flex h-full flex-col w-full break-words px-4 overflow-x-hidden columns-1">
