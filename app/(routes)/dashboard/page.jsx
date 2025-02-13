@@ -37,7 +37,7 @@ function Dashboard({ params: paramsPromise }) {
 	}, [isSignedIn, user, params.id]);
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-[repeat(6,1fr)] grid-rows-[repeat(5,250px)] gap-5 pl-5 pr-5 pt-5">
+		<div className="grid grid-cols-1 md:grid-cols-[repeat(6,1fr)] grid-rows-[repeat(5,300px)] gap-5 pl-5 pr-5 pt-5">
 			<div className="col-span-4">
 				<Welcome budgetList={budgetList} />
 			</div>
@@ -47,22 +47,22 @@ function Dashboard({ params: paramsPromise }) {
 			<div>
 				<CardInfo budgetList={budgetList} />
 			</div>
-			<div className="col-span-2 row-span-2 gap-5">
+			<div className="col-span-3  gap-5">
 				<BarChartDashboard budgetList={budgetList} />
 			</div>
-			<div className="col-span-2 row-span-2 gap-5">
+			<div className="row-span-2 gap-5">
 				<PiChartDashboard monthlyList={monthlyList} />
 			</div>
 
 			<div className="col-span-2 row-span-2 overflow-y-auto overflow-x-hidden ">
 				<h2 className="font-bold text-2xl mb-4">Latest Budgets</h2>
-				<div className="grid grid-cols-2 gap-5 mr-5">
+				<div className="grid grid-cols-1 gap-5 mr-5">
 					{budgetList.map((budget, i) => (
 						<BudgetItem budget={budget} key={i} expensesList={expenseList} />
 					))}
 				</div>
 			</div>
-			<div className=" overflow-y-auto overflow-x-hidden">
+			<div className=" overflow-y-auto overflow-x-hidden col-span-3">
 				<ExpenseListTable />
 			</div>
 		</div>

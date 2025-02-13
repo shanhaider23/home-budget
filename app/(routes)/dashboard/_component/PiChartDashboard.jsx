@@ -52,34 +52,51 @@ function PiChartDashboard({ monthlyList }) {
 			return acc;
 		}, {});
 
-	const data = Object.entries(expenseCategories).map(([category, amount]) => ({
-		name: category,
-		value: Number(((amount / totalIncome) * 100).toFixed(3)), // Convert to percentage of total income
-	}));
+	const data = Object.entries(expenseCategories)
+		.map(([category, amount]) => ({
+			name: category,
+			value: Number(((amount / totalIncome) * 100).toFixed(2)),
+		}))
+		.filter((item) => item.value >= 5);
 
-	console.log('📊 Final PieChart Data:', data);
+	const otherCategory = Object.entries(expenseCategories)
+		.map(([category, amount]) => ({
+			name: category,
+			value: Number(((amount / totalIncome) * 100).toFixed(3)),
+		}))
+		.filter((item) => item.value < 5)
+		.reduce((acc, item) => acc + item.value, 0);
 
-	// const data = [
-	// 	{ name: 'Group A', value: 10 },
-	// 	{ name: 'Group B', value: 300 },
-	// 	{ name: 'Group C', value: 300 },
-	// 	{ name: 'Group D', value: 200 },
-	// 	{ name: 'Group D', value: 200 },
-	// 	{ name: 'Group D', value: 200 },
-	// 	{ name: 'Group D', value: 200 },
-	// 	{ name: 'Group D', value: 200 },
-	// 	{ name: 'Group D', value: 200 },
-	// ];
-	const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+	if (otherCategory > 0) {
+		data.push({
+			name: 'Others',
+			value: Number(otherCategory.toFixed(2)),
+		});
+	}
+
+	const COLORS = [
+		'#C512A1', // Purple
+		'#5DCF31', // Green
+		'#F84134', // Red
+		'#2D93F9', // Blue
+		'#FF8C00', // Orange
+		'#FFD700', // Yellow
+		'#8A2BE2', // Blue-Violet
+		'#00BFFF', // Deep Sky Blue
+		'#D2691E', // Chocolate
+		'#FF1493', // Deep Pink
+		'#32CD32', // Lime Green
+	];
+
 	return (
-		<div className="bg-card h-full flex justify-center items-center flex-col ">
-			<div>
-				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5">
-					{dayjs().format('MMMM')} Activity
+		<div className="bg-card  flex justify-start items-center flex-col ">
+			<div className="self-start">
+				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5 mt-5 pl-5">
+					{dayjs().format('MMMM')} Monthly Activity
 				</h2>
 			</div>
-			<div className="relative w-64 h-64">
-				<ResponsiveContainer width="100%" height="100%">
+			<div className="relative w-[92%] h-75">
+				<ResponsiveContainer width="100%" height={200}>
 					<PieChart>
 						<Pie
 							data={data}
@@ -119,6 +136,18 @@ function PiChartDashboard({ monthlyList }) {
 						Spent
 					</span>
 				</div>
+			</div>
+			<div className="m-5 text-center w-[92%]">
+				{data.map((entry, index) => (
+					<div
+						key={index}
+						style={{ color: COLORS[index % COLORS.length] }}
+						className="text-sm font-medium flex justify-between items-center gap-5"
+					>
+						<span className="text-left">{entry.name}: </span>
+						<span>{entry.value}%</span>
+					</div>
+				))}
 			</div>
 		</div>
 	);

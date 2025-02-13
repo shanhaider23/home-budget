@@ -7,8 +7,26 @@ function Welcome({ budgetList }) {
 	const [totalBudget, setTotalBudget] = useState(0);
 	const [totalSpend, setTotalSpend] = useState(0);
 	const [currency, setCurrency] = useState('$');
+	const [fromCurrency, setFromCurrency] = useState('');
+	const [toCurrency, setToCurrency] = useState('');
+	const [rates, setRates] = useState({});
+	const [lastUpdated, setLastUpdated] = useState('');
+
 	useEffect(() => {
-		console.log('setTotalSpend', budgetList.currency);
+		const storedFromCurrency = localStorage.getItem('fromCurrency');
+		const storedToCurrency = localStorage.getItem('toCurrency');
+		const savedRates = localStorage.getItem('currencyRates');
+		const savedLastUpdated = localStorage.getItem('lastUpdated');
+
+		if (savedRates) {
+			setRates(JSON.parse(savedRates));
+		}
+		if (savedLastUpdated) {
+			setLastUpdated(savedLastUpdated);
+		}
+		if (storedFromCurrency) setFromCurrency(storedFromCurrency);
+		if (storedToCurrency) setToCurrency(storedToCurrency);
+
 		if (budgetList) {
 			CalculateCardInfo();
 		}
@@ -25,10 +43,14 @@ function Welcome({ budgetList }) {
 		setTotalBudget(total_budget);
 		setTotalSpend(total_spend);
 	};
+	const getCurrencyFlag = (currencyCode) => {
+		return `https://flagcdn.com/w40/${currencyCode
+			.substring(0, 2)
+			.toLowerCase()}.png`;
+	};
 	const progress = Math.min((totalSpend / totalBudget) * 100, 100);
 	return (
-		<div className="grid grid-cols-1 sm:grid-cols-[60%_40%]  bg-card h-full ">
-			{/* Left Content (70%) */}
+		<div className="grid grid-cols-1 sm:grid-cols-[60%_40%]  bg-card h-full">
 			<div className="flex flex-col justify-around ">
 				<div className="flex justify-start items-center gap-5 pl-10 ">
 					<UserButton />
@@ -40,7 +62,7 @@ function Welcome({ budgetList }) {
 
 				<div>
 					{budgetList ? (
-						<div className="flex justify-start items-center pl-10  ">
+						<div className="flex justify-start items-center pl-10 ">
 							<div className="pr-14 border-r-2">
 								<div className="flex gap-2 justify-end items-center">
 									<h1 className="text-5xl text-gray-900 dark:text-gray-100 pb-2">
@@ -89,15 +111,72 @@ function Welcome({ budgetList }) {
 				</div>
 			</div>
 
-			{/* Right Image Column (30%) - Hidden on Mobile */}
-			<div className="hidden sm:flex h-full justify-end items-end pr-10">
-				<Image
-					src="/welcome.png"
-					alt="Logo"
-					width={250}
-					height={200}
-					layout="intrinsic"
-				/>
+			<div className="hidden sm:flex flex-col h-full justify-between items-end pt-4 pr-10">
+				<div>
+					{fromCurrency &&
+					toCurrency &&
+					rates[fromCurrency] &&
+					rates[toCurrency] ? (
+						<>
+							<div className="flex justify-center items-center gap-3">
+								<div className="flex items-center gap-2">
+									<img
+										src={getCurrencyFlag(fromCurrency)}
+										alt={`Flag of ${fromCurrency}`}
+										className="w-6 h-4"
+									/>
+									<span className="font-semibold">{fromCurrency}</span>
+								</div>
+
+								<span className="text-lg">to</span>
+
+								<div className="flex items-center gap-2">
+									<img
+										src={getCurrencyFlag(toCurrency)}
+										alt={`Flag of ${toCurrency}`}
+										className="w-6 h-4"
+									/>
+									<span className="font-semibold">{toCurrency}</span>
+								</div>
+							</div>
+
+							<div className="flex flex-col ">
+								<p className="text-center  text-md text-gray-500">
+									Exchange Rate:{' '}
+									<strong>
+										{(rates[toCurrency] / rates[fromCurrency]).toFixed(2)}
+									</strong>
+								</p>
+
+								{/* Last Updated */}
+								<p className="text-center  text-xs text-gray-500">
+									Last Updated:{' '}
+									<strong>
+										{new Date(lastUpdated).toLocaleString('en-GB', {
+											day: '2-digit',
+											month: '2-digit',
+											year: 'numeric',
+											hour: '2-digit',
+											minute: '2-digit',
+											hour12: false,
+										})}
+									</strong>
+								</p>
+							</div>
+						</>
+					) : (
+						<span>Loading...</span>
+					)}
+				</div>
+				<div>
+					<Image
+						src="/welcome.png"
+						alt="Logo"
+						width={250}
+						height={200}
+						layout="intrinsic"
+					/>
+				</div>
 			</div>
 		</div>
 	);

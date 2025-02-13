@@ -124,6 +124,12 @@ const CurrencyConverter = () => {
 				setConvertedAmount((amount * rate).toFixed(2));
 				setRates(response.data.conversion_rates);
 				setLastUpdated(response.data.time_last_update_utc);
+
+				localStorage.setItem(
+					'currencyRates',
+					JSON.stringify(response.data.conversion_rates)
+				);
+				localStorage.setItem('lastUpdated', response.data.time_last_update_utc);
 			} catch (err) {
 				console.error('Failed to fetch exchange rate.');
 			}
