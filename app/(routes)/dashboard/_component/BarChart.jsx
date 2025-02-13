@@ -18,28 +18,16 @@ function BarChartDashboard({ budgetList, totalBudget, totalSpend }) {
 	}, []);
 
 	// Only execute code that uses `isDarkMode` after the component has mounted
-	const budgetBarColor = isDarkMode
-		? totalBudget > totalSpend
-			? '#82ca9d'
-			: '#4caf50'
-		: totalBudget > totalSpend
-		? '#00bcd4'
-		: '#009688';
+	const budgetBarColor = isDarkMode ? '#3ABE34' : '#66FFCA';
 
-	const spendBarColor = isDarkMode
-		? totalSpend > totalBudget
-			? '#ff6347'
-			: '#f44336'
-		: totalSpend > totalBudget
-		? '#ff5722'
-		: '#d32f2f';
+	const spendBarColor = isDarkMode ? '#F84233' : ' #58D1FF';
 
 	return (
-		<div className="shadow-lg bg-card  hover:shadow-xl p-5">
+		<div className="shadow-lg bg-card h-full hover:shadow-xl p-5">
 			<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5">
-				Activity
+				Budgets Activity
 			</h2>
-			<ResponsiveContainer width={'80%'} height={250}>
+			<ResponsiveContainer width={'100%'} height={'90%'}>
 				<BarChart
 					data={budgetList}
 					margin={{

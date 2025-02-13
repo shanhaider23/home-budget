@@ -27,7 +27,7 @@ function DashboardHeader() {
 			{/* === RIGHT SIDE: User & Dark Mode Toggle === */}
 			<div className="flex items-center gap-4">
 				<UserButton />
-				<p> {user?.fullName}</p>
+
 				<DarkModeToggle />
 			</div>
 

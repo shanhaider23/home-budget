@@ -36,16 +36,21 @@ html {
 		--border: #e2e8f0;
 
 		--text-primary: #1e293b;
+		--btn-grad-start: #00c6ff;
+		--btn-grad-middle: #0072ff;
+		--btn-grad-end: #00c6ff;
 	}
 	.dark {
-		--background: linear-gradient(
+		--background: linear-gradient(to bottom, rgb(23, 22, 64), rgb(41, 49, 141));
+
+		/* --background: linear-gradient(
 			168deg,
 			rgba(17, 16, 37, 1) 0%,
 			rgba(29, 36, 77, 1) 42%,
 			rgba(35, 43, 93, 1) 74%,
 			rgba(50, 64, 173, 1) 95%,
 			rgba(47, 68, 179, 1) 100%
-		);
+		); */
 		--foreground: #f8fafc;
 		--sidebar: #0f1535;
 		--card: #0a0f2a;
@@ -53,6 +58,13 @@ html {
 		--btn-bg: #f8fafc;
 
 		--text-primary: #f8fafc;
+		--btn-grad-start: #1a2980;
+		--btn-grad-middle: #26d0ce;
+		--btn-grad-end: #1a2980;
+
+		--btn-grad-light-start: #172232;
+		--btn-grad-light-middle: #4b5563;
+		--btn-grad-light-end: #6b7280;
 	}
 }
 @layer utilities {
@@ -88,12 +100,10 @@ html {
 	.btn-grad {
 		background-image: linear-gradient(
 			to right,
-			#1a2980 0%,
-			#26d0ce 51%,
-			#1a2980 100%
+			var(--btn-grad-start) 0%,
+			var(--btn-grad-middle) 51%,
+			var(--btn-grad-end) 100%
 		);
-	}
-	.btn-grad {
 		padding: 15px 45px;
 		text-align: center;
 		text-transform: uppercase;
@@ -105,27 +115,20 @@ html {
 	}
 
 	.btn-grad:hover {
-		background-position: right center; /* change the direction of the change here */
+		background-position: right center;
 		color: #fff;
 		text-decoration: none;
 	}
-	.bg-grad {
-		background-image: linear-gradient(
-			to right,
-			#1a2980 0%,
-			#26d0ce 51%,
-			#1a2980 100%
-		);
-		text-align: center;
-		text-transform: uppercase;
-		transition: 0.5s;
-		background-size: 200% auto;
-		color: white;
+	.bg-input {
+		background-color: var(--btn-grad-light-start);
 		border-radius: 10px;
 	}
-	.bg-grad:hover {
-		background-position: right center; /* change the direction of the change here */
-		color: #fff;
-		text-decoration: none;
+
+	.bg-dropdown {
+		background-color: var(--card);
+		border-radius: 10px;
+	}
+	.bg-table {
+		background-color: var(--btn-grad-light-start);
 	}
 }

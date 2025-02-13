@@ -94,19 +94,19 @@ function CashFlow({ month, setMonth, year, setYear }) {
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>
 						<div className="w-full text-left border-collapse">
-							<div className="border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+							<div className="border  shadow-lg  bg-table dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
 								<h1 className="capitalize">
 									{month || year || 'Select Month or Year'}
 								</h1>
 							</div>
 							<div>
-								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+								<div className="grid grid-cols-2 border  shadow-lg bg-table dark:border-gray-700">
 									<h2 className="justify-self-center self-center">Month</h2>
 									<Select value={month} onValueChange={setMonth}>
-										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200  rounded-none">
+										<SelectTrigger className=" bg-table">
 											<SelectValue placeholder="Select a Month" />
 										</SelectTrigger>
-										<SelectContent>
+										<SelectContent className="bg-dropdown">
 											<SelectGroup>
 												<SelectItem value="january">January</SelectItem>
 												<SelectItem value="february">February</SelectItem>
@@ -124,13 +124,13 @@ function CashFlow({ month, setMonth, year, setYear }) {
 										</SelectContent>
 									</Select>
 								</div>
-								<div className="grid grid-cols-2 border  shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+								<div className="grid grid-cols-2 border  shadow-lg bg-table dark:border-gray-700">
 									<h2 className="justify-self-center self-center">Year</h2>
 									<Select value={year} onValueChange={setYear}>
-										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200 rounded-none ">
+										<SelectTrigger className="bg-table">
 											<SelectValue placeholder="Select a Year" />
 										</SelectTrigger>
-										<SelectContent>
+										<SelectContent className="bg-dropdown">
 											<SelectGroup>
 												<SelectItem value="2022">2022</SelectItem>
 												<SelectItem value="2023">2023</SelectItem>
@@ -147,7 +147,7 @@ function CashFlow({ month, setMonth, year, setYear }) {
 							</div>
 						</div>
 					</div>
-					<div className="bg-white dark:bg-gray-800 shadow-md  overflow-hidden border border-gray-200 dark:border-gray-700">
+					<div className="bg-table shadow-md  overflow-hidden border border-gray-200 dark:border-gray-700">
 						<div className="overflow-x-auto">
 							{loading ? (
 								<div className="flex justify-center items-center p-10">
@@ -188,7 +188,7 @@ function CashFlow({ month, setMonth, year, setYear }) {
 					</div>
 				</div>
 				<div className="border border-gray-200 dark:border-gray-700">
-					<div className="border bg-slate-500 shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+					<div className="border shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
 						<h1 className="">Cash Flow </h1>
 					</div>
 					<div className="mt-4">

@@ -70,12 +70,10 @@ function AddTodo({ refreshData }) {
 			<Dialog className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
 				<DialogTrigger asChild>
 					<div className=" cursor-pointer w-full ">
-						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800 w-full">
-							Add Reminder
-						</Button>
+						<button className=" btn-grad w-full">Add Reminder</button>
 					</div>
 				</DialogTrigger>
-				<DialogContent>
+				<DialogContent className="bg-card">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Add Reminder
@@ -104,10 +102,10 @@ function AddTodo({ refreshData }) {
 										Status
 									</Label>
 									<Select value={status} onValueChange={setStatus}>
-										<SelectTrigger className=" dark:bg-gray-700 dark:text-gray-200">
+										<SelectTrigger className="bg-input">
 											<SelectValue placeholder="Select a status" />
 										</SelectTrigger>
-										<SelectContent>
+										<SelectContent className="bg-dropdown">
 											<SelectGroup>
 												<SelectItem value="todo">Todo</SelectItem>
 												<SelectItem value="inprogress">InProgress</SelectItem>
@@ -124,7 +122,7 @@ function AddTodo({ refreshData }) {
 										placeholder="Pay Electricity Bill"
 										onChange={(e) => setTitle(e.target.value)}
 										value={title}
-										className="dark:bg-gray-700 dark:text-gray-200"
+										className="bg-input"
 									/>
 								</div>
 								<div className="mt-2">
@@ -135,7 +133,7 @@ function AddTodo({ refreshData }) {
 										placeholder="Pay Electricity Bill"
 										onChange={(e) => setDescription(e.target.value)}
 										value={description}
-										className="dark:bg-gray-700 dark:text-gray-200"
+										className="bg-input"
 									/>
 								</div>
 							</div>
