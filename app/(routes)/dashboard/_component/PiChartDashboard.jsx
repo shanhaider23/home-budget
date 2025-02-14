@@ -12,7 +12,6 @@ function PiChartDashboard({ monthlyList }) {
 		);
 	}
 
-	// Get current month and filter expenses for the current month
 	const currentMonth = dayjs().format('YYYY-MM');
 
 	const filteredData = monthlyList.filter(

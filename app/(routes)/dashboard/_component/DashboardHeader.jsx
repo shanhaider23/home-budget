@@ -15,23 +15,18 @@ function DashboardHeader() {
 	const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
 	return (
-		<div className="p-4 flex justify-between items-center gap-5  transition-all duration-300 relative">
+		<div className="p-4 flex justify-between items-center gap-5 transition-all duration-300 relative mr-5">
 			<div className="flex items-center gap-3">
 				<button className="sm:hidden" onClick={toggleMobileMenu}>
 					{isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
 				</button>
 			</div>
 
-			{/* === CENTER: Search Bar (Hidden on Mobile) === */}
-
-			{/* === RIGHT SIDE: User & Dark Mode Toggle === */}
 			<div className="flex items-center gap-4">
 				<UserButton />
-
 				<DarkModeToggle />
 			</div>
 
-			{/* === MOBILE MENU (Dropdown) === */}
 			{isMobileMenuOpen && (
 				<div className="absolute top-full left-0 w-[350px] bg-menu bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md sm:hidden z-50">
 					<div className="flex justify-start items-center gap-3 pl-5 pt-5  ">

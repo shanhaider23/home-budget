@@ -35,7 +35,7 @@ export default function SideNav({ isSidebarExpanded, setIsSidebarExpanded }) {
 	return (
 		<div className="z-[999] h-full">
 			{isSignedIn && (
-				<div className="pr-4 z-50 h-full">
+				<div className="pr-4 z-[999] h-full">
 					<div
 						className={cn(
 							isSidebarExpanded ? 'w-[255px]' : 'w-[68px]',
@@ -158,7 +158,7 @@ export const SideNavItem = ({
 								<h2
 									className={`flex gap-2  items-center text-gray-500 font-medium p-2 cursor-pointer round  hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
 										path === active &&
-										'text-primary bg-blue-100 dark:bg-blue-600 dark:text-white'
+										' bg-blue-100 dark:bg-blue-600 text-black dark:text-white'
 									}`}
 								>
 									{icon}
@@ -167,7 +167,7 @@ export const SideNavItem = ({
 						</TooltipTrigger>
 						<TooltipContent
 							side="right"
-							className="px-3 py-1.5 text-md z-[999] round bg-card  "
+							className="px-3 py-1.5 text-md z-[999] round bg-card text-gray-900  "
 							sideOffset={10}
 						>
 							<h2 className="z-[999]">{label}</h2>
