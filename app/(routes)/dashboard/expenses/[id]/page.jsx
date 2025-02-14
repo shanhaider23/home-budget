@@ -87,19 +87,18 @@ function ExpensesScreen({ params: paramsPromise }) {
 	}
 
 	return (
-		<div className="p-10">
-			<div className="flex justify-between items-center">
-				<h2 className="text-2xl font-bold">My Expenses</h2>
+		<div className="pl-5 pr-5">
+			<div className="flex justify-end items-center">
 				<div className="flex gap-2 items-center">
 					<EditBudget budgetInfo={budgetInfo} refreshData={refreshData} />
 					<AlertDialog>
 						<AlertDialogTrigger asChild>
-							<Button className="flex gap-2" variant="destructive">
-								Delete
+							<button className="btn-delete flex gap-2" variant="destructive">
 								<Trash />
-							</Button>
+								Delete
+							</button>
 						</AlertDialogTrigger>
-						<AlertDialogContent>
+						<AlertDialogContent className="bg-card">
 							<AlertDialogHeader>
 								<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
 								<AlertDialogDescription>
@@ -107,9 +106,14 @@ function ExpensesScreen({ params: paramsPromise }) {
 									your current budget along with your expenses.
 								</AlertDialogDescription>
 							</AlertDialogHeader>
-							<AlertDialogFooter>
-								<AlertDialogCancel>Cancel</AlertDialogCancel>
-								<AlertDialogAction onClick={deleteBudgetHandler}>
+							<AlertDialogFooter className="flex justify-center items-center">
+								<AlertDialogCancel className="btn-edit">
+									Cancel
+								</AlertDialogCancel>
+								<AlertDialogAction
+									className="btn-delete"
+									onClick={deleteBudgetHandler}
+								>
 									Continue
 								</AlertDialogAction>
 							</AlertDialogFooter>

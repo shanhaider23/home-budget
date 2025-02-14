@@ -131,4 +131,48 @@ html {
 	.bg-table {
 		background-color: var(--btn-grad-light-start);
 	}
+	.btn-delete {
+		background-image: linear-gradient(
+			to right,
+			#e52d27 0%,
+			#b31217 51%,
+			#e52d27 100%
+		);
+
+		margin: 5px;
+		padding: 10px 25px;
+		text-align: center;
+		text-transform: uppercase;
+		transition: 0.5s;
+		background-size: 200% auto;
+
+		border-radius: 10px;
+	}
+	.btn-delete:hover {
+		background-position: right center; /* change the direction of the change here */
+		color: #fff;
+		text-decoration: none;
+	}
+	.btn-edit {
+		background-image: linear-gradient(
+			to right,
+			#1fa2ff 0%,
+			#12d8fa 51%,
+			#1fa2ff 100%
+		);
+
+		margin: 5px;
+		padding: 10px 25px;
+		text-align: center;
+		text-transform: uppercase;
+		transition: 0.5s;
+		background-size: 200% auto;
+
+		border-radius: 10px;
+	}
+	.btn-edit:hover {
+		background-position: right center; /* change the direction of the change here */
+		color: #fff;
+		text-decoration: none;
+	}
 }

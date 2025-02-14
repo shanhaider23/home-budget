@@ -57,14 +57,14 @@ function PiChartDashboard({ monthlyList }) {
 			name: category,
 			value: Number(((amount / totalIncome) * 100).toFixed(2)),
 		}))
-		.filter((item) => item.value >= 5);
+		.filter((item) => item.value >= 1);
 
 	const otherCategory = Object.entries(expenseCategories)
 		.map(([category, amount]) => ({
 			name: category,
 			value: Number(((amount / totalIncome) * 100).toFixed(3)),
 		}))
-		.filter((item) => item.value < 5)
+		.filter((item) => item.value < 1)
 		.reduce((acc, item) => acc + item.value, 0);
 
 	if (otherCategory > 0) {

@@ -33,7 +33,7 @@ function AddExpense({ budgetId, refreshData }) {
 	};
 
 	return (
-		<div className="p-5 border rounded-lg shadow-lg bg-white dark:bg-gray-800 dark:border-gray-700">
+		<div className="p-5 bg-card">
 			<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200">
 				Add Expense
 			</h2>
@@ -46,7 +46,7 @@ function AddExpense({ budgetId, refreshData }) {
 						placeholder="e.g home decor"
 						onChange={(e) => setName(e.target.value)}
 						value={name}
-						className="dark:bg-gray-700 dark:text-gray-200"
+						className="bg-input"
 					/>
 				</div>
 				<div className="mt-2">
@@ -58,7 +58,7 @@ function AddExpense({ budgetId, refreshData }) {
 						type="number"
 						onChange={(e) => setAmount(e.target.value)}
 						value={amount}
-						className="dark:bg-gray-700 dark:text-gray-200"
+						className="bg-input"
 					/>
 				</div>
 				<div className="mt-2">
@@ -69,16 +69,16 @@ function AddExpense({ budgetId, refreshData }) {
 						placeholder="Food"
 						onChange={(e) => setCategory(e.target.value)}
 						value={category}
-						className="dark:bg-gray-700 dark:text-gray-200"
+						className="bg-input"
 					/>
 				</div>
-				<Button
+				<button
 					disabled={!(name && amount && category)}
-					className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
+					className="mt-5 w-full btn-grad"
 					onClick={handleAddExpense}
 				>
 					{loading ? <Loader className="animate-spin" /> : 'Add New Expense'}
-				</Button>
+				</button>
 			</div>
 		</div>
 	);

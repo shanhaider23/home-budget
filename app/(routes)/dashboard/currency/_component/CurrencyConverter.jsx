@@ -158,7 +158,7 @@ const CurrencyConverter = () => {
 			<div className="flex flex-col md:flex-row gap-5 w-full">
 				<div className="flex-1">
 					<Card className="p-6 shadow-lg bg-card h-full">
-						<h1 className="text-xl font-bold text-center mb-4">
+						<h1 className="text-3xl font-bold text-center mb-4">
 							Currency Converter
 						</h1>
 
@@ -171,7 +171,7 @@ const CurrencyConverter = () => {
 									value={amount}
 									onChange={(e) => setAmount(e.target.value)}
 									placeholder="Enter amount"
-									className="mt-1"
+									className="mt-1 bg-input"
 								/>
 							</div>
 
@@ -179,10 +179,10 @@ const CurrencyConverter = () => {
 							<div>
 								<Label className="text-sm">From</Label>
 								<Select value={fromCurrency} onValueChange={setFromCurrency}>
-									<SelectTrigger className="mt-1">
+									<SelectTrigger className="mt-1 bg-input">
 										<SelectValue placeholder="Select currency" />
 									</SelectTrigger>
-									<SelectContent>
+									<SelectContent className="bg-input">
 										{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
 											<SelectItem key={code} value={code}>
 												<img
@@ -217,20 +217,20 @@ const CurrencyConverter = () => {
 
 							{/* Swap Button */}
 							<div className="flex justify-end">
-								<Button
+								<button
 									variant="outline"
 									onClick={swapCurrencies}
-									className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center"
+									className="btn-edit flex items-center"
 								>
 									<RefreshCcw className="w-5 h-5 mr-2" /> Swap
-								</Button>
+								</button>
 							</div>
 
 							{/* To Currency Selector */}
 							<div>
 								<Label className="text-sm">To</Label>
 								<Select value={toCurrency} onValueChange={setToCurrency}>
-									<SelectTrigger className="mt-1">
+									<SelectTrigger className="mt-1 bg-input">
 										<SelectValue placeholder="Select currency" />
 									</SelectTrigger>
 									<SelectContent>
@@ -268,7 +268,7 @@ const CurrencyConverter = () => {
 
 							{/* Converted Amount */}
 							{convertedAmount !== null && (
-								<p className="text-3xl font-bold text-center">
+								<p className="text-5xl font-bold text-center">
 									{amount} {fromCurrency} = {convertedAmount} {toCurrency}
 								</p>
 							)}
@@ -278,7 +278,7 @@ const CurrencyConverter = () => {
 
 				<div className="flex-1">
 					<Card className="p-6 shadow-lg bg-card h-full">
-						<h2 className="text-xl font-bold text-center mb-4">
+						<h2 className="text-3xl font-bold text-center mb-4">
 							{fromCurrency} Exchange Rates
 						</h2>
 						<p className="text-center text-sm text-gray-500 mb-12">

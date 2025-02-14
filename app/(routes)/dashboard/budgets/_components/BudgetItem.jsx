@@ -10,15 +10,15 @@ function BudgetItem({ budget, expensesList }) {
 
 	return (
 		<Link href={`/dashboard/expenses/${budget.id}`}>
-			<div className="flex flex-col justify-between items-center min-h-52 p-5 bg-card h-full hover:shadow-xl hover:scale-105 transition-all cursor-pointer">
-				<div className="flex  justify-between w-full items-center">
+			<div className="flex flex-col justify-between items-center min-h-52 p-5 bg-card h-full hover:shadow-xl hover:scale-95 transition-all cursor-pointer">
+				<div className="flex  justify-between w-full items-center flex-wrap-reverse gap-4">
 					<div className="flex items-center gap-2">
-						<div className="bg-slate-200 text-slate-600 p-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
+						<div className="bg-slate-200 text-slate-600 p-3 rounded-full dark:bg-gray-700 dark:text-gray-300">
 							{budget?.icon}
 						</div>
 
-						<div>
-							<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+						<div className="mt-5">
+							<h2 className="text-3xl font-semibold text-gray-800 dark:text-gray-200">
 								{budget.name}
 							</h2>
 
@@ -43,7 +43,7 @@ function BudgetItem({ budget, expensesList }) {
 						</div>
 					</div>
 					<div>
-						<h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1">
+						<h2 className="text-5xl font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1">
 							{budget.amount}
 							<p className="text-sm text-gray-500 dark:text-gray-400">
 								{budget.currency}
@@ -51,7 +51,7 @@ function BudgetItem({ budget, expensesList }) {
 						</h2>
 					</div>
 				</div>
-				<div className="w-full">
+				<div className="w-full mb-2">
 					<div className="text-gray-800 font-semibold flex items-center justify-between mt-5 dark:text-gray-200">
 						<p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1 flex-wrap">
 							Spent:

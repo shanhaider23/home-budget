@@ -40,13 +40,9 @@ export default function TodoBoard() {
 	}
 
 	return (
-		<div className="p-4">
-			<div className="w-full flex justify-between items-center pb-5">
+		<div className="w-full pl-5 pr-5">
+			<div className="w-full flex justify-end items-center pb-5">
 				<div>
-					<h1 className="text-3xl font-bold ">All Budgets</h1>
-				</div>
-				<div>
-					{' '}
 					<AddTodo refreshData={refreshData} />
 				</div>
 			</div>
@@ -57,7 +53,7 @@ export default function TodoBoard() {
 					collisionDetection={closestCenter}
 					onDragEnd={handleDragEnd}
 				>
-					<div className="flex gap-8 flex-wrap justify-center items-start">
+					<div className="flex gap-2 flex-wrap justify-between items-start">
 						{COLUMNS.map((column) => (
 							<Column
 								key={column.id}

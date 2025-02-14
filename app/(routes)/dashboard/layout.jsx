@@ -6,6 +6,7 @@ import { Budgets } from '@/utils/schema';
 import { eq } from 'drizzle-orm';
 import { db } from '@/utils/dbConfig';
 import { useRouter } from 'next/navigation';
+import Breadcrumbs from '@/app/_component/Breadcrumb';
 
 function DashboardLayout({ children }) {
 	const { user } = useUser();
@@ -22,7 +23,7 @@ function DashboardLayout({ children }) {
 	return (
 		<>
 			<div>
-				<h2>Breadcrumbs</h2>
+				<Breadcrumbs />
 			</div>
 			{children}
 		</>

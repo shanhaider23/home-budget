@@ -37,33 +37,34 @@ function Dashboard({ params: paramsPromise }) {
 	}, [isSignedIn, user, params.id]);
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-[repeat(6,1fr)] grid-rows-[repeat(5,300px)] gap-5 pl-5 pr-5 pt-5">
-			<div className="col-span-4">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(6,1fr)]  grid-rows-[repeat(3,300px)] gap-5 pl-5 pr-5 pt-5">
+			<div className="col-span-3">
 				<Welcome budgetList={budgetList} />
 			</div>
-			<div>
+			<div className="col-span-3 md:col-span-1 lg:col-span-1">
 				<CardInfo budgetList={budgetList} />
 			</div>
-			<div>
+			<div className="col-span-3 md:col-span-2 lg:col-span-2 row-span-2 gap-5">
+				<PiChartDashboard monthlyList={monthlyList} />
+			</div>
+			<div className="col-span-3 md:col-span-1 lg:col-span-1">
 				<CardInfo budgetList={budgetList} />
 			</div>
+
 			<div className="col-span-3  gap-5">
 				<BarChartDashboard budgetList={budgetList} />
 			</div>
-			<div className="row-span-2 gap-5">
-				<PiChartDashboard monthlyList={monthlyList} />
+			<div className=" overflow-y-auto overflow-x-hidden col-span-3">
+				<h2 className="font-bold text-2xl mb-4">Latest Expenses</h2>
+				<ExpenseListTable />
 			</div>
-
-			<div className="col-span-2 row-span-2 overflow-y-auto overflow-x-hidden ">
+			<div className="col-span-3 row-span-1 overflow-y-auto overflow-x-hidden ">
 				<h2 className="font-bold text-2xl mb-4">Latest Budgets</h2>
 				<div className="grid grid-cols-1 gap-5 mr-5">
 					{budgetList.map((budget, i) => (
 						<BudgetItem budget={budget} key={i} expensesList={expenseList} />
 					))}
 				</div>
-			</div>
-			<div className=" overflow-y-auto overflow-x-hidden col-span-3">
-				<ExpenseListTable />
 			</div>
 		</div>
 	);

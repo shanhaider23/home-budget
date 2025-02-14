@@ -54,26 +54,24 @@ function CreateBudget({ refreshData }) {
 		<div>
 			<Dialog>
 				<DialogTrigger asChild>
-					<div className=" cursor-pointer ">
-						<Button className="bg-blue-800  text-gray-100 dark:text-gray-200  dark:hover:text-gray-800">
-							Create New Budget
-						</Button>
+					<div className=" cursor-pointer flex justify-end ">
+						<button className="btn-grad">Create New Budget</button>
 					</div>
 				</DialogTrigger>
-				<DialogContent>
+				<DialogContent className="bg-card">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Create New Budget
 						</DialogTitle>
 						<DialogDescription>
 							<div className="mt-5">
-								<Button
-									variant="outline"
+								<button
 									onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
 									size="lg"
+									className="btn-grad"
 								>
 									{emojiIcon}
-								</Button>
+								</button>
 								<div className="absolute z-20">
 									<EmojiPicker
 										open={openEmojiPicker}
@@ -90,7 +88,7 @@ function CreateBudget({ refreshData }) {
 									<Input
 										placeholder="e.g home decor"
 										onChange={(e) => setName(e.target.value)}
-										className="dark:bg-gray-700 dark:text-gray-200"
+										className="bg-input"
 									/>
 								</div>
 								<div className="mt-2">
@@ -101,14 +99,14 @@ function CreateBudget({ refreshData }) {
 										placeholder="e.g 5000 Dkk"
 										type="number"
 										onChange={(e) => setAmount(e.target.value)}
-										className="dark:bg-gray-700 dark:text-gray-200"
+										className="bg-input"
 									/>
 								</div>
 								<div className="mt-5">
 									<select
 										value={currency}
 										onChange={(e) => setCurrency(e.target.value)}
-										className="w-full p-2 border rounded-md dark:bg-gray-700 dark:text-gray-200"
+										className="w-full p-2 border rounded-md bg-input"
 									>
 										<option value="kr">🇩🇰 Danish Krone (kr)</option>
 										<option value="₨">🇵🇰 Pakistani Rupee (₨)</option>
@@ -122,13 +120,13 @@ function CreateBudget({ refreshData }) {
 						</DialogDescription>
 						<DialogFooter className="sm:justify-start">
 							<DialogClose asChild>
-								<Button
+								<button
 									disabled={!(name && amount)}
-									className="mt-5 w-full"
+									className="mt-5 w-full btn-grad"
 									onClick={onCreateBudget}
 								>
 									Create Budget
-								</Button>
+								</button>
 							</DialogClose>
 						</DialogFooter>
 					</DialogHeader>

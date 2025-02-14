@@ -46,25 +46,23 @@ function EditBudget({ budgetInfo, refreshData }) {
 		<div>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button className="bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700">
+					<button className="btn-edit flex gap-2">
 						<PenBox /> Edit
-					</Button>
+					</button>
 				</DialogTrigger>
-				<DialogContent>
+				<DialogContent className="bg-card">
 					<DialogHeader>
-						<DialogTitle className="text-gray-800 dark:text-gray-200">
-							Update Budget
-						</DialogTitle>
+						<DialogTitle>Update Budget</DialogTitle>
 						<DialogDescription>
 							<div className="mt-5">
-								<Button
+								<button
 									variant="outline"
 									onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
 									size="lg"
-									className="dark:text-gray-200 dark:border-gray-700 dark:bg-gray-700"
+									className="btn-grad"
 								>
 									{emojiIcon}
-								</Button>
+								</button>
 								<div className="absolute z-20">
 									<EmojiPicker
 										open={openEmojiPicker}
@@ -82,7 +80,7 @@ function EditBudget({ budgetInfo, refreshData }) {
 										placeholder="e.g home decor"
 										onChange={(e) => setName(e.target.value)}
 										defaultValue={budgetInfo?.name}
-										className="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+										className="bg-input"
 									/>
 								</div>
 								<div className="mt-2">
@@ -94,20 +92,20 @@ function EditBudget({ budgetInfo, refreshData }) {
 										type="number"
 										onChange={(e) => setAmount(e.target.value)}
 										defaultValue={budgetInfo?.amount}
-										className="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+										className="bg-input"
 									/>
 								</div>
 							</div>
 						</DialogDescription>
 						<DialogFooter className="sm:justify-start">
 							<DialogClose asChild>
-								<Button
+								<button
 									disabled={!(name && amount)}
-									className="mt-5 w-full bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700"
+									className="btn-grad w-full mt-4"
 									onClick={onEditBudget}
 								>
 									Update Budget
-								</Button>
+								</button>
 							</DialogClose>
 						</DialogFooter>
 					</DialogHeader>
