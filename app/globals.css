@@ -30,7 +30,7 @@ html {
 	:root {
 		--background: #eff1f3;
 		--foreground: #1e293b;
-
+		--nav: linear-gradient(to right, #00d2ff 0%, #3a7bd5 51%, #00d2ff 100%);
 		--sidebar: ##ffffff;
 		--card: #ffffff;
 		--border: #e2e8f0;
@@ -43,14 +43,7 @@ html {
 	.dark {
 		--background: linear-gradient(to bottom, rgb(23, 22, 64), rgb(41, 49, 141));
 
-		/* --background: linear-gradient(
-			168deg,
-			rgba(17, 16, 37, 1) 0%,
-			rgba(29, 36, 77, 1) 42%,
-			rgba(35, 43, 93, 1) 74%,
-			rgba(50, 64, 173, 1) 95%,
-			rgba(47, 68, 179, 1) 100%
-		); */
+		--nav: linear-gradient(to right, #005c97 0%, #363795 51%, #005c97 100%);
 		--foreground: #f8fafc;
 		--sidebar: #0f1535;
 		--card: #0a0f2a;
@@ -171,8 +164,29 @@ html {
 		border-radius: 10px;
 	}
 	.btn-edit:hover {
+		background-position: right center;
+		color: #fff;
+		text-decoration: none;
+	}
+	.btn-nav {
+		background-image: var(--nav);
+
+		margin: 5px;
+		padding: 15px 45px;
+		text-align: center;
+		text-transform: uppercase;
+		transition: 0.5s;
+		background-size: 200% auto;
+
+		border-radius: 10px;
+	}
+	.btn-nav:hover {
 		background-position: right center; /* change the direction of the change here */
 		color: #fff;
 		text-decoration: none;
+	}
+
+	.round {
+		border-radius: 10px;
 	}
 }

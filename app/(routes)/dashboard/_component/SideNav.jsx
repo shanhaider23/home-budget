@@ -113,13 +113,13 @@ export default function SideNav({ isSidebarExpanded, setIsSidebarExpanded }) {
 						<div className="mt-[calc(calc(90vh)-40px)] relative">
 							<button
 								type="button"
-								className="absolute bottom-32 right-[-12px] flex h-6 w-6 items-center justify-center border border-muted-foreground/20 rounded-full bg-accent shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out"
+								className="absolute bottom-32 right-[-12px] flex h-6 w-6 items-center justify-center border border-muted-foreground/20 rounded-full bg-accent shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out bg-slate-800  dark:bg-sky-900"
 								onClick={toggleSidebar}
 							>
 								{isSidebarExpanded ? (
-									<ChevronLeft size={16} className="stroke-foreground" />
+									<ChevronLeft size={16} className="stroke-slate-50" />
 								) : (
-									<ChevronRight size={16} className="stroke-foreground" />
+									<ChevronRight size={16} className="stroke-slate-50" />
 								)}
 							</button>
 						</div>
@@ -142,9 +142,8 @@ export const SideNavItem = ({
 			{isSidebarExpanded ? (
 				<TransitionLink href={path}>
 					<h2
-						className={`flex gap-2 items-center text-gray-500 font-medium p-5 cursor-pointer rounded-md hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
-							path === active &&
-							'text-primary bg-blue-100 dark:bg-blue-600 dark:text-white'
+						className={`flex gap-2 items-center text-gray-900 font-medium p-5 cursor-pointer round hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
+							path === active && 'btn-nav'
 						}`}
 					>
 						{icon}
@@ -153,11 +152,11 @@ export const SideNavItem = ({
 				</TransitionLink>
 			) : (
 				<TooltipProvider delayDuration={70}>
-					<Tooltip>
+					<Tooltip className="z-50">
 						<TooltipTrigger>
 							<Link href={path}>
 								<h2
-									className={`flex gap-2  items-center text-gray-500 font-medium p-2 cursor-pointer rounded-md hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
+									className={`flex gap-2  items-center text-gray-500 font-medium p-2 cursor-pointer round  hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
 										path === active &&
 										'text-primary bg-blue-100 dark:bg-blue-600 dark:text-white'
 									}`}
@@ -168,10 +167,10 @@ export const SideNavItem = ({
 						</TooltipTrigger>
 						<TooltipContent
 							side="right"
-							className="px-3 py-1.5 text-xs "
+							className="px-3 py-1.5 text-md z-[999] round bg-card  "
 							sideOffset={10}
 						>
-							<span>{label}</span>
+							<h2 className="z-[999]">{label}</h2>
 						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
