@@ -88,7 +88,7 @@ function PiChartDashboard({ monthlyList }) {
 	];
 
 	return (
-		<div className="bg-card  flex justify-start items-center flex-col ">
+		<div className="bg-card  flex justify-start items-center flex-col shadow-md ">
 			<div className="self-start">
 				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5 mt-5 pl-5">
 					{dayjs().format('MMMM')} Monthly Activity

@@ -36,19 +36,47 @@ function Dashboard({ params: paramsPromise }) {
 		}
 	}, [isSignedIn, user, params.id]);
 
+	const expenseForecast = [
+		{ name: 'Jan', amount: 1500 },
+		{ name: 'Feb', amount: 4200 },
+		{ name: 'Mar', amount: 6900 },
+		{ name: 'Apr', amount: 3400 },
+		{ name: 'May', amount: 4700 },
+		{ name: 'Jun', amount: 8300 },
+		{ name: 'Jul', amount: 7400 },
+	];
+
+	const incomeForecast = [
+		{ name: 'Jan', amount: 2000 },
+		{ name: 'Feb', amount: 6200 },
+		{ name: 'Mar', amount: 6100 },
+		{ name: 'Apr', amount: 3000 },
+		{ name: 'May', amount: 7500 },
+		{ name: 'Jun', amount: 6400 },
+		{ name: 'Jul', amount: 9600 },
+	];
+
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(6,1fr)]  grid-rows-[repeat(3,300px)] gap-5 pl-5 pr-5 pt-5">
 			<div className="col-span-3">
 				<Welcome budgetList={budgetList} />
 			</div>
 			<div className="col-span-3 md:col-span-1 lg:col-span-1">
-				<CardInfo budgetList={budgetList} />
+				<CardInfo
+					data={expenseForecast}
+					name="Expense Forecast"
+					color="#F63642"
+				/>
 			</div>
 			<div className="col-span-3 md:col-span-2 lg:col-span-2 row-span-2 gap-5">
 				<PiChartDashboard monthlyList={monthlyList} />
 			</div>
 			<div className="col-span-3 md:col-span-1 lg:col-span-1">
-				<CardInfo budgetList={budgetList} />
+				<CardInfo
+					data={incomeForecast}
+					name="Income Forecast"
+					color="#98EC2D"
+				/>
 			</div>
 
 			<div className="col-span-3  gap-5">

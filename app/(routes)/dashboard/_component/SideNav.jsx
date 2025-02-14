@@ -143,7 +143,8 @@ export const SideNavItem = ({
 				<TransitionLink href={path}>
 					<h2
 						className={`flex gap-2 items-center text-gray-900 font-medium p-5 cursor-pointer round hover:text-primary hover:bg-blue-100 mb-2 transition-all dark:hover:bg-blue-600 dark:text-gray-300 dark:hover:text-white ${
-							path === active && 'btn-nav'
+							path === active &&
+							' bg-blue-100 dark:bg-blue-600 text-black dark:text-white round'
 						}`}
 					>
 						{icon}
@@ -166,8 +167,8 @@ export const SideNavItem = ({
 							</Link>
 						</TooltipTrigger>
 						<TooltipContent
-							side="right"
-							className="px-3 py-1.5 text-md z-[999] round bg-card text-gray-900  "
+							side="top"
+							className="px-3 py-1.5 text-xs z-[999] round bg-card text-gray-900 dark:text-white  "
 							sideOffset={10}
 						>
 							<h2 className="z-[999]">{label}</h2>

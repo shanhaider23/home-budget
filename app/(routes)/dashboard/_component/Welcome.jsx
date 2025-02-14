@@ -50,7 +50,7 @@ function Welcome({ budgetList }) {
 	};
 	const progress = Math.min((totalSpend / totalBudget) * 100, 100);
 	return (
-		<div className="flex flex-col bg-card h-full justify-between items-stretch pt-5 ">
+		<div className="flex flex-col bg-card h-full justify-between items-stretch pt-5 overflow-auto shadow-md">
 			<div className="flex justify-between items-center pl-5 pr-5 flex-wrap gap-2">
 				<div className="flex justify-center items-center gap-2 ">
 					<UserButton />
@@ -158,7 +158,7 @@ function Welcome({ budgetList }) {
 						</div>
 					)}
 
-					<div className="ml-5 mr-5  ">
+					<div className="ml-5 mr-5">
 						<div className="relative h-3 rounded-full bg-gray-200 dark:bg-gray-600">
 							<div
 								className="absolute top-0 left-0 h-3 rounded-full bg-green-500 transition-all"

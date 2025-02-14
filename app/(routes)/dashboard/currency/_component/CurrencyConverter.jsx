@@ -233,7 +233,7 @@ const CurrencyConverter = () => {
 									<SelectTrigger className="mt-1 bg-input">
 										<SelectValue placeholder="Select currency" />
 									</SelectTrigger>
-									<SelectContent>
+									<SelectContent className="bg-input">
 										{favoriteCurrencies.map(({ code, symbol, name, flag }) => (
 											<SelectItem key={code} value={code}>
 												<img
