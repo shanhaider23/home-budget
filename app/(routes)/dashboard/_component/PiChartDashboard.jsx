@@ -137,16 +137,19 @@ function PiChartDashboard({ monthlyList }) {
 				</div>
 			</div>
 			<div className="m-5 text-center w-[92%]">
-				{data.map((entry, index) => (
-					<div
-						key={index}
-						style={{ color: COLORS[index % COLORS.length] }}
-						className="text-sm font-medium flex justify-between items-center gap-5"
-					>
-						<span className="text-left">{entry.name}: </span>
-						<span>{entry.value}%</span>
-					</div>
-				))}
+				{data
+					.slice()
+					.sort((a, b) => b.value - a.value)
+					.map((entry, index) => (
+						<div
+							key={index}
+							style={{ color: COLORS[index % COLORS.length] }}
+							className="text-sm font-medium flex justify-between items-center gap-5"
+						>
+							<span className="text-left">{entry.name}: </span>
+							<span>{entry.value}%</span>
+						</div>
+					))}
 			</div>
 		</div>
 	);
