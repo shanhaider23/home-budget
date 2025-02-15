@@ -11,6 +11,7 @@ import Footer from "./_component/Footer";
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useUser } from "@clerk/nextjs";
+import Head from "next/head";
 
 const geistSans = Outfit({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Outfit({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -20,6 +21,10 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <Provider store={store}>
         <html lang="en">
+          <Head>
+            <link rel="manifest" href="/manifest.json" />
+            <meta name="theme-color" content="#000000" />
+          </Head>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <Toaster />
             <AppContent>{children}</AppContent> {/* 👈 Move logic into a child component */}
