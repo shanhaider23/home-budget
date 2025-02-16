@@ -11,8 +11,8 @@ function Monthly() {
 
 	return (
 		<div className="m-5 overflow-hidden">
-			<div className="flex justify-center items-start gap-5 flex-wrap sm:flex-nowrap  h-full">
-				<div className="w-full sm:w-[300px] self-start">
+			<div className="flex justify-center items-start gap-5 flex-wrap md:flex-nowrap  h-full overflow-x-auto">
+				<div className="w-full sm:w-[350px] min-w-[300px] self-start">
 					<CashFlow
 						month={month}
 						setMonth={setMonth}
@@ -27,7 +27,7 @@ function Monthly() {
 					</div>
 
 					{/* Scrollable Section */}
-					<div className="flex gap-5 items-start justify-center flex-wrap sm:flex-nowrap overflow-y-auto max-h-[700px] ">
+					<div className="flex gap-5 items-start justify-center flex-wrap md:flex-nowrap overflow-y-auto max-h-[700px] ">
 						{/* These components will be scrollable */}
 						<div className="flex-1 min-w-[250px]">
 							<MonthlyIncome month={month} year={year} />
