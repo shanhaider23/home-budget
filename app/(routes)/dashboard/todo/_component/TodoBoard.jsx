@@ -1,18 +1,14 @@
 'use client';
 
-import { DndContext, closestCenter } from '@dnd-kit/core';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTasks, updateTask } from '@/redux/slices/todoSlice';
 import Column from './Column';
 import AddTodo from './AddTodo';
 import { useUser } from '@clerk/nextjs';
+import Reminder from './Reminder';
 
-const COLUMNS = [
-	{ id: 'todo', title: 'To Do' },
-	{ id: 'inprogress', title: 'In Progress' },
-	{ id: 'done', title: 'Done' },
-];
+const COLUMNS = [{ id: 'done', title: 'Done' }];
 
 export default function TodoBoard() {
 	const dispatch = useDispatch();
@@ -42,28 +38,23 @@ export default function TodoBoard() {
 	return (
 		<div className="w-full pl-5 pr-5">
 			<div className="w-full flex justify-end items-center pb-5">
-				<div>
-					<AddTodo refreshData={refreshData} />
-				</div>
+				<AddTodo refreshData={refreshData} />
 			</div>
 
-			<div>
-				<DndContext
-					key={refreshKey}
-					collisionDetection={closestCenter}
-					onDragEnd={handleDragEnd}
-				>
-					<div className="flex gap-2 flex-wrap justify-between items-start">
-						{COLUMNS.map((column) => (
-							<Column
-								key={column.id}
-								column={column}
-								refreshData={refreshData}
-								tasks={tasks.filter((task) => task.status === column.id)}
-							/>
-						))}
-					</div>
-				</DndContext>
+			<div className="flex flex-col gap-5 ">
+				<div>
+					<Reminder />
+				</div>
+				<div className="h-full">
+					{COLUMNS.map((column) => (
+						<Column
+							key={column.id}
+							column={column}
+							refreshData={refreshData}
+							tasks={tasks.filter((task) => task.status === column.id)}
+						/>
+					))}
+				</div>
 			</div>
 		</div>
 	);
