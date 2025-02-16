@@ -67,7 +67,7 @@ function Welcome({ budgetList }) {
 					rates[fromCurrency] &&
 					rates[toCurrency] ? (
 						<>
-							<div className="flex justify-center items-center gap-3">
+							<div className="flex justify-start sm:justify-center items-center gap-3">
 								<div className="flex items-center gap-2">
 									<img
 										src={getCurrencyFlag(fromCurrency)}
@@ -90,7 +90,7 @@ function Welcome({ budgetList }) {
 							</div>
 
 							<div className="flex flex-col ">
-								<p className="text-center  text-md text-gray-500">
+								<p className="text-left sm:text-center  text-md text-gray-500">
 									Exchange Rate:{' '}
 									<strong>
 										{(rates[toCurrency] / rates[fromCurrency]).toFixed(2)}
@@ -119,11 +119,11 @@ function Welcome({ budgetList }) {
 				</div>
 			</div>
 
-			<div className="flex justify-between items-center pl-5 pr-5  ">
+			<div className="flex justify-between items-center pl-0 sm:pl-5 pr-5  ">
 				<div className="flex flex-col items-stretch justify-between">
 					{budgetList ? (
 						<div className="flex justify-between items-stretch ">
-							<div className="flex flex-col border-r-2 ml-5 mt-5 mb-5 pr-5 ">
+							<div className="flex flex-col border-r-2 ml-5 mt-5 mb-5 pr-1 sm:pr-5 ">
 								<div className="flex justify-center items-center gap-2">
 									<h1 className="text-3xl text-gray-900 dark:text-gray-100 pb-2">
 										{totalBudget}

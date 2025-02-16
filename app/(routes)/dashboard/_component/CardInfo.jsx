@@ -27,7 +27,7 @@ function CardInfo({ data, name, color }) {
 		return null;
 	};
 	return (
-		<div className="bg-card h-full flex justify-start items-center flex-col p-5 rounded-lg shadow-md">
+		<div className="bg-card h-full flex justify-around items-center flex-col p-5 rounded-lg shadow-md">
 			<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-3 self-start">
 				{name}
 			</h2>

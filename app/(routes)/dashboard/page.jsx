@@ -57,7 +57,7 @@ function Dashboard({ params: paramsPromise }) {
 	];
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(6,1fr)]  grid-rows-[repeat(3,300px)] gap-5 pl-5 pr-5 pt-5">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[repeat(6,1fr)] grid-rows-[repeat(3,350px)] sm:grid-rows-[repeat(3,300px)] gap-5 pl-5 pr-5 pt-5">
 			<div className="col-span-3">
 				<Welcome budgetList={budgetList} />
 			</div>
