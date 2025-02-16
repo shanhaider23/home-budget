@@ -88,7 +88,7 @@ function Dashboard({ params: paramsPromise }) {
 			</div>
 			<div className="col-span-3 row-span-1 overflow-y-auto overflow-x-hidden ">
 				<h2 className="font-bold text-2xl mb-4">Latest Budgets</h2>
-				<div className="grid grid-cols-1 gap-5 mr-5">
+				<div className="grid grid-cols-1 gap-5 mr-0 sm:mr-5">
 					{budgetList.map((budget, i) => (
 						<BudgetItem budget={budget} key={i} expensesList={expenseList} />
 					))}
