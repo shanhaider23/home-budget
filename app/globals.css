@@ -104,11 +104,22 @@ html {
 		border-radius: 10px;
 		border: none;
 	}
-
+	.bg-dropdown {
+		background-color: var(--card);
+		border-radius: 10px;
+	}
 	.border-custom {
 		border-color: var(--border);
 	}
-
+	.bg-table {
+		background-color: var(--sidebar);
+		border-radius: 10px;
+	}
+	.bg-input {
+		background-color: var(--sidebar);
+		border-radius: 10px;
+		background-color: var(--card);
+	}
 	.text-primary {
 		color: var(--text-primary);
 	}

@@ -43,24 +43,26 @@ function PiChartDashboard({ monthlyList }) {
 	const expenseCategories = filteredData
 		.filter((item) => item.type === 'expense')
 		.reduce((acc, item) => {
-			if (!acc[item.category]) {
-				acc[item.category] = 0;
+			const category = item.category.trim().toLowerCase(); // Normalize category names
+			if (!acc[category]) {
+				acc[category] = {
+					name: item.category, // Keep original casing for display
+					amount: 0,
+				};
 			}
-			acc[item.category] += Number(item.amount);
-
+			acc[category].amount += Number(item.amount);
 			return acc;
 		}, {});
 
-	const data = Object.entries(expenseCategories)
-		.map(([category, amount]) => ({
-			name: category,
+	const data = Object.values(expenseCategories)
+		.map(({ name, amount }) => ({
+			name,
 			value: Number(((amount / totalIncome) * 100).toFixed(2)),
 		}))
 		.filter((item) => item.value >= 1);
 
-	const otherCategory = Object.entries(expenseCategories)
-		.map(([category, amount]) => ({
-			name: category,
+	const otherCategory = Object.values(expenseCategories)
+		.map(({ amount }) => ({
 			value: Number(((amount / totalIncome) * 100).toFixed(3)),
 		}))
 		.filter((item) => item.value < 1)
@@ -136,7 +138,7 @@ function PiChartDashboard({ monthlyList }) {
 					</span>
 				</div>
 			</div>
-			<div className="m-5 text-center w-[92%]">
+			<div className="m-5 text-center w-[92%] max-h-[310px] overflow-y-auto">
 				{data
 					.slice()
 					.sort((a, b) => b.value - a.value)
@@ -144,7 +146,7 @@ function PiChartDashboard({ monthlyList }) {
 						<div
 							key={index}
 							style={{ color: COLORS[index % COLORS.length] }}
-							className="text-sm font-medium flex justify-between items-center gap-5"
+							className="text-sm font-medium flex justify-between items-center gap-5 p-1"
 						>
 							<span className="text-left">{entry.name}: </span>
 							<span>{entry.value}%</span>

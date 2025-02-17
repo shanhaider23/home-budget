@@ -99,7 +99,7 @@ function MonthlyExpense({ month, year }) {
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>
 						<div className="w-full text-left border-collapse">
-							<div className="border shadow-lg bg-red-500 dark:bg-red-800 dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+							<div className="border round shadow-lg bg-red-500 dark:bg-red-800 dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
 								<h1>Expense</h1>
 							</div>
 							<div>
@@ -128,7 +128,7 @@ function MonthlyExpense({ month, year }) {
 							</div>
 						</div>
 					</div>
-					<div className="bg-white dark:bg-gray-800 shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+					<div className="bg-white dark:bg-gray-800 round shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
 						<div className="overflow-x-auto">
 							{loading ? (
 								<div className="flex justify-center items-center p-10">

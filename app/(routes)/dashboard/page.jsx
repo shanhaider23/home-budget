@@ -68,7 +68,7 @@ function Dashboard({ params: paramsPromise }) {
 					color="#F63642"
 				/>
 			</div>
-			<div className="col-span-3 md:col-span-2 lg:col-span-2 row-span-2 gap-5">
+			<div className="col-span-3 md:col-span-2 lg:col-span-2 row-span-2 gap-5 overflow-hidden">
 				<PiChartDashboard monthlyList={monthlyList} />
 			</div>
 			<div className="col-span-3 md:col-span-1 lg:col-span-1">

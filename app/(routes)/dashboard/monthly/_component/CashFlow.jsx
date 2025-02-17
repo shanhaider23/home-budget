@@ -94,7 +94,7 @@ function CashFlow({ month, setMonth, year, setYear }) {
 				<div className="flex flex-col justify-center items-stretch gap-5">
 					<div>
 						<div className="w-full text-left border-collapse">
-							<div className="border  shadow-lg  bg-table dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+							<div className="border  bg-table dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
 								<h1 className="capitalize">
 									{month || year || 'Select Month or Year'}
 								</h1>
@@ -103,7 +103,7 @@ function CashFlow({ month, setMonth, year, setYear }) {
 								<div className="grid grid-cols-2 border  shadow-lg bg-table dark:border-gray-700">
 									<h2 className="justify-self-center self-center">Month</h2>
 									<Select value={month} onValueChange={setMonth}>
-										<SelectTrigger className=" bg-table">
+										<SelectTrigger className="bg-table">
 											<SelectValue placeholder="Select a Month" />
 										</SelectTrigger>
 										<SelectContent className="bg-dropdown">
@@ -187,8 +187,8 @@ function CashFlow({ month, setMonth, year, setYear }) {
 						</div>
 					</div>
 				</div>
-				<div className="border border-gray-200 dark:border-gray-700">
-					<div className="border shadow-lg  dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
+				<div className="border border-gray-200 dark:border-gray-700 bg-table">
+					<div className="border shadow-lg bg-dropdown  round dark:border-gray-700 flex justify-center items-center text-lg p-2 italic">
 						<h1 className="">Cash Flow </h1>
 					</div>
 					<div className="mt-4">
