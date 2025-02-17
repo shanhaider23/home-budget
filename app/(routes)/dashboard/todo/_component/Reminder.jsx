@@ -48,7 +48,7 @@ export default function ReminderBoard() {
 	}));
 
 	return (
-		<div className="flex flex-col lg:flex-row gap-5 p-5">
+		<div className="flex flex-col lg:flex-row gap-5 p-5 bg-card shadow-lg">
 			{/* Left side: Task List for selected date */}
 			<div className="w-full lg:w-1/3">
 				<h1 className="text-xl font-bold mb-4">
@@ -91,7 +91,8 @@ export default function ReminderBoard() {
 					defaultView="month"
 					toolbar={true}
 					popup={true}
-					onNavigate={(date) => setSelectedDate(date)}
+					onNavigate={(date) => setSelectedDate(date)} // Ensure calendar updates when date is navigated
+					date={selectedDate} // Pass the selectedDate to the Calendar component
 				/>
 			</div>
 		</div>

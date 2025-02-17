@@ -22,7 +22,7 @@ export default function Column({ column, tasks, refreshData }) {
 	};
 
 	return (
-		<div className="flex min-w-60 sm:min-w-96 md:min-w-[550px] lg: min-h-80 flex-col shadow-lg bg-card p-4">
+		<div className="flex flex-col shadow-lg bg-card p-4">
 			<h1 className="mb-4 font-bold text-xl text-center">{column.title}</h1>
 			<div ref={setNodeRef} className="flex flex-1 flex-col gap-4">
 				{tasks.map((task) => (

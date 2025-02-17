@@ -7,6 +7,7 @@ import Column from './Column';
 import AddTodo from './AddTodo';
 import { useUser } from '@clerk/nextjs';
 import Reminder from './Reminder';
+import '../../../../_styles/calender.css';
 
 const COLUMNS = [{ id: 'done', title: 'Done' }];
 
@@ -41,11 +42,11 @@ export default function TodoBoard() {
 				<AddTodo refreshData={refreshData} />
 			</div>
 
-			<div className="flex flex-col gap-5 ">
-				<div>
+			<div className="flex flex-wrap sm:flex-nowrap items-stretch justify-center gap-5 ">
+				<div className="flex-grow">
 					<Reminder />
 				</div>
-				<div className="h-full">
+				<div className="h-full w-full sm:min-w-[300px] sm:max-w-[350px]">
 					{COLUMNS.map((column) => (
 						<Column
 							key={column.id}
