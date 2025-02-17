@@ -42,7 +42,7 @@ export default function TodoBoard() {
 				<AddTodo refreshData={refreshData} />
 			</div>
 
-			<div className="flex flex-wrap sm:flex-nowrap items-stretch justify-center gap-5 ">
+			<div className="flex flex-wrap md:flex-nowrap items-stretch justify-center gap-5 ">
 				<div className="flex-grow">
 					<Reminder />
 				</div>
