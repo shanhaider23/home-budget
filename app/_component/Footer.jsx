@@ -30,9 +30,13 @@ function Footer() {
 			</div>
 
 			<div className="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs md:text-sm flex justify-center gap-0 sm:gap-5 items-center flex-wrap">
-				<p className="text-center">
+				<a
+					href="https://shanehaider.dk"
+					target="_blank"
+					className="text-center"
+				>
 					Design and Developed by Shan-e-Haider Bukhari
-				</p>
+				</a>
 				<p className="text-center">
 					&copy; {new Date().getFullYear()} All rights reserved.
 				</p>
