@@ -26,6 +26,7 @@ export const Expenses = pgTable('expenses', {
 export const Monthly = pgTable('monthly', {
 	id: serial('id').primaryKey(),
 	date: varchar('date').notNull(),
+	name: varchar('name').notNull(),
 	type: varchar('type').notNull(),
 	category: varchar('category').notNull(),
 	amount: numeric('amount').notNull().default(0),

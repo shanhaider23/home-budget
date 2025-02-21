@@ -15,6 +15,7 @@ export const fetchMonthly = createAsyncThunk(
             .select({
                 id: Monthly.id,
                 date: Monthly.date,
+                name: Monthly.name,
                 type: Monthly.type,
                 category: Monthly.category,
                 amount: Monthly.amount,
@@ -31,7 +32,7 @@ export const fetchMonthly = createAsyncThunk(
 // **Add New Monthly Record**
 export const addMonthly = createAsyncThunk(
     'monthly/addMonthly',
-    async ({ date, type, category, amount, email }, { dispatch }) => {
+    async ({ date, type, category, amount, email, name }, { dispatch }) => {
         if (!email) throw new Error('User email is required');
 
         try {
@@ -41,12 +42,14 @@ export const addMonthly = createAsyncThunk(
                     date: date || moment().format('DD-MM-YYYY'),
                     type,
                     category,
+                    name,
                     amount,
                     createdBy: email, // 🔹 Store user who created it
                 })
                 .returning({
                     id: Monthly.id,
                     date: Monthly.date,
+                    name: Monthly.name,
                     type: Monthly.type,
                     category: Monthly.category,
                     amount: Monthly.amount,
@@ -84,9 +87,9 @@ export const deleteMonthly = createAsyncThunk(
 );
 export const updateMonthly = createAsyncThunk(
     "monthly/updateMonthly",
-    async ({ id, amount, category }) => {
+    async ({ id, amount, category, name }) => {
         const updatedRecord = await db.update(Monthly)
-            .set({ amount, category })
+            .set({ amount, category, name })
             .where(eq(Monthly.id, id))
             .returning(); // Ensure it returns the updated row
         return updatedRecord[0]; // Return the updated record

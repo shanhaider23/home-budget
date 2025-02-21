@@ -57,6 +57,7 @@ function InputDetail() {
 	const [loading, setLoading] = useState(false);
 	const [date, setDate] = useState('');
 	const [type, setType] = useState('');
+	const [name, setName] = useState('');
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const dispatch = useDispatch();
 	const { user } = useUser();
@@ -70,12 +71,13 @@ function InputDetail() {
 
 		setLoading(true);
 
-		dispatch(addMonthly({ date, type, category, amount, email }));
+		dispatch(addMonthly({ date, type, name, category, amount, email }));
 
 		setType('');
 		setCategory('');
 		setAmount('');
 		setCategory('');
+		setName('');
 		setLoading(false);
 	};
 
@@ -119,13 +121,13 @@ function InputDetail() {
 		const email = user?.primaryEmailAddress?.emailAddress;
 
 		data.forEach((item) => {
-			const { date, type, category, amount } = item;
-			if (!date || !type || !category || !amount) {
+			const { date, type, name, category, amount } = item;
+			if (!date || !type || !name || !category || !amount) {
 				toast.error('Missing required fields in file.');
 				return;
 			}
 
-			dispatch(addMonthly({ date, type, category, amount, email }));
+			dispatch(addMonthly({ date, type, name, category, amount, email }));
 		});
 
 		toast.success('Data successfully added!');
@@ -168,68 +170,85 @@ function InputDetail() {
 										className="ml-2"
 									/>
 								</div>
-								<div className="mt-2">
-									<Label className="text-md text-black font-bold my-1 dark:text-gray-300 ">
-										Type
-									</Label>
+								<div className="mt-2 justify-center items-start flex gap-5">
+									<div className="mt-2">
+										<Label className="text-md text-black font-bold my-1 dark:text-gray-300 ">
+											Type
+										</Label>
 
-									<RadioGroup
-										value={type}
-										onValueChange={setType}
-										className="mt-2"
-									>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value="income" id="income" />
-											<Label htmlFor="income">Income</Label>
-										</div>
-										<div className="flex items-center space-x-2">
-											<RadioGroupItem value="expense" id="expense" />
-											<Label htmlFor="expense">Expense</Label>
-										</div>
-									</RadioGroup>
-								</div>
-								<div className="mt-2">
-									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
-										Category
-									</Label>
-									<Command className="rounded-lg border shadow-md md:min-w-[300px] h-[150px] overflow-y-hidden mt-1">
-										<CommandInput placeholder="Type a command or search..." />
-										<CommandList>
-											<CommandEmpty>No results found.</CommandEmpty>
-											<CommandGroup
-												heading="Suggestions"
-												className=" overflow-y-auto"
-											>
-												{predefinedCategories.map((item) => (
-													<CommandItem
-														key={item}
-														onSelect={() => setCategory(item)}
-													>
-														{item}
-													</CommandItem>
-												))}
-											</CommandGroup>
-										</CommandList>
-									</Command>
-									<Input
-										placeholder="Type Category"
-										onChange={(e) => setCategory(e.target.value)}
-										value={category}
-										className="dark:bg-gray-700 dark:text-gray-200 mt-4"
-									/>
-								</div>
+										<RadioGroup
+											value={type}
+											onValueChange={setType}
+											className="mt-2"
+										>
+											<div className="flex items-center space-x-2">
+												<RadioGroupItem value="income" id="income" />
+												<Label htmlFor="income">Income</Label>
+											</div>
+											<div className="flex items-center space-x-2">
+												<RadioGroupItem value="expense" id="expense" />
+												<Label htmlFor="expense">Expense</Label>
+											</div>
+										</RadioGroup>
+									</div>
 
-								<div className="mt-2">
-									<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
-										Amount
-									</Label>
-									<Input
-										placeholder="e.g 5000"
-										type="number"
-										onChange={(e) => setAmount(e.target.value)}
-										value={amount}
-										className="dark:bg-gray-700 dark:text-gray-200"
-									/>
+									<div className="mt-2">
+										<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
+											Category
+										</Label>
+										<Input
+											placeholder="Type Category"
+											onChange={(e) => setCategory(e.target.value)}
+											value={category}
+											className="dark:bg-gray-700 dark:text-gray-200 mt-4"
+										/>
+										<Command className="rounded-lg border shadow-md md:min-w-[300px] h-[150px] overflow-y-hidden mt-1">
+											<CommandInput placeholder="Type a command or search..." />
+											<CommandList>
+												<CommandEmpty>No results found.</CommandEmpty>
+												<CommandGroup
+													heading="Suggestions"
+													className=" overflow-y-auto"
+												>
+													{predefinedCategories.map((item) => (
+														<CommandItem
+															key={item}
+															onSelect={() => setCategory(item)}
+														>
+															{item}
+														</CommandItem>
+													))}
+												</CommandGroup>
+											</CommandList>
+										</Command>
+									</div>
+								</div>
+								<div className="mt-2 justify-center items-start flex gap-5">
+									{' '}
+									<div className="mt-2">
+										<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
+											Name
+										</Label>
+										<Input
+											placeholder="Dinning at..."
+											type="number"
+											onChange={(e) => setName(e.target.value)}
+											value={name}
+											className="dark:bg-gray-700 dark:text-gray-200"
+										/>
+									</div>
+									<div className="mt-2">
+										<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
+											Amount
+										</Label>
+										<Input
+											placeholder="e.g 5000"
+											type="number"
+											onChange={(e) => setAmount(e.target.value)}
+											value={amount}
+											className="dark:bg-gray-700 dark:text-gray-200"
+										/>
+									</div>
 								</div>
 							</div>
 						</DialogDescription>

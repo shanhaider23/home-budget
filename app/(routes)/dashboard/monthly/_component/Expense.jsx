@@ -21,7 +21,11 @@ import { Loader, Trash2, PenBox, Check, X } from 'lucide-react';
 
 function MonthlyExpense({ month, year }) {
 	const [editId, setEditId] = useState(null);
-	const [editValues, setEditValues] = useState({ category: '', amount: '' });
+	const [editValues, setEditValues] = useState({
+		category: '',
+		amount: '',
+		name: '',
+	});
 	const dispatch = useDispatch();
 	const { user } = useUser();
 
@@ -56,7 +60,11 @@ function MonthlyExpense({ month, year }) {
 
 	const handleEdit = (item) => {
 		setEditId(item.id);
-		setEditValues({ category: item.category, amount: item.amount });
+		setEditValues({
+			category: item.category,
+			amount: item.amount,
+			name: item.name,
+		});
 	};
 
 	const handleUpdate = async (id) => {
@@ -65,6 +73,7 @@ function MonthlyExpense({ month, year }) {
 				id,
 				category: editValues.category,
 				amount: editValues.amount,
+				name: editValues.name,
 			})
 		);
 		setEditId(null);
@@ -87,9 +96,7 @@ function MonthlyExpense({ month, year }) {
 		'#E64A19', // Deep Orange
 		'#FF5722', // Orange-Red
 		'#795548', // Brown
-
 		'#F28C8C', // Soft Coral
-
 		'#FF8E72', // Vibrant Coral
 	];
 
@@ -136,13 +143,26 @@ function MonthlyExpense({ month, year }) {
 								</div>
 							) : filteredList.length > 0 ? (
 								<table className="w-full text-center border border-gray-200 dark:border-gray-700">
+									<thead>
+										<tr className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+											<th className="p-2 font-semibold min-w-[80px]">Edit</th>
+											<th className="p-2 font-semibold min-w-[100px] text-center">
+												Category
+											</th>
+											<th className="p-2 font-semibold min-w-[100px]">Name</th>
+											<th className="p-2 font-semibold min-w-[100px]">
+												Amount
+											</th>
+											<th className="p-2 font-semibold min-w-[80px]">Delete</th>
+										</tr>
+									</thead>
 									<tbody>
 										{filteredList.map((item, index) => (
 											<tr
 												key={item.id}
 												className="border border-gray-200 dark:border-gray-700 last:border-none hover:bg-gray-100 dark:hover:bg-gray-600 transition"
 											>
-												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+												<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700 ">
 													<button
 														onClick={() => handleEdit(item)}
 														className="bg-transparent"
@@ -180,6 +200,34 @@ function MonthlyExpense({ month, year }) {
 												) : (
 													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
 														{item.category}
+													</td>
+												)}
+												{editId === item.id ? (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														<div className="flex justify-center items-center">
+															<Input
+																type="text"
+																value={editValues.name}
+																onChange={(e) =>
+																	setEditValues({
+																		...editValues,
+																		name: e.target.value,
+																	})
+																}
+															/>
+															<div>
+																<button onClick={() => handleUpdate(item.id)}>
+																	<Check size={15} />
+																</button>
+																<button onClick={handleCancel}>
+																	<X size={15} />
+																</button>
+															</div>
+														</div>
+													</td>
+												) : (
+													<td className="p-3 text-gray-800 dark:text-gray-200 text-center border border-gray-200 dark:border-gray-700">
+														{item.name}
 													</td>
 												)}
 												{editId === item.id ? (
