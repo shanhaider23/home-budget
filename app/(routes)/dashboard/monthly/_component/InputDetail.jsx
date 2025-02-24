@@ -137,7 +137,7 @@ function InputDetail() {
 	};
 
 	return (
-		<div className="flex ">
+		<div className="flex">
 			<Dialog>
 				<DialogTrigger asChild>
 					<div className=" cursor-pointer w-full pr-5 ">
@@ -146,7 +146,7 @@ function InputDetail() {
 						</button>
 					</div>
 				</DialogTrigger>
-				<DialogContent className="sm:max-w-sm bg-card">
+				<DialogContent className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:max-w-sm bg-card max-h-[90vh] overflow-y-auto">
 					<DialogHeader>
 						<DialogTitle className="font-bold text-lg text-gray-800 dark:text-gray-200">
 							Add Income or Expense
