@@ -89,8 +89,8 @@ function PiChartDashboard({ monthlyList }) {
 		'#FF8C00', // Orange
 		'#FFD700', // Yellow
 
-		'#0cb91a', // Blue
 		'#178d21', // Blue-Violet
+		'#0cb91a', // Blue
 		'#32CD32', // Lime Green
 		'#84da5d', // Deep Sky Blue
 		'#77f577', // Lime Green
