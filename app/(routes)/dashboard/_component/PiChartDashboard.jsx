@@ -1,35 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import dayjs from 'dayjs';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 
 function PiChartDashboard({ monthlyList }) {
-	if (!monthlyList || monthlyList.length === 0) {
-		return (
-			<div className="bg-card h-full flex justify-center items-center flex-col p-4">
-				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5">
-					No Data Available
-				</h2>
-			</div>
-		);
-	}
-
 	const currentMonth = dayjs().format('YYYY-MM');
+	const [month, setMonth] = useState(currentMonth);
+	const months = Array.from({ length: 12 }, (_, i) => {
+		const date = dayjs().month(i).format('YYYY-MM');
+		return { label: dayjs().month(i).format('MMMM'), value: date };
+	});
 
 	const filteredData = monthlyList.filter(
-		(item) => dayjs(item.date).format('YYYY-MM') === currentMonth
+		(item) => dayjs(item.date).format('YYYY-MM') === month
 	);
 
-	if (filteredData.length === 0) {
-		return (
-			<div className="bg-card h-full flex justify-center items-center flex-col p-4">
-				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5">
-					No Expenses for {dayjs().format('MMMM')}
-				</h2>
-			</div>
-		);
-	}
-
-	// Calculate total income and total expenses
 	const totalIncome = filteredData
 		.filter((item) => item.type === 'income')
 		.reduce((sum, item) => sum + Number(item.amount), 0);
@@ -98,10 +89,24 @@ function PiChartDashboard({ monthlyList }) {
 
 	return (
 		<div className="bg-card flex justify-start items-center flex-col shadow-md">
-			<div className="self-start">
+			<div className="flex justify-between items-center w-full">
 				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5 mt-5 pl-5">
-					{dayjs().format('MMMM')} Month Activity
+					{dayjs(month).format('MMMM')} Month Activity
 				</h2>
+				<div className="pr-5">
+					<Select value={month} onValueChange={setMonth}>
+						<SelectTrigger className="w-[120px] bg-input round">
+							<SelectValue placeholder={dayjs(month).format('MMMM')} />
+						</SelectTrigger>
+						<SelectContent className="bg-input round">
+							{months.map(({ label, value }) => (
+								<SelectItem key={value} value={value}>
+									{label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
 			</div>
 			<div className="relative w-[92%] h-75">
 				<ResponsiveContainer width="100%" height={200}>
