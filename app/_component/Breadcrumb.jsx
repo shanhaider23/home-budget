@@ -18,7 +18,7 @@ function Breadcrumbs() {
 	return (
 		<div className="pl-5 ">
 			<Breadcrumb>
-				<BreadcrumbList className="flex items-center text-xl font-semibold">
+				<BreadcrumbList className="flex items-center text-sm font-semibold">
 					<BreadcrumbItem>
 						<BreadcrumbLink>
 							<Link href="/" className="hover:underline">
