@@ -1,6 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import dayjs from 'dayjs';
+
 function PiChartDashboard({ monthlyList }) {
 	if (!monthlyList || monthlyList.length === 0) {
 		return (
@@ -40,6 +41,7 @@ function PiChartDashboard({ monthlyList }) {
 	const expensePercentage = totalIncome
 		? Math.round((totalExpenses / totalIncome) * 100)
 		: 0;
+
 	const expenseCategories = filteredData
 		.filter((item) => item.type === 'expense')
 		.reduce((acc, item) => {
@@ -75,22 +77,27 @@ function PiChartDashboard({ monthlyList }) {
 		});
 	}
 
+	// Sort data by value (percentage) in descending order
+	data.sort((a, b) => b.value - a.value);
+
 	const COLORS = [
-		'#C512A1', // Purple
-		'#5DCF31', // Green
+		'#7c0000', // Purple
+		'#ff1414', // Deep Pink
 		'#F84134', // Red
-		'#2D93F9', // Blue
+
+		'#D2691E', // Chocolate
 		'#FF8C00', // Orange
 		'#FFD700', // Yellow
-		'#8A2BE2', // Blue-Violet
-		'#00BFFF', // Deep Sky Blue
-		'#D2691E', // Chocolate
-		'#FF1493', // Deep Pink
+
+		'#0cb91a', // Blue
+		'#178d21', // Blue-Violet
 		'#32CD32', // Lime Green
+		'#84da5d', // Deep Sky Blue
+		'#77f577', // Lime Green
 	];
 
 	return (
-		<div className="bg-card  flex justify-start items-center flex-col shadow-md ">
+		<div className="bg-card flex justify-start items-center flex-col shadow-md">
 			<div className="self-start">
 				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5 mt-5 pl-5">
 					{dayjs().format('MMMM')} Month Activity
@@ -148,29 +155,26 @@ function PiChartDashboard({ monthlyList }) {
 						</tr>
 					</thead>
 					<tbody>
-						{data
-							.slice()
-							.sort((a, b) => b.value - a.value)
-							.map((entry, index) => {
-								const categoryKey = Object.keys(expenseCategories).find(
-									(key) => expenseCategories[key].name === entry.name
-								);
-								const amount = categoryKey
-									? expenseCategories[categoryKey].amount
-									: 0;
+						{data.map((entry, index) => {
+							const categoryKey = Object.keys(expenseCategories).find(
+								(key) => expenseCategories[key].name === entry.name
+							);
+							const amount = categoryKey
+								? expenseCategories[categoryKey].amount
+								: 0;
 
-								return (
-									<tr
-										key={index}
-										className="border-b"
-										style={{ color: COLORS[index % COLORS.length] }}
-									>
-										<td className="p-2 text-left">{entry.name}</td>
-										<td className="p-2 text-center">{entry.value}%</td>
-										<td className="p-2 text-right">{amount.toFixed(2)}</td>
-									</tr>
-								);
-							})}
+							return (
+								<tr
+									key={index}
+									className="border-b"
+									style={{ color: COLORS[index % COLORS.length] }}
+								>
+									<td className="p-2 text-left">{entry.name}</td>
+									<td className="p-2 text-center">{entry.value}%</td>
+									<td className="p-2 text-right">{amount.toFixed(2)}</td>
+								</tr>
+							);
+						})}
 					</tbody>
 				</table>
 			</div>
