@@ -138,60 +138,41 @@ function PiChartDashboard({ monthlyList }) {
 					</span>
 				</div>
 			</div>
-			<div className="m-5 text-center w-[95%] overflow-y-auto">
-				{data
-					.slice()
-					.sort((a, b) => b.value - a.value)
-					.map((entry, index) => {
-						const categoryKey = Object.keys(expenseCategories).find(
-							(key) => expenseCategories[key].name === entry.name
-						);
+			<div className="m-5 text-center w-[92%] max-h-[310px] overflow-y-auto">
+				<table className="w-full border-collapse">
+					<thead>
+						<tr className="text-gray-700 dark:text-gray-300 border-b">
+							<th className="p-2 text-left">Category</th>
+							<th className="p-2 text-center">%</th>
+							<th className="p-2 text-right">Amount </th>
+						</tr>
+					</thead>
+					<tbody>
+						{data
+							.slice()
+							.sort((a, b) => b.value - a.value)
+							.map((entry, index) => {
+								const categoryKey = Object.keys(expenseCategories).find(
+									(key) => expenseCategories[key].name === entry.name
+								);
+								const amount = categoryKey
+									? expenseCategories[categoryKey].amount
+									: 0;
 
-						const amount = categoryKey
-							? expenseCategories[categoryKey].amount
-							: 0;
-
-						return (
-							<div className="m-5 text-center  max-h-[310px] overflow-y-auto">
-								<table className="w-full border-collapse">
-									<thead>
-										<tr className="text-gray-700 dark:text-gray-300 border-b">
-											<th className="p-2 text-left">Category</th>
-											<th className="p-2 text-center">Percentage</th>
-											<th className="p-2 text-right">Amount </th>
-										</tr>
-									</thead>
-									<tbody>
-										{data
-											.slice()
-											.sort((a, b) => b.value - a.value)
-											.map((entry, index) => {
-												const categoryKey = Object.keys(expenseCategories).find(
-													(key) => expenseCategories[key].name === entry.name
-												);
-												const amount = categoryKey
-													? expenseCategories[categoryKey].amount
-													: 0;
-
-												return (
-													<tr
-														key={index}
-														style={{ color: COLORS[index % COLORS.length] }}
-														className="border-b"
-													>
-														<td className="p-2 text-left">{entry.name}</td>
-														<td className="p-2 text-center">{entry.value}%</td>
-														<td className="p-2 text-right">
-															{amount.toFixed(2)}
-														</td>
-													</tr>
-												);
-											})}
-									</tbody>
-								</table>
-							</div>
-						);
-					})}
+								return (
+									<tr
+										key={index}
+										className="border-b"
+										style={{ color: COLORS[index % COLORS.length] }}
+									>
+										<td className="p-2 text-left">{entry.name}</td>
+										<td className="p-2 text-center">{entry.value}%</td>
+										<td className="p-2 text-right">{amount.toFixed(2)}</td>
+									</tr>
+								);
+							})}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);
