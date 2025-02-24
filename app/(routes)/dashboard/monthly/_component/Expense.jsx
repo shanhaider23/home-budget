@@ -54,7 +54,7 @@ function MonthlyExpense({ month, year }) {
 	});
 
 	const incomeData = filteredList.map((item) => ({
-		name: item.category,
+		name: item.name,
 		value: parseFloat(item.amount),
 	}));
 

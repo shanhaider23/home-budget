@@ -64,7 +64,8 @@ function InputDetail() {
 
 	const handleInputDetail = async () => {
 		const email = user?.primaryEmailAddress?.emailAddress;
-		if (!amount || !category) {
+
+		if (!date || !type || !name || !category || !amount) {
 			toast.error('All fields are required.');
 			return;
 		}
@@ -73,10 +74,10 @@ function InputDetail() {
 
 		dispatch(addMonthly({ date, type, name, category, amount, email }));
 
+		setDate('');
 		setType('');
 		setCategory('');
 		setAmount('');
-		setCategory('');
 		setName('');
 		setLoading(false);
 	};
@@ -170,7 +171,7 @@ function InputDetail() {
 										className="ml-2"
 									/>
 								</div>
-								<div className="mt-2 justify-center items-start flex gap-5">
+								<div className="mt-2 justify-center items-start flex gap-5 flex-col">
 									<div className="mt-2">
 										<Label className="text-md text-black font-bold my-1 dark:text-gray-300 ">
 											Type
@@ -193,16 +194,16 @@ function InputDetail() {
 									</div>
 
 									<div className="mt-2">
-										<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
+										<Label className="text-md text-black font-bold  dark:text-gray-300">
 											Category
 										</Label>
 										<Input
 											placeholder="Type Category"
 											onChange={(e) => setCategory(e.target.value)}
 											value={category}
-											className="dark:bg-gray-700 dark:text-gray-200 mt-4"
+											className="dark:bg-gray-700 dark:text-gray-200 bg-input"
 										/>
-										<Command className="rounded-lg border shadow-md md:min-w-[300px] h-[150px] overflow-y-hidden mt-1">
+										<Command className="bg-input border shadow-md md:min-w-[300px] h-[150px] overflow-y-hidden mt-1">
 											<CommandInput placeholder="Type a command or search..." />
 											<CommandList>
 												<CommandEmpty>No results found.</CommandEmpty>
@@ -223,7 +224,7 @@ function InputDetail() {
 										</Command>
 									</div>
 								</div>
-								<div className="mt-2 justify-center items-start flex gap-5">
+								<div className="mt-2 justify-center items-start flex gap-5 flex-col">
 									{' '}
 									<div className="mt-2">
 										<Label className="text-md text-black font-bold my-1 dark:text-gray-300">
@@ -231,10 +232,9 @@ function InputDetail() {
 										</Label>
 										<Input
 											placeholder="Dinning at..."
-											type="number"
 											onChange={(e) => setName(e.target.value)}
 											value={name}
-											className="dark:bg-gray-700 dark:text-gray-200"
+											className="dark:bg-gray-700 dark:text-gray-200 bg-input"
 										/>
 									</div>
 									<div className="mt-2">
@@ -246,7 +246,7 @@ function InputDetail() {
 											type="number"
 											onChange={(e) => setAmount(e.target.value)}
 											value={amount}
-											className="dark:bg-gray-700 dark:text-gray-200"
+											className="dark:bg-gray-700 dark:text-gray-200 bg-input"
 										/>
 									</div>
 								</div>
