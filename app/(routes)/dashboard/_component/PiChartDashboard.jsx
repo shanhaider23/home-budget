@@ -93,7 +93,7 @@ function PiChartDashboard({ monthlyList }) {
 		<div className="bg-card  flex justify-start items-center flex-col shadow-md ">
 			<div className="self-start">
 				<h2 className="font-bold text-lg text-gray-800 dark:text-gray-200 mb-5 mt-5 pl-5">
-					{dayjs().format('MMMM')} Monthly Activity
+					{dayjs().format('MMMM')} Month Activity
 				</h2>
 			</div>
 			<div className="relative w-[92%] h-75">
@@ -138,20 +138,60 @@ function PiChartDashboard({ monthlyList }) {
 					</span>
 				</div>
 			</div>
-			<div className="m-5 text-center w-[92%] max-h-[310px] overflow-y-auto">
+			<div className="m-5 text-center w-[95%] overflow-y-auto">
 				{data
 					.slice()
 					.sort((a, b) => b.value - a.value)
-					.map((entry, index) => (
-						<div
-							key={index}
-							style={{ color: COLORS[index % COLORS.length] }}
-							className="text-sm font-medium flex justify-between items-center gap-5 p-1"
-						>
-							<span className="text-left">{entry.name}: </span>
-							<span>{entry.value}%</span>
-						</div>
-					))}
+					.map((entry, index) => {
+						const categoryKey = Object.keys(expenseCategories).find(
+							(key) => expenseCategories[key].name === entry.name
+						);
+
+						const amount = categoryKey
+							? expenseCategories[categoryKey].amount
+							: 0;
+
+						return (
+							<div className="m-5 text-center  max-h-[310px] overflow-y-auto">
+								<table className="w-full border-collapse">
+									<thead>
+										<tr className="text-gray-700 dark:text-gray-300 border-b">
+											<th className="p-2 text-left">Category</th>
+											<th className="p-2 text-center">Percentage</th>
+											<th className="p-2 text-right">Amount </th>
+										</tr>
+									</thead>
+									<tbody>
+										{data
+											.slice()
+											.sort((a, b) => b.value - a.value)
+											.map((entry, index) => {
+												const categoryKey = Object.keys(expenseCategories).find(
+													(key) => expenseCategories[key].name === entry.name
+												);
+												const amount = categoryKey
+													? expenseCategories[categoryKey].amount
+													: 0;
+
+												return (
+													<tr
+														key={index}
+														style={{ color: COLORS[index % COLORS.length] }}
+														className="border-b"
+													>
+														<td className="p-2 text-left">{entry.name}</td>
+														<td className="p-2 text-center">{entry.value}%</td>
+														<td className="p-2 text-right">
+															{amount.toFixed(2)}
+														</td>
+													</tr>
+												);
+											})}
+									</tbody>
+								</table>
+							</div>
+						);
+					})}
 			</div>
 		</div>
 	);
