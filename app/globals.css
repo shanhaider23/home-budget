@@ -136,7 +136,7 @@ html {
 			var(--btn-grad-middle) 51%,
 			var(--btn-grad-end) 100%
 		);
-		padding: 10px 20px;
+
 		text-align: center;
 		text-transform: uppercase;
 		transition: 0.5s;
@@ -144,7 +144,7 @@ html {
 		color: white;
 		border-radius: 10px;
 		display: block;
-		@apply sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5;
+		@apply sm:px-6 sm:py-3 md:px-4 md:py-2 lg:px-4 lg:py-2;
 	}
 
 	.btn-grad:hover {
@@ -219,5 +219,45 @@ html {
 
 	.round {
 		border-radius: 10px;
+	}
+	/* Add this in your global CSS file or style tag */
+	.dot-pulse {
+		position: relative;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background-color: #1890ff;
+		animation: dotPulse 1.5s infinite ease-in-out;
+	}
+
+	.dot-pulse::before,
+	.dot-pulse::after {
+		content: '';
+		position: absolute;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background-color: #1890ff;
+		animation: dotPulse 1.5s infinite ease-in-out;
+	}
+
+	.dot-pulse::before {
+		animation-delay: 0.2s;
+	}
+
+	.dot-pulse::after {
+		animation-delay: 0.4s;
+	}
+
+	@keyframes dotPulse {
+		0% {
+			opacity: 0.2;
+		}
+		50% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0.2;
+		}
 	}
 }
